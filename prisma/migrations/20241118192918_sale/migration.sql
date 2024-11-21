@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Card" ADD COLUMN     "isForSale" BOOLEAN NOT NULL DEFAULT false,
+ADD COLUMN     "isForTrade" BOOLEAN NOT NULL DEFAULT false;

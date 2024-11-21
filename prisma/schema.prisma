@@ -1,0 +1,543 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User and Auth
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id             String            @id @default(cuid())
+  name           String?           @unique
+  email          String?           @unique
+  emailVerified  DateTime?
+  image          String?
+  password       String? // For credentials login
+  coins          Int               @default(1000)
+  level          Int               @default(1)
+  xp             Int               @default(0)
+  totalXp        Int               @default(0)
+  lastLocation   Location?
+  discoveries    Drop[]
+  accounts       Account[]
+  sessions       Session[]
+  cards          Card[]            @relation("UserCards")
+  listings       Listing[]
+  sentTrades     Trade[]           @relation("SentTrades")
+  receivedTrades Trade[]           @relation("ReceivedTrades")
+  packsPurchased Pack[]
+  followers      User[]            @relation("UserFollows")
+  following      User[]            @relation("UserFollows")
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  lastLogin      DateTime?         @default(now())
+  lastActive     DateTime?         @default(now())
+  Activity       Activity[]
+  achievements   UserAchievement[]
+  locations      UserLocation[]
+  notifications  Notification[]
+  quests         UserQuest[]
+  createdQuests  Quest[]           @relation("QuestCreator")
+  completedMilestones Json?
+}
+
+model UserLocation {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+  latitude  Float
+  longitude Float
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([updatedAt])
+}
+
+model Activity {
+  id          String       @id @default(cuid())
+  userId      String
+  type        ActivityType
+  description String
+  metadata    Json? // For storing additional activity-specific data
+  createdAt   DateTime     @default(now())
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum ActivityType {
+  TRADE
+  PACK_OPENED
+  ACHIEVEMENT
+  FOLLOW
+  COLLECTION_UPDATE
+}
+
+model Achievement {
+  id          String            @id @default(cuid())
+  title       String
+  description String
+  type        AchievementType
+  imageUrl    String
+  requirement Int // Number required to unlock (e.g., 10 trades)
+  xpReward    Int
+  rarity      AchievementRarity
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  userAchievements UserAchievement[]
+}
+
+model UserAchievement {
+  id            String    @id @default(cuid())
+  userId        String
+  achievementId String
+  progress      Int       @default(0)
+  unlockedAt    DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievement Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, achievementId])
+}
+
+enum AchievementType {
+  TRADES_COMPLETED
+  PACKS_OPENED
+  CARDS_COLLECTED
+  LEGENDARY_CARDS
+  FOLLOWERS_GAINED
+  SERIES_COMPLETED
+  DAILY_LOGIN
+  COLLECTION_VALUE
+}
+
+enum AchievementRarity {
+  COMMON
+  RARE
+  EPIC
+  LEGENDARY
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  type      NotificationType
+  title     String
+  message   String
+  metadata  Json?
+  isRead    Boolean          @default(false)
+  createdAt DateTime         @default(now())
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead])
+}
+
+enum NotificationType {
+  FOLLOW
+  TRADE_OFFER
+  TRADE_ACCEPTED
+  TRADE_DECLINED
+  ACHIEVEMENT_UNLOCKED
+  LEVEL_UP
+  NEW_PACK
+  SYSTEM_ANNOUNCEMENT
+  COLLECTION_MILESTONE
+}
+
+model Location {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+  latitude  Float
+  longitude Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum DropType {
+  STANDARD // Regular drops around the map
+  CIRCUIT // Special drops at race circuits
+  EVENT // Special event drops (race weekends)
+  DAILY // Daily reward drops
+  ACHIEVEMENT // Achievement rewards
+}
+
+model Drop {
+  id           String   @id @default(cuid())
+  type         DropType
+  rarity       Rarity
+  latitude     Float
+  longitude    Float
+  circuit      Circuit? @relation(fields: [circuitId], references: [id])
+  circuitId    String?
+  expiresAt    DateTime
+  discoveredBy User[]
+  rewards      Reward[]
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+}
+
+model Reward {
+  id        String     @id @default(cuid())
+  type      RewardType
+  amount    Int
+  cardId    String?
+  card      Card?      @relation(fields: [cardId], references: [id])
+  dropId    String
+  drop      Drop       @relation(fields: [dropId], references: [id])
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+enum RewardType {
+  PACK
+  CARD
+  COINS
+  SPECIAL_ITEM
+}
+
+model Circuit {
+  id          String   @id @default(cuid())
+  name        String
+  country     String
+  latitude    Float
+  longitude   Float
+  length      Float // Circuit length in km
+  corners     Int
+  description String
+  imageUrl    String
+  drops       Drop[]
+  events      Event[] // Current and upcoming events
+  tier        Int // 1 for F1, 2 for F2, etc.
+  dropRate    Float // Increased drop rates for this circuit
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Event {
+  id          String   @id @default(cuid())
+  name        String
+  circuit     Circuit  @relation(fields: [circuitId], references: [id])
+  circuitId   String
+  startDate   DateTime
+  endDate     DateTime
+  series      String // F1, F2, WEC, etc.
+  description String
+  dropRate    Float // Special drop rate during event
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Cards and Collections
+model Card {
+  id                  String   @id @default(cuid())
+  name                String
+  type                CardType
+  rarity              Rarity
+  imageUrl            String
+  description         String?
+  edition             String?
+  serialNumber        String? // For unique card identification
+  stats               Json? // Different stats based on card type
+  series              String // F1, F2, WEC, etc.
+  year                Int
+  isExclusive         Boolean  @default(false)
+  eventId             String?
+  isPromotional       Boolean  @default(false)
+  promotionalDetails  Json?
+  eventDetails        Json?
+  championshipDetails Json?
+  seasonDetails       Json?
+  seasonalDetails     Json?
+  historicDetails     Json?
+
+  isQuestLocked Boolean @default(false)
+  questLockExpiry DateTime?
+  isForSale       Boolean @default(false)
+  isForTrade      Boolean @default(false)
+
+  // Relations
+  owners          User[]          @relation("UserCards")
+  listing         Listing?
+  inTrades        Trade[]         @relation("TradeCards")
+  pack            Pack?           @relation(fields: [packId], references: [id])
+  packId          String?
+  questRewards    QuestReward[]
+  lockedForQuests UserQuestCard[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Reward    Reward[]
+}
+
+enum CardType {
+  F1_DRIVER
+  F2_DRIVER
+  F3_DRIVER
+  WEC_DRIVER
+  INDYCAR_DRIVER
+  NASCAR_DRIVER
+  F1_CAR
+  F2_CAR
+  F3_CAR
+  WEC_CAR
+  INDYCAR_CAR
+  NASCAR_CAR
+  CIRCUIT
+  HISTORIC_MOMENT
+  TEAM
+  PROMOTIONAL
+  EVENT
+  CHAMPIONSHIP
+  SEASONAL
+  LEGENDARY_HISTORIC
+}
+
+enum Rarity {
+  COMMON
+  RARE
+  EPIC
+  LEGENDARY
+}
+
+// Marketplace
+model Listing {
+  id       String        @id @default(cuid())
+  price    Int
+  status   ListingStatus
+  card     Card          @relation(fields: [cardId], references: [id])
+  cardId   String        @unique
+  seller   User          @relation(fields: [sellerId], references: [id])
+  sellerId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum ListingStatus {
+  ACTIVE
+  SOLD
+  CANCELLED
+}
+
+// Trading System
+model Trade {
+  id           String      @id @default(cuid())
+  sender       User        @relation("SentTrades", fields: [senderId], references: [id])
+  senderId     String
+  receiver     User        @relation("ReceivedTrades", fields: [receiverId], references: [id])
+  receiverId   String
+  cards        Card[]      @relation("TradeCards")
+  coinsOffered Int         @default(0)
+  status       TradeStatus
+  message      String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum TradeStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  CANCELLED
+}
+
+// Pack System
+model Pack {
+  id                 String   @id @default(cuid())
+  name               String
+  description        String?
+  price              Int
+  type               PackType
+  imageUrl           String
+  cards              Card[]
+  purchasedBy        User[]
+  cardsPerPack       Int
+  dropRates          Json // Stores the drop rates for each rarity
+  guaranteedRarities Rarity[] // Array of guaranteed rarities
+
+  cardTypeFilter String?
+  seriesFilter   String?
+  yearFilter     Int?
+  teamFilter     String?
+  driverFilter   String?
+  eventFilter    String?
+
+  isLimited       Boolean @default(false)
+  limitedQuantity Int?
+  isPromotional   Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum PackType {
+  STANDARD
+  PREMIUM
+  LEGENDARY
+  SPECIAL_EDITION
+}
+
+model Contact {
+  id        String          @id @default(cuid())
+  name      String
+  email     String
+  category  ContactCategory
+  subject   String
+  message   String          @db.Text
+  status    ContactStatus   @default(PENDING)
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+}
+
+enum ContactCategory {
+  GENERAL
+  TECHNICAL
+  BILLING
+  PARTNERSHIP
+}
+
+enum ContactStatus {
+  PENDING
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+model Quest {
+  id          String      @id @default(cuid())
+  type        QuestType
+  status      QuestStatus @default(ACTIVE)
+  title       String
+  description String
+  driverId    String? // Optional link to specific driver
+  category    String? // Optional category (e.g., "F1", "NASCAR")
+
+  // Rewards
+  rewardCards QuestReward[]
+  rewardCoins Int           @default(0)
+  rewardXp    Int           @default(0)
+
+  // Requirements stored as JSON for flexibility
+  requirements Json // {cards: [{id, count}], conditions: {...}}
+
+  // Dates
+  startDate DateTime  @default(now())
+  endDate   DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  // Relations
+  creator      User        @relation("QuestCreator", fields: [creatorId], references: [id])
+  creatorId    String
+  participants UserQuest[]
+}
+
+model UserQuest {
+  id          String          @id @default(cuid())
+  userId      String
+  questId     String
+  status      UserQuestStatus @default(IN_PROGRESS)
+  progress    Json // Track progress of submissions
+  completedAt DateTime?
+
+  // Relations
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quest       Quest           @relation(fields: [questId], references: [id], onDelete: Cascade)
+  lockedCards UserQuestCard[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, questId])
+}
+
+// New models for better relationship handling
+model UserQuestCard {
+  id          String   @id @default(cuid())
+  userQuestId String
+  cardId      String
+  lockedUntil DateTime
+
+  // Relations
+  userQuest UserQuest @relation(fields: [userQuestId], references: [id], onDelete: Cascade)
+  card      Card      @relation(fields: [cardId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userQuestId, cardId])
+  @@index([lockedUntil])
+}
+
+model QuestReward {
+  id      String @id @default(cuid())
+  questId String
+  cardId  String
+  amount  Int    @default(1)
+
+  // Relations
+  quest Quest @relation(fields: [questId], references: [id], onDelete: Cascade)
+  card  Card  @relation(fields: [cardId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([questId, cardId])
+}
+
+enum QuestType {
+  MERGE_CARDS
+  COLLECT_SERIES
+  DRIVER_SPECIFIC
+  SPECIAL_EVENT
+  DAILY
+  WEEKLY
+}
+
+enum QuestStatus {
+  DRAFT
+  ACTIVE
+  COMPLETED
+  EXPIRED
+  CANCELLED
+}
+
+enum UserQuestStatus {
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+  ABANDONED
+}
