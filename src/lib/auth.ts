@@ -1,5 +1,5 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { NextAuthOptions } from "next-auth";
+import { getServerSession, NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { compare } from "bcrypt";
@@ -52,6 +52,15 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
+    async signIn({ user, account }) {
+      if (account?.provider === 'google') {
+        await prisma.user.update({
+          where: { id: user.id },
+          data: { needUsernameSetup: true }
+        });
+      }
+      return true;
+    },
     async session({ token, session }) {
       if (token) {
         session.user.id = token.id;
@@ -59,6 +68,7 @@ export const authOptions: NextAuthOptions = {
         session.user.email = token.email;
         session.user.image = token.picture;
         session.user.coins = token.coins;
+        session.user.needUsernameSetup = token.needUsernameSetup as boolean;
       }
       return session;
     },
@@ -82,12 +92,20 @@ export const authOptions: NextAuthOptions = {
         email: dbUser.email,
         picture: dbUser.image,
         coins: dbUser.coins,
+        needUsernameSetup: dbUser.needUsernameSetup,
         lastLocation: {
             latitude: 0,
             longitude: 0,
         },
       };
     },
+    async redirect({ url, baseUrl }) {
+      const session = await getServerSession(authOptions);
+      if (session?.user?.needUsernameSetup && url !== '/onboarding') {
+        return '/onboarding';
+      }
+      return url;
+    }
   },
   pages: {
     signIn: "/auth/signin",
