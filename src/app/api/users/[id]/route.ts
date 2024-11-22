@@ -3,25 +3,31 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { withAuth } from '@/middleware/api';
+import { apiCache } from '@/lib/cache';
 
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  try {
-    const { id } = await params;
-    const session = await getServerSession(authOptions);
-    if (!session?.user || session.user.id !== id) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const session = await getServerSession(authOptions);
+  if (!session?.user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  const { id } = await params;
+  const cacheKey = `user-data:${id}`;
+  const cached = apiCache.get(cacheKey);
+
+  if (cached) {
+      return NextResponse.json(cached);
     }
 
     const userData = await prisma.user.findUnique({
-      where: {
-        id,
-      },
+      where: { id },
       select: {
         coins: true,
         cards: {
+          take: 20,
           select: {
             id: true,
             name: true,
@@ -32,9 +38,8 @@ export async function GET(
           },
         },
         listings: {
-          where: {
-            status: "ACTIVE",
-          },
+          where: { status: "ACTIVE" },
+          take: 10,
           select: {
             id: true,
             price: true,
@@ -53,13 +58,11 @@ export async function GET(
       },
     });
 
+    if (userData) {
+      apiCache.set(cacheKey, userData, { ttl: 1000 * 60 }); // 1 minute cache
+    }
+
     return NextResponse.json(userData);
-  } catch (error) {
-    return NextResponse.json(
-      { error: "Error fetching user data" },
-      { status: 500 }
-    );
-  }
 }
 
 export async function PATCH(

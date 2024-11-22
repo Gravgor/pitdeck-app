@@ -68,6 +68,7 @@ model User {
   quests         UserQuest[]
   createdQuests  Quest[]           @relation("QuestCreator")
   completedMilestones Json?
+  needUsernameSetup Boolean @default(false)
 }
 
 model UserLocation {

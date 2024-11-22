@@ -1,4 +1,5 @@
 import { prisma } from "./prisma";
+import { apiCache } from "./cache";
 
 export async function getUserByUsername(username: string) {
   try {
@@ -6,11 +7,12 @@ export async function getUserByUsername(username: string) {
       where: { name: username },
       select: {
         id: true,
-        name:  true,
+        name: true,
         image: true,
         coins: true,
         totalXp: true,
         cards: {
+          take: 20, // Limit initial load
           orderBy: { createdAt: 'desc' },
         },
         _count: {
