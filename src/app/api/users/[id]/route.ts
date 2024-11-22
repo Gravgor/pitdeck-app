@@ -8,14 +8,17 @@ import { apiCache } from '@/lib/cache';
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  return withAuth(request, async (session) => {
-    const { id } = params;
-    const cacheKey = `user-data:${id}`;
-    const cached = apiCache.get(cacheKey);
+  const session = await getServerSession(authOptions);
+  if (!session?.user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  const { id } = await params;
+  const cacheKey = `user-data:${id}`;
+  const cached = apiCache.get(cacheKey);
 
-    if (cached) {
+  if (cached) {
       return NextResponse.json(cached);
     }
 
@@ -60,7 +63,6 @@ export async function GET(
     }
 
     return NextResponse.json(userData);
-  });
 }
 
 export async function PATCH(
