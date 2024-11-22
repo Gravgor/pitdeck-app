@@ -17,10 +17,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies with increased memory limit
-RUN npm install --force \
-    --max-old-space-size=8192 \
-    --no-audit \
-    --prefer-offline
+RUN npm install --force
 
 # Copy application code
 COPY . .
