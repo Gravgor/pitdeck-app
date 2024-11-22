@@ -56,31 +56,31 @@ export function Card({
       transition={{ duration: 0.5 }}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
-      className={`group relative aspect-[2/3] rounded-xl overflow-hidden 
+      className={`group relative aspect-[2/3] sm:aspect-[2/3] rounded-lg sm:rounded-xl overflow-hidden 
                  ${getRarityBorder(rarity)}
                  hover:scale-105 hover:shadow-2xl transition-all duration-300`}
     >
-      {/* Top badges container with proper z-index */}
-      <div className="absolute top-0 left-0 right-0 z-30 p-3 flex justify-between items-start">
+      {/* Top badges container */}
+      <div className="absolute top-0 left-0 right-0 z-30 p-2 sm:p-3 flex justify-between items-start">
         {/* Available/Owner badge */}
         {owner ? (
-          <div className="flex items-center gap-2 bg-black/50 backdrop-blur-sm rounded-full pl-1 pr-3 py-1">
+          <div className="flex items-center gap-1.5 sm:gap-2 bg-black/50 backdrop-blur-sm rounded-full pl-1 pr-2 sm:pr-3 py-0.5 sm:py-1">
             {owner.image ? (
               <Image
                 src={owner.image}
                 alt={owner.name || 'Owner'}
-                width={24}
-                height={24}
-                className="rounded-full"
+                width={20}
+                height={20}
+                className="rounded-full w-5 h-5 sm:w-6 sm:h-6"
               />
             ) : (
-              <div className="w-6 h-6 bg-gray-600 rounded-full flex items-center justify-center">
-                <span className="text-xs text-white">
+              <div className="w-5 h-5 sm:w-6 sm:h-6 bg-gray-600 rounded-full flex items-center justify-center">
+                <span className="text-[10px] sm:text-xs text-white">
                   {owner.name?.[0]?.toUpperCase() || '?'}
                 </span>
               </div>
             )}
-            <span className="text-xs text-white/90 truncate max-w-[100px]">
+            <span className="text-[10px] sm:text-xs text-white/90 truncate max-w-[80px] sm:max-w-[100px]">
               {owner.name || 'Anonymous'}
             </span>
           </div>
@@ -88,14 +88,14 @@ export function Card({
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-emerald-500 px-3 py-1 rounded-full shadow-lg"
+            className="bg-emerald-500 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full shadow-lg"
           >
-            <span className="text-xs font-medium text-white">Available</span>
+            <span className="text-[10px] sm:text-xs font-medium text-white">Available</span>
           </motion.div>
         )}
 
         {/* Rarity Badge */}
-        <div className={`${getRarityBadgeStyle(rarity)}`}>
+        <div className={`${getRarityBadgeStyle(rarity)} scale-75 sm:scale-100`}>
           {getRarityIcon(rarity)}
         </div>
       </div>
@@ -112,26 +112,28 @@ export function Card({
         
         {/* Content Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent">
-          {/* Card Content - Moved down and adjusted padding */}
-          <div className="absolute bottom-0 left-0 right-0 p-4 pt-12">
+          {/* Card Content */}
+          <div className="absolute bottom-0 left-0 right-0 p-2.5 sm:p-4 pt-8 sm:pt-12">
             {/* Type and Rarity Tags */}
-            <div className="flex items-center gap-2 mb-2">
-              <span className={`px-2 py-0.5 rounded-full text-xs font-medium uppercase tracking-wider 
+            <div className="flex items-center gap-1.5 sm:gap-2 mb-1.5 sm:mb-2">
+              <span className={`px-1.5 sm:px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-medium uppercase tracking-wider 
                             ${getRarityTagStyle(rarity)}`}>
                 {rarity}
               </span>
-              <span className="text-xs text-white/80">{type.replace(/_/g, ' ')}</span>
+              <span className="text-[10px] sm:text-xs text-white/80">{type.replace(/_/g, ' ')}</span>
             </div>
 
             {/* Title */}
-            <h3 className="text-white font-medium tracking-wide text-lg mb-2">{name}</h3>
+            <h3 className="text-white font-medium tracking-wide text-base sm:text-lg mb-1.5 sm:mb-2">{name}</h3>
 
-            {/* Description - Now visible by default */}
-            <p className="text-sm text-white/80 mb-3 line-clamp-2">{description}</p>
+            {/* Description - Hidden on mobile unless touched */}
+            <p className="text-xs sm:text-sm text-white/80 mb-2 sm:mb-3 line-clamp-2 hidden sm:block">
+              {description}
+            </p>
 
             {/* Availability Status */}
             {!owner && (
-              <div className="flex items-center gap-2 text-xs">
+              <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs">
                 <span className="text-emerald-400">Available to Collect</span>
                 <Link 
                   href="/auth/signin" 
@@ -144,11 +146,11 @@ export function Card({
 
             {/* Serial Number */}
             {serialNumber && (
-              <p className={`text-xs ${
+              <p className={`text-[10px] sm:text-xs ${
                 isSpecialSerial(serialNumber)
                   ? 'text-yellow-400 font-semibold'
                   : 'text-white/60'
-              } mt-2`}>
+              } mt-1.5 sm:mt-2`}>
                 #{serialNumber}
                 {isSpecialSerial(serialNumber) && (
                   <span className="ml-1 text-yellow-500">
