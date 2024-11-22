@@ -72,96 +72,175 @@ async function FeaturedCards() {
   );
 }
 
+
+// Stats data
+const STATS_DATA = [
+  { icon: Flag, value: "5+", label: "Racing Series", color: "from-red-500 to-orange-500", bgColor: "bg-red-500/10", iconColor: "text-red-500" },
+  { icon: Car, value: "1000+", label: "Unique Cards", color: "from-blue-500 to-purple-500", bgColor: "bg-blue-500/10", iconColor: "text-blue-500" },
+  { icon: ArrowLeftRight, value: "50K+", label: "Cards Traded", color: "from-green-500 to-emerald-500", bgColor: "bg-green-500/10", iconColor: "text-green-500" },
+  { icon: Users, value: "10K+", label: "Collectors", color: "from-yellow-500 to-amber-500", bgColor: "bg-yellow-500/10", iconColor: "text-yellow-500" }
+];
+
+// Series data
+const SERIES_DATA = [
+  { name: "Formula 1", image: "/logos/f1.png", color: "from-red-500" },
+  { name: "WEC", image: "/logos/wec.png", color: "from-blue-500" },
+  { name: "IndyCar", image: "/logos/indycar.png", color: "from-green-500" },
+  { name: "NASCAR", image: "/logos/nascar.png", color: "from-yellow-500" },
+  { name: "Formula E", image: "/logos/formula-e.png", color: "from-purple-500" }
+];
+
 export default async function Page() {
   const upcomingEvents = await getUpcomingEvents(3);
 
   return (
-    <div className="min-h-screen bg-black">
-      {/* Alpha Version Banner - Mobile Optimized */}
-      <div className="relative bg-yellow-500/10 border-b border-yellow-500/20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 sm:py-3">
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 text-center">
+    <main className="min-h-screen bg-black">
+      {/* Alpha Banner */}
+      <div className="sticky top-0 z-50 bg-yellow-500/10 border-b border-yellow-500/20 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto px-4 py-2">
+          <div className="flex flex-wrap items-center justify-center gap-2 text-center">
             <div className="flex items-center gap-2">
-              <Zap className="h-3 w-3 sm:h-4 sm:w-4 text-yellow-500 animate-pulse" />
-              <span className="text-xs sm:text-sm font-medium text-yellow-500">Alpha Version</span>
+              <Zap className="h-3 w-3 text-yellow-500 animate-pulse" />
+              <span className="text-xs font-medium text-yellow-500">Alpha Version</span>
             </div>
-            <span className="text-xs sm:text-sm text-gray-400 hidden sm:block">
-              This is an early access release. Features may be unstable.
+            <span className="hidden sm:block text-xs text-gray-400">
+              Early access release - Features may be unstable
             </span>
-            <Link
-              href="/roadmap"
-              className="text-xs sm:text-sm text-yellow-500 hover:text-yellow-400 font-medium"
-            >
-              View Roadmap
-              <ArrowRight className="inline-block ml-1 h-3 w-3 sm:h-4 sm:w-4" />
+            <Link href="/roadmap" className="text-xs text-yellow-500 hover:text-yellow-400 font-medium flex items-center">
+              View Roadmap <ArrowRight className="ml-1 h-3 w-3" />
             </Link>
           </div>
         </div>
       </div>
 
-      {/* Hero Section - Mobile Optimized */}
-      <div className="relative">
-        <div className="absolute inset-0 bg-gradient-to-br from-red-600/50 via-blue-600/30 to-slate-900/50" />
-        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-20" />
+      {/* Hero Section */}
+      <section className="relative min-h-[90vh] flex items-center">
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-gradient-to-br from-red-600/50 via-blue-600/30 to-slate-900/50" />
+          <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-20" />
+        </div>
         
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-32 pb-16 sm:pb-20">
-          <div className="text-center space-y-6 sm:space-y-8 animate-fade-in">
-            <div className="inline-flex items-center px-3 py-1 sm:px-4 sm:py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm">
-              <Sparkles className="h-3 w-3 sm:h-4 sm:w-4 text-yellow-400 mr-1.5 sm:mr-2" />
-              <span className="text-xs sm:text-sm text-white/80">New 2024 Season Cards</span>
+        <div className="relative w-full max-w-7xl mx-auto px-4 py-20">
+          <div className="text-center space-y-8 animate-fade-in">
+            <div className="inline-flex items-center px-4 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm">
+              <Sparkles className="h-4 w-4 text-yellow-400 mr-2" />
+              <span className="text-sm text-white/80">New 2024 Season Cards</span>
             </div>
             
-            <h1 className="text-4xl sm:text-5xl md:text-7xl font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500 px-4">
-              The Ultimate
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-display font-bold">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500">
+                The Ultimate
+              </span>
               <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-blue-500 to-yellow-500">
                 Motorsport Collection
               </span>
             </h1>
             
-            <p className="text-base sm:text-xl text-gray-400 max-w-2xl mx-auto px-4">
+            <p className="text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto">
               Collect and trade cards from Formula 1, WEC, IndyCar, NASCAR, and more.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
                 href="/auth/signin"
-                className="group inline-flex items-center justify-center px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base font-medium rounded-full bg-gradient-to-r from-red-600 to-red-500 text-white hover:from-red-500 hover:to-red-400 transition-all duration-200"
+                className="w-full sm:w-auto group inline-flex items-center justify-center px-8 py-3 text-base font-medium rounded-full bg-gradient-to-r from-red-600 to-red-500 text-white hover:from-red-500 hover:to-red-400 transition-all duration-200 shadow-lg shadow-red-500/25"
               >
                 Start Collecting
-                <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Link>
               <Link
                 href="/browse"
-                className="inline-flex items-center justify-center px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base font-medium rounded-full text-white border border-white/10 hover:bg-white/10 transition-colors"
+                className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3 text-base font-medium rounded-full text-white border border-white/10 hover:bg-white/10 transition-colors backdrop-blur-sm"
               >
                 Browse Cards
               </Link>
             </div>
           </div>
         </div>
+      </section>
 
-        {/* Featured Cards Section - Mobile Optimized */}
-        <div className="relative px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
-          <div className="text-center mb-8 sm:mb-12">
-            <h2 className="text-xl sm:text-2xl font-display font-bold text-white inline-flex items-center gap-2">
-              <Star className="h-5 w-5 sm:h-6 sm:w-6 text-yellow-400" />
-              Featured Cards
-            </h2>
-            <p className="text-sm sm:text-base text-gray-400 mt-2">
-              Discover legendary moments across motorsports
-            </p>
-          </div>
-          
-          <Suspense fallback={<FeaturedCardsLoading />}>
-            <div className="overflow-x-auto pb-4 -mx-4 px-4 scrollbar-hide">
-              <div className="flex gap-4 sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:gap-8 max-w-6xl mx-auto">
-                <FeaturedCards />
-              </div>
-            </div>
-          </Suspense>
+      {/* Featured Cards */}
+      <section className="relative py-20 px-4">
+        <div className="text-center mb-12">
+          <h2 className="text-2xl font-display font-bold text-white inline-flex items-center gap-2">
+            <Star className="h-6 w-6 text-yellow-400" />
+            Featured Cards
+          </h2>
+          <p className="text-gray-400 mt-2">
+            Discover legendary moments across motorsports
+          </p>
         </div>
-      </div>
+        
+        <Suspense fallback={<FeaturedCardsLoading />}>
+          <div className="overflow-x-auto -mx-4 px-4 pb-4 scrollbar-hide">
+            <div className="flex sm:grid sm:grid-cols-3 gap-6 max-w-6xl mx-auto">
+              <FeaturedCards />
+            </div>
+          </div>
+        </Suspense>
+      </section>
+
+      {/* Stats Section */}
+      <section className="relative border-y border-white/10 bg-white/5">
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10" />
+          <div className="absolute inset-0 bg-gradient-to-r from-red-500/10 via-transparent to-blue-500/10" />
+        </div>
+        
+        <div className="relative px-4 py-16">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 max-w-7xl mx-auto">
+            {STATS_DATA.map((stat, index) => (
+              <div key={index} className="group relative">
+                <div className={`absolute -inset-0.5 bg-gradient-to-r ${stat.color} rounded-lg blur opacity-25 group-hover:opacity-50 transition duration-1000`} />
+                <div className="relative p-6 bg-black/50 rounded-lg backdrop-blur-sm border border-white/10">
+                  <div className="flex flex-col items-center">
+                    <div className={`p-3 ${stat.bgColor} rounded-xl mb-4`}>
+                      <stat.icon className={`h-6 w-6 sm:h-8 sm:w-8 ${stat.iconColor}`} />
+                    </div>
+                    <div className="text-2xl sm:text-3xl font-bold text-white mb-2 font-display">{stat.value}</div>
+                    <div className="text-sm text-gray-400">{stat.label}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Series Section */}
+      <section className="relative py-20">
+        <div className="px-4">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white text-center mb-12">
+            Featured Series
+          </h2>
+          <div className="overflow-x-auto pb-4 -mx-4 px-4 scrollbar-hide">
+            <div className="flex sm:grid sm:grid-cols-5 gap-4 max-w-7xl mx-auto">
+              {SERIES_DATA.map((series) => (
+                <Link
+                  key={series.name}
+                  href={`/series/${series.name.toLowerCase()}`}
+                  className="group relative rounded-xl overflow-hidden flex-shrink-0 w-60 sm:w-auto"
+                >
+                  <div className={`absolute inset-0 bg-gradient-to-t ${series.color} to-transparent opacity-60 group-hover:opacity-80 transition-opacity`} />
+                  <Image
+                    src={series.image}
+                    alt={series.name}
+                    width={300}
+                    height={200}
+                    className="w-full aspect-[4/3] object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 flex items-end p-4">
+                    <h3 className="text-white font-bold group-hover:translate-x-1 transition-transform">
+                      {series.name}
+                    </h3>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Mobile Game Section */}
       <div className="relative py-24 overflow-hidden">
@@ -355,104 +434,6 @@ export default async function Page() {
         </div>
       </div>
 
-      {/* Stats Section - Mobile Optimized */}
-      <div className="border-y border-white/10 bg-white/5 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10" />
-        <div className="absolute inset-0 bg-gradient-to-r from-red-500/10 via-transparent to-blue-500/10" />
-        
-        <div className="relative px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
-          <div className="grid grid-cols-2 gap-4 sm:gap-8">
-            {/* Racing Series Stat */}
-            <div className="relative group">
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-red-500 to-orange-500 rounded-lg blur opacity-25 group-hover:opacity-50 transition duration-1000" />
-              <div className="relative p-6 bg-black/50 rounded-lg backdrop-blur-sm border border-white/10">
-                <div className="flex flex-col items-center">
-                  <div className="p-3 bg-red-500/10 rounded-xl mb-4">
-                    <Flag className="h-8 w-8 text-red-500" />
-                  </div>
-                  <div className="text-3xl font-bold text-white mb-2 font-display">5+</div>
-                  <div className="text-sm text-gray-400">Racing Series</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Unique Cards Stat */}
-            <div className="relative group">
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg blur opacity-25 group-hover:opacity-50 transition duration-1000" />
-              <div className="relative p-6 bg-black/50 rounded-lg backdrop-blur-sm border border-white/10">
-                <div className="flex flex-col items-center">
-                  <div className="p-3 bg-blue-500/10 rounded-xl mb-4">
-                    <Car className="h-8 w-8 text-blue-500" />
-                  </div>
-                  <div className="text-3xl font-bold text-white mb-2 font-display">1000+</div>
-                  <div className="text-sm text-gray-400">Unique Cards</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Cards Traded Stat */}
-            <div className="relative group">
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg blur opacity-25 group-hover:opacity-50 transition duration-1000" />
-              <div className="relative p-6 bg-black/50 rounded-lg backdrop-blur-sm border border-white/10">
-                <div className="flex flex-col items-center">
-                  <div className="p-3 bg-green-500/10 rounded-xl mb-4">
-                    <ArrowLeftRight className="h-8 w-8 text-green-500" />
-                  </div>
-                  <div className="text-3xl font-bold text-white mb-2 font-display">50K+</div>
-                  <div className="text-sm text-gray-400">Cards Traded</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Collectors Stat */}
-            <div className="relative group">
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-yellow-500 to-amber-500 rounded-lg blur opacity-25 group-hover:opacity-50 transition duration-1000" />
-              <div className="relative p-6 bg-black/50 rounded-lg backdrop-blur-sm border border-white/10">
-                <div className="flex flex-col items-center">
-                  <div className="p-3 bg-yellow-500/10 rounded-xl mb-4">
-                    <Users className="h-8 w-8 text-yellow-500" />
-                  </div>
-                  <div className="text-3xl font-bold text-white mb-2 font-display">10K+</div>
-                  <div className="text-sm text-gray-400">Collectors</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Series Section - Mobile Optimized */}
-      <div className="relative py-16 sm:py-24">
-        <div className="px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl sm:text-3xl font-bold text-white text-center mb-8 sm:mb-12">Featured Series</h2>
-          <div className="overflow-x-auto pb-4 -mx-4 px-4 scrollbar-hide">
-            <div className="flex gap-4 sm:grid sm:grid-cols-3 lg:grid-cols-5 sm:gap-6">
-              {[
-                { name: "Formula 1", image: "/logos/f1.png", color: "from-red-500" },
-                { name: "WEC", image: "/logos/wec.png", color: "from-blue-500" },
-                { name: "IndyCar", image: "/logos/indycar.png", color: "from-green-500" },
-                { name: "NASCAR", image: "/logos/nascar.png", color: "from-yellow-500" },
-                { name: "Formula E", image: "/logos/formula-e.png", color: "from-purple-500" }
-              ].map((series) => (
-                <div key={series.name} className="group relative rounded-xl overflow-hidden">
-                  <div className={`absolute inset-0 bg-gradient-to-t ${series.color} to-transparent opacity-60`} />
-                  <Image
-                    src={series.image}
-                    alt={series.name}
-                    width={300}
-                    height={200}
-                    className="w-full aspect-[4/3] object-cover"
-                  />
-                  <div className="absolute inset-0 flex items-end p-4">
-                    <h3 className="text-white font-bold">{series.name}</h3>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Features Section */}
       <div className="relative">
         <div className="absolute inset-0 bg-gradient-to-b from-black to-slate-900" />
@@ -532,7 +513,7 @@ export default async function Page() {
           </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
 
