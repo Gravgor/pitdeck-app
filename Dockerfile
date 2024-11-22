@@ -22,7 +22,7 @@ COPY tsconfig.json ./
 
 # Clean install dependencies
 RUN npm cache clean --force
-RUN npm install --force --production=false
+RUN npm install --force
 
 # Copy application code
 COPY . .
