@@ -16,7 +16,7 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 COPY prisma ./prisma/
-COPY postcss.config.js ./
+COPY postcss.config.mjs ./
 COPY tailwind.config.ts ./
 COPY tsconfig.json ./
 
