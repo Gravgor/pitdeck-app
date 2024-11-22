@@ -8,7 +8,7 @@ export const prisma =
     log: process.env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
     datasources: {
       db: {
-        url: process.env.DATABASE_URL,
+        url: 'postgresql://postgres:RRgtlLJsjbguXqakEInKEqAracVOlxVa@postgres.railway.internal:5432/railway',
       },
     },
   });
