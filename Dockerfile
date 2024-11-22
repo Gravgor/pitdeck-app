@@ -15,31 +15,26 @@ WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
+COPY prisma ./prisma/
+COPY postcss.config.js ./
+COPY tailwind.config.ts ./
+COPY tsconfig.json ./
 
-# Install dependencies with increased memory limit
-RUN npm install --force
+# Clean install dependencies
+RUN npm cache clean --force
+RUN npm install --force --production=false
 
 # Copy application code
 COPY . .
 
-# Generate Prisma client with increased memory
-RUN npx --node-options="--max-old-space-size=8192" prisma generate
+# Generate Prisma client
+RUN npx prisma generate
 
-# Build application with increased memory
-RUN npm run build --max-old-space-size=8192
+# Build application
+RUN npm run build
 
 # Expose port
 EXPOSE 3000
 
-# Configure container memory limits
-ENV MALLOC_ARENA_MAX=2
-ENV UV_THREADPOOL_SIZE=4
-
-# Start the application with optimized garbage collection
-CMD ["node", \
-     "--max-old-space-size=8192", \
-     "--optimize-for-size", \
-     "--gc-interval=100", \
-     "--max-semi-space-size=512", \
-     "node_modules/.bin/next", \
-     "start"]
+# Start the application
+CMD ["npm", "start"]
