@@ -17,7 +17,7 @@ const PREMIUM_RADIUS = 400;
 const LOCKED_ZOOM = 17;
 
 // Replace with your Mapbox token
-mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN!;
+mapboxgl.accessToken = 'pk.eyJ1IjoibWJvcm93Y3phazIxMTUiLCJhIjoiY20zMnk1bXA5MWF2NTJxcXNhems4b2g1OCJ9.Jw4aE3ygRcqg9wXddMVVAQ';
 
 interface MapViewProps {
   drops: Drop[];
