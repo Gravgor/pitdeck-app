@@ -102,8 +102,8 @@ export function NotificationList({ onClose }: { onClose: () => void }) {
       ) : (
         <div className="divide-y divide-[#1D1D20]">
           {notifications.map((notification: any) => {
-            const Icon = notificationIcons[notification.type as NotificationType] || Bell;
-            const colorClass = notificationColors[notification.type as NotificationType] || 'text-gray-400 bg-[#1D1D20]';
+            const Icon = notificationIcons[notification.type as keyof typeof notificationIcons] || Bell;
+            const colorClass = notificationColors[notification.type as keyof typeof notificationColors] || 'text-gray-400 bg-[#1D1D20]';
 
             return (
               <div
