@@ -38,7 +38,6 @@ export default function RootLayout({
         <SpeedInsights />
         <Providers>
           <Navbar />
-          <EA />
           <main className="pt-16">{children}</main>
           <Footer />
         </Providers>
