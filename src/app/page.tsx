@@ -9,6 +9,8 @@ import Link from 'next/link';
 import { FeaturedCardsLoading } from '@/components/cards/FeaturedCardsLoading';
 import { Suspense } from 'react';
 
+
+
 async function getRandomCards() {
   try {
     // Get all LEGENDARY and EPIC cards
@@ -79,21 +81,21 @@ export default async function Page() {
     <div className="min-h-screen bg-black">
       {/* Alpha Version Banner */}
       <div className="relative bg-yellow-500/10 border-b border-yellow-500/20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-          <div className="flex items-center justify-center gap-2">
-            <div className="flex items-center gap-2">
-              <Zap className="h-4 w-4 text-yellow-500 animate-pulse" />
-              <span className="text-sm font-medium text-yellow-500">Alpha Version</span>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 sm:py-3">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-1.5 sm:gap-2 text-center sm:text-left">
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <Zap className="h-3 w-3 sm:h-4 sm:w-4 text-yellow-500 animate-pulse" />
+              <span className="text-xs sm:text-sm font-medium text-yellow-500">Alpha Version</span>
             </div>
-            <span className="text-sm text-gray-400">
+            <span className="text-xs sm:text-sm text-gray-400 px-2 sm:px-0">
               This is an early access release. Features may be unstable and data might be reset.
             </span>
             <Link
               href="/roadmap"
-              className="text-sm text-yellow-500 hover:text-yellow-400 font-medium ml-2"
+              className="flex items-center text-xs sm:text-sm text-yellow-500 hover:text-yellow-400 font-medium sm:ml-2"
             >
               View Roadmap
-              <ArrowRight className="inline-block ml-1 h-4 w-4" />
+              <ArrowRight className="inline-block ml-1 h-3 w-3 sm:h-4 sm:w-4" />
             </Link>
           </div>
         </div>
@@ -104,39 +106,44 @@ export default async function Page() {
         <div className="absolute inset-0 bg-gradient-to-br from-red-600/50 via-blue-600/30 to-slate-900/50" />
         <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-20" />
         
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20">
-          <div className="text-center space-y-8 animate-fade-in">
-            <div className="inline-flex items-center px-4 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm">
-              <Sparkles className="h-4 w-4 text-yellow-400 mr-2" />
-              <span className="text-sm text-white/80">New 2024 Season Cards Across All Series</span>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-32 pb-12 sm:pb-20">
+          <div className="text-center space-y-6 sm:space-y-8 animate-fade-in">
+            {/* Badge - Smaller on mobile */}
+            <div className="inline-flex items-center px-3 sm:px-4 py-1 sm:py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm">
+              <Sparkles className="h-3 w-3 sm:h-4 sm:w-4 text-yellow-400 mr-1.5 sm:mr-2" />
+              <span className="text-xs sm:text-sm text-white/80">New 2024 Season Cards Across All Series</span>
             </div>
             
-            <h1 className="text-5xl md:text-7xl font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500">
-              The Ultimate
-              <br />
+            {/* Title - Adjusted font sizes */}
+            <h1 className="text-3xl sm:text-5xl md:text-7xl font-display font-bold px-2 sm:px-0">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500">
+                The Ultimate
+              </span>
+              <br className="sm:block" />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-blue-500 to-yellow-500">
                 Motorsport Collection
               </span>
             </h1>
             
-            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-              Collect and trade cards from Formula 1, WEC, IndyCar, NASCAR, and more.
-              From legendary drivers to iconic moments across motorsport history.
-            </p>
+            {/* Description - Smaller text on mobile */}
+            <p className="text-base sm:text-xl text-gray-400 max-w-2xl mx-auto px-4">
+            Collect and trade cards from Formula 1, WEC, IndyCar, NASCAR, and more.
+            From legendary drivers to iconic moments across motorsport history.            </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            {/* Buttons - Full width on mobile */}
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4 sm:px-0">
               <Link
                 href="/auth/signin"
-                className="group inline-flex items-center justify-center px-8 py-3 text-base font-medium rounded-full bg-gradient-to-r from-red-600 to-red-500 text-white hover:from-red-500 hover:to-red-400 transition-all duration-200 shadow-lg shadow-red-500/25"
+                className="w-full sm:w-auto group inline-flex items-center justify-center px-6 sm:px-8 py-3 text-sm sm:text-base font-medium rounded-full bg-gradient-to-r from-red-600 to-red-500 text-white hover:from-red-500 hover:to-red-400 transition-all duration-200 shadow-lg shadow-red-500/25"
               >
                 Start Collecting
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5 group-hover:translate-x-1 transition-transform" />
               </Link>
               <Link
-                href="/browse"
-                className="inline-flex items-center justify-center px-8 py-3 text-base font-medium rounded-full text-white border border-white/10 hover:bg-white/10 transition-colors backdrop-blur-sm"
+                href="/download"
+                className="w-full sm:w-auto inline-flex items-center justify-center px-6 sm:px-8 py-3 text-sm sm:text-base font-medium rounded-full text-white border border-white/10 hover:bg-white/10 transition-colors backdrop-blur-sm"
               >
-                Browse Cards
+                Mobile App
               </Link>
             </div>
           </div>
@@ -208,56 +215,72 @@ export default async function Page() {
             </div>
 
             {/* Mobile Game Features */}
-            <div className="space-y-8">
+            <div className="space-y-6 sm:space-y-8 px-4 sm:px-0">
               <div>
-                <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-3 sm:mb-4">
                   Hunt Cards in the Real World
                 </h2>
-                <p className="text-xl text-gray-400">
+                <p className="text-base sm:text-xl text-gray-400">
                   Turn your race weekend into a treasure hunt. Find exclusive cards at actual racing events and locations.
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                 {/* Feature Cards */}
-                <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
-                  <MapPin className="h-8 w-8 text-red-500 mb-4" />
-                  <h3 className="text-lg font-semibold text-white mb-2">Location-Based Drops</h3>
-                  <p className="text-gray-400">Find rare cards at race tracks and motorsport venues worldwide</p>
+                <div className="group bg-white/5 hover:bg-white/10 backdrop-blur-sm rounded-lg sm:rounded-xl p-4 sm:p-6 border border-white/10 transition-colors duration-200">
+                  <div className="flex items-start sm:block">
+                    <MapPin className="h-6 w-6 sm:h-8 sm:w-8 text-red-500 mb-0 sm:mb-4 mr-4 sm:mr-0 flex-shrink-0" />
+                    <div>
+                      <h3 className="text-base sm:text-lg font-semibold text-white mb-1 sm:mb-2">Location-Based Drops</h3>
+                      <p className="text-sm sm:text-base text-gray-400">Find rare cards at race tracks and motorsport venues worldwide</p>
+                    </div>
+                  </div>
                 </div>
 
-                <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
-                  <Calendar className="h-8 w-8 text-blue-500 mb-4" />
-                  <h3 className="text-lg font-semibold text-white mb-2">Event Bonuses</h3>
-                  <p className="text-gray-400">Higher drop rates and exclusive cards during race weekends</p>
+                <div className="group bg-white/5 hover:bg-white/10 backdrop-blur-sm rounded-lg sm:rounded-xl p-4 sm:p-6 border border-white/10 transition-colors duration-200">
+                  <div className="flex items-start sm:block">
+                    <Calendar className="h-6 w-6 sm:h-8 sm:w-8 text-blue-500 mb-0 sm:mb-4 mr-4 sm:mr-0 flex-shrink-0" />
+                    <div>
+                      <h3 className="text-base sm:text-lg font-semibold text-white mb-1 sm:mb-2">Event Bonuses</h3>
+                      <p className="text-sm sm:text-base text-gray-400">Higher drop rates and exclusive cards during race weekends</p>
+                    </div>
+                  </div>
                 </div>
 
-                <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
-                  <Compass className="h-8 w-8 text-green-500 mb-4" />
-                  <h3 className="text-lg font-semibold text-white mb-2">Exploration Rewards</h3>
-                  <p className="text-gray-400">Earn bonus rewards by exploring new racing locations</p>
+                <div className="group bg-white/5 hover:bg-white/10 backdrop-blur-sm rounded-lg sm:rounded-xl p-4 sm:p-6 border border-white/10 transition-colors duration-200">
+                  <div className="flex items-start sm:block">
+                    <Compass className="h-6 w-6 sm:h-8 sm:w-8 text-green-500 mb-0 sm:mb-4 mr-4 sm:mr-0 flex-shrink-0" />
+                    <div>
+                      <h3 className="text-base sm:text-lg font-semibold text-white mb-1 sm:mb-2">Exploration Rewards</h3>
+                      <p className="text-sm sm:text-base text-gray-400">Earn bonus rewards by exploring new racing locations</p>
+                    </div>
+                  </div>
                 </div>
 
-                <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
-                  <Signal className="h-8 w-8 text-yellow-500 mb-4" />
-                  <h3 className="text-lg font-semibold text-white mb-2">Live Racing Bonuses</h3>
-                  <p className="text-gray-400">Special drops during live races and qualifying sessions</p>
+                <div className="group bg-white/5 hover:bg-white/10 backdrop-blur-sm rounded-lg sm:rounded-xl p-4 sm:p-6 border border-white/10 transition-colors duration-200">
+                  <div className="flex items-start sm:block">
+                    <Signal className="h-6 w-6 sm:h-8 sm:w-8 text-yellow-500 mb-0 sm:mb-4 mr-4 sm:mr-0 flex-shrink-0" />
+                    <div>
+                      <h3 className="text-base sm:text-lg font-semibold text-white mb-1 sm:mb-2">Live Racing Bonuses</h3>
+                      <p className="text-sm sm:text-base text-gray-400">Special drops during live races and qualifying sessions</p>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <Link
                   href="/download"
-                  className="inline-flex items-center justify-center px-8 py-3 text-base font-medium rounded-full bg-gradient-to-r from-red-600 to-red-500 text-white hover:from-red-500 hover:to-red-400 transition-all duration-200"
+                  className="w-full sm:w-auto inline-flex items-center justify-center px-6 sm:px-8 py-3 text-sm sm:text-base font-medium rounded-full bg-gradient-to-r from-red-600 to-red-500 text-white hover:from-red-500 hover:to-red-400 transition-all duration-200 shadow-lg shadow-red-500/25"
                 >
-                  <Smartphone className="mr-2 h-5 w-5" />
+                  <Smartphone className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                   Download App
                 </Link>
                 <Link
                   href="/events"
-                  className="inline-flex items-center justify-center px-8 py-3 text-base font-medium rounded-full text-white border border-white/10 hover:bg-white/10 transition-colors"
+                  className="w-full sm:w-auto inline-flex items-center justify-center px-6 sm:px-8 py-3 text-sm sm:text-base font-medium rounded-full text-white border border-white/10 hover:bg-white/10 transition-colors"
                 >
-                  <Calendar className="mr-2 h-5 w-5" />
+                  <Calendar className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                   View Events
                 </Link>
               </div>

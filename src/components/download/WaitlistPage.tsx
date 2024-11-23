@@ -1,9 +1,10 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Mail, ChevronRight, Star, Trophy, MapPin, Sparkles } from 'lucide-react';
+import { Mail, ChevronRight, Star, Trophy, MapPin, Sparkles, Github } from 'lucide-react';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 const FEATURES = [
   {
@@ -26,14 +27,52 @@ const FEATURES = [
   }
 ];
 
+const APP_PREVIEW_IMAGES = [
+  '/mobile-app/1.png',
+  '/mobile-app/2.png'
+];
+
 export function WaitlistPage() {
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentImageIndex((prev) => 
+        prev === APP_PREVIEW_IMAGES.length - 1 ? 0 : prev + 1
+      );
+    }, 3000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    // Add your waitlist logic here
+    
+    try {
+      const response = await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          email,
+          source: 'website_waitlist' 
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to join waitlist');
+      }
+
+      setSubmitted(true);
+    } catch (error) {
+      console.error('Waitlist submission error:', error);
+      // Handle error (show error message to user)
+    }
   };
 
   return (
@@ -103,6 +142,22 @@ export function WaitlistPage() {
               <p className="text-green-400">Thanks for joining! We'll be in touch soon.</p>
             </motion.div>
           )}
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="flex justify-center mt-8"
+          >
+            <Link 
+              href="/discord" 
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[#5865F2] hover:bg-[#4752C4] transition-colors text-white font-medium group"
+            >
+              <Github className="h-5 w-5" />
+              <span>Join our Discord</span>
+              <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </motion.div>
         </div>
 
         {/* Features Grid */}
@@ -123,21 +178,53 @@ export function WaitlistPage() {
           ))}
         </div>
 
-        {/* App Preview */}
+        {/* Updated App Preview Section */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="relative max-w-md mx-auto"
+          className="relative max-w-[280px] mx-auto h-[600px]"
         >
           <div className="absolute -inset-4 bg-gradient-to-b from-red-500/20 via-orange-500/20 to-transparent blur-xl" />
-          <Image
-            src="/preview.png"
-            alt="App Preview"
-            width={400}
-            height={800}
-            className="relative rounded-2xl border border-white/10"
-          />
+          <div className="relative h-full">
+            {APP_PREVIEW_IMAGES.map((src, index) => (
+              <motion.div
+                key={src}
+                initial={{ opacity: 0 }}
+                animate={{ 
+                  opacity: currentImageIndex === index ? 1 : 0,
+                  scale: currentImageIndex === index ? 1 : 0.8,
+                }}
+                transition={{ duration: 0.5 }}
+                className="absolute inset-0"
+                style={{ display: currentImageIndex === index ? 'block' : 'none' }}
+              >
+                <Image
+                  src={src}
+                  alt={`App Preview ${index + 1}`}
+                  fill
+                  className="rounded-2xl border border-white/10 object-contain"
+                  priority
+                />
+              </motion.div>
+            ))}
+          </div>
+          
+          {/* Navigation dots */}
+          <div className="flex justify-center gap-2 mt-4">
+            {APP_PREVIEW_IMAGES.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentImageIndex(index)}
+                className={`w-2 h-2 rounded-full transition-colors ${
+                  currentImageIndex === index 
+                    ? 'bg-red-500' 
+                    : 'bg-gray-600 hover:bg-gray-500'
+                }`}
+                aria-label={`Go to image ${index + 1}`}
+              />
+            ))}
+          </div>
         </motion.div>
       </div>
     </div>

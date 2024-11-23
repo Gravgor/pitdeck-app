@@ -64,7 +64,8 @@ model User {
   Activity       Activity[]
   achievements   UserAchievement[]
   locations      UserLocation[]
-  notifications  Notification[]
+  notifications         Notification[] @relation("UserNotifications")
+  relatedNotifications  Notification[] @relation("RelatedUserNotifications") 
   quests         UserQuest[]
   createdQuests  Quest[]           @relation("QuestCreator")
   completedMilestones Json?
@@ -151,22 +152,30 @@ enum AchievementRarity {
 }
 
 model Notification {
-  id        String           @id @default(cuid())
-  userId    String
-  type      NotificationType
-  title     String
-  message   String
-  metadata  Json?
-  isRead    Boolean          @default(false)
-  createdAt DateTime         @default(now())
-  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id            String    @id @default(cuid())
+  userId        String
+  type          NotificationType // e.g., TRADE_OFFER, CARD_SOLD, LEVEL_UP
+  message       String
+  read          Boolean   @default(false)
+  relatedUserId String?
+  metadata      Json?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime?  @updatedAt
 
-  @@index([userId, isRead])
+  user          User      @relation("UserNotifications", fields: [userId], references: [id])
+  relatedUser   User?     @relation("RelatedUserNotifications", fields: [relatedUserId], references: [id])
+
+  @@index([userId])
+  @@index([relatedUserId])
+  @@index([createdAt])
+  @@index([read])
 }
 
 enum NotificationType {
   FOLLOW
   TRADE_OFFER
+  CARD_LISTED
+  CARD_SOLD
   TRADE_ACCEPTED
   TRADE_DECLINED
   ACHIEVEMENT_UNLOCKED
@@ -174,6 +183,14 @@ enum NotificationType {
   NEW_PACK
   SYSTEM_ANNOUNCEMENT
   COLLECTION_MILESTONE
+  RARE_CARD_OBTAINED
+  FOLLOWERS_GAINED
+  QUEST_COMPLETED
+  QUEST_EXPIRED
+  QUEST_FAILED
+  QUEST_CANCELLED
+  PACK_OPENED
+  PACK_PURCHASED
 }
 
 model Location {
@@ -291,7 +308,8 @@ model Card {
   // Relations
   owners          User[]          @relation("UserCards")
   listing         Listing?
-  inTrades        Trade[]         @relation("TradeCards")
+ offeredInTrades    Trade[] @relation("OfferedCards")
+  requestedInTrades  Trade[] @relation("RequestedCards")
   pack            Pack?           @relation(fields: [packId], references: [id])
   packId          String?
   questRewards    QuestReward[]
@@ -354,19 +372,23 @@ enum ListingStatus {
 
 // Trading System
 model Trade {
-  id           String      @id @default(cuid())
-  sender       User        @relation("SentTrades", fields: [senderId], references: [id])
+  id           String   @id @default(cuid())
   senderId     String
-  receiver     User        @relation("ReceivedTrades", fields: [receiverId], references: [id])
   receiverId   String
-  cards        Card[]      @relation("TradeCards")
-  coinsOffered Int         @default(0)
-  status       TradeStatus
-  message      String?
+  status       String   @default("PENDING") // PENDING, COMPLETED, REJECTED
+  coinsOffered Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  sender        User     @relation("SentTrades", fields: [senderId], references: [id])
+  receiver      User     @relation("ReceivedTrades", fields: [receiverId], references: [id])
+  offeredCards  Card[]   @relation("OfferedCards")
+  requestedCards Card[]  @relation("RequestedCards")
+
+  @@index([senderId])
+  @@index([receiverId])
 }
+
 
 enum TradeStatus {
   PENDING
@@ -517,6 +539,15 @@ model QuestReward {
   updatedAt DateTime @updatedAt
 
   @@unique([questId, cardId])
+}
+
+model WaitlistEntry {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+  status    String   @default("pending") // pending, approved, rejected
+  source    String?  // track where the signup came from
+  notes     String?
 }
 
 enum QuestType {
