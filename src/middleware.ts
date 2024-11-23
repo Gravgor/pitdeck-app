@@ -5,6 +5,7 @@ import type { NextRequest } from 'next/server';
 
 export const config = {
   matcher: [
+    '/',
     '/achievements/:path*',
     '/packs/:path*',
     '/trading/:path*',
