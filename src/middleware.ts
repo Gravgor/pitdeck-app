@@ -5,7 +5,7 @@ import type { NextRequest } from 'next/server';
 
 export const config = {
   matcher: [
-    '/',
+    'https://pitdeck-app-production.up.railway.app/',
     '/achievements/:path*',
     '/packs/:path*',
     '/trading/:path*',
@@ -17,7 +17,7 @@ export const config = {
 };
 
 export async function middleware(request: NextRequest) {
-  if (request.headers.get('host')?.includes('railway.app')) {
+  if (request.headers.get('host') === 'pitdeck-app-production.up.railway.app') {
     return NextResponse.redirect('https://pitdeck.app', { status: 301 });
   }
   const token = await getToken({ req: request });
