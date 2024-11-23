@@ -25,6 +25,11 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
+    let newName = name;
+
+    if (name.includes(" ") || !/^[a-zA-Z0-9]+$/.test(name)) {
+      newName = name.replace(/[^a-zA-Z0-9]/g, "-");
+    }
 
     // Hash password
     const hashedPassword = await hash(password, 10);
@@ -33,7 +38,7 @@ export async function POST(req: Request) {
     const user = await prisma.user.create({
       data: {
         email,
-        name,
+        name: newName,
         password: hashedPassword,
         coins: 1000, // Starting coins
       },
