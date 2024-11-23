@@ -14,6 +14,7 @@ import { getRecentActivities } from '@/lib/activity';
 import { ActivityFeed } from '@/components/profile/ActivityFeed';
 import { LevelProgress } from '@/components/profile/LevelProgress';
 import Image from 'next/image';
+import { cleanNickname } from '@/lib/utils';
 
 interface ProfilePageProps {
     params: Promise<{ 
@@ -63,19 +64,20 @@ export async function generateMetadata(
   }
 
   const previousImages = (await parent).openGraph?.images || [];
+  const cleanName = cleanNickname(user.name || '');
 
   return {
-    title: `${user.name}'s Profile | PitDeck`,
-    description: `Check out ${user.name}'s racing card collection on PitDeck. View their cards, trades, and achievements.`,
+      title: `${cleanName}'s Profile | PitDeck`,
+    description: `Check out ${cleanName}'s racing card collection on PitDeck. View their cards, trades, and achievements.`,
     openGraph: {
-      title: `${user.name}'s Racing Card Collection`,
-      description: `Explore ${user.name}'s collection of ${user._count.cards} racing cards, including trades and achievements.`,
+      title: `${cleanName}'s Racing Card Collection`,
+      description: `Explore ${cleanName}'s collection of ${user._count.cards} racing cards, including trades and achievements.`,
       images: [user.image || '', ...previousImages],
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${user.name}'s Racing Card Collection | PitDeck`,
-      description: `Explore ${user.name}'s collection of ${user._count.cards} racing cards, including trades and achievements.`,
+      title: `${cleanName}'s Racing Card Collection | PitDeck`,
+      description: `Explore ${cleanName}'s collection of ${user._count.cards} racing cards, including trades and achievements.`,
       images: [user.image || '', ...previousImages],
     },
     alternates: {
@@ -139,6 +141,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
   });
 
   const activities = await getRecentActivities(profileUser.id);
+  const cleanName = cleanNickname(profileUser.name || '');
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -155,17 +158,17 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
 
           <div className="flex-grow">
             <h1 className="text-3xl font-bold bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent">
-              {profileUser.name}
+              {cleanName}
             </h1>
-            <p className="text-gray-400">@{profileUser.name}</p>
+            <p className="text-gray-400">@{cleanName}</p>
           </div>
 
           <div className="flex items-center gap-4">
             <div className="flex gap-6 text-sm text-gray-400">
-              <Link href={`/profile/${profileUser.name}/followers`} className="hover:text-white">
+              <Link href={`/profile/${cleanName}/followers`} className="hover:text-white">
                 <span className="font-bold text-white">{followData?._count.followers}</span> followers
               </Link>
-              <Link href={`/profile/${profileUser.name}/following`} className="hover:text-white">
+              <Link href={`/profile/${cleanName}/following`} className="hover:text-white">
                 <span className="font-bold text-white">{followData?._count.following}</span> following
               </Link>
             </div>
@@ -199,7 +202,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-white">Collection Preview</h2>
             <Link 
-              href={`/collection/${profileUser.name}`}
+              href={`/collection/${cleanName}`}
               className="flex items-center gap-1 px-4 py-2 text-sm text-red-400 hover:text-red-300 transition-colors"
             >
               View All <ChevronRight className="h-4 w-4" />

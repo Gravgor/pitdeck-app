@@ -57,4 +57,11 @@ export function formatCompactNumber(n: number): string {
 export function truncateText(text: string, length: number): string {
   if (text.length <= length) return text;
   return text.slice(0, length) + '...';
+}
+
+/**
+ * Removes hyphens and trims whitespace from a nickname
+ */
+export function cleanNickname(nickname: string): string {
+  return nickname.replace(/-/g, '').trim();
 } 
