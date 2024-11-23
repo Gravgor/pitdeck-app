@@ -5,7 +5,6 @@ import type { NextRequest } from 'next/server';
 
 export const config = {
   matcher: [
-    'https://pitdeck-app-production.up.railway.app/',
     '/achievements/:path*',
     '/packs/:path*',
     '/trading/:path*',
