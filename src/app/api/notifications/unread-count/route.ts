@@ -13,7 +13,7 @@ export async function GET() {
   const count = await prisma.notification.count({
     where: {
       userId: session.user.id,
-      isRead: false,
+      read: false,
     },
   });
 

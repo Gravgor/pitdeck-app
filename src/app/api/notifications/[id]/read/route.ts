@@ -24,7 +24,7 @@ export async function POST(
 
   await prisma.notification.update({
     where: { id },
-    data: { isRead: true },
+    data: { read: true },
   });
 
   return NextResponse.json({ success: true });
