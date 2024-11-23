@@ -16,6 +16,9 @@ export const config = {
 };
 
 export async function middleware(request: NextRequest) {
+  if (request.headers.get('host')?.includes('railway.app')) {
+    return NextResponse.redirect('https://pitdeck.app', { status: 301 });
+  }
   const token = await getToken({ req: request });
 
   // Check if user is authenticated
