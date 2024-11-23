@@ -28,7 +28,7 @@ const ROADMAP_PHASES = [
     description: 'Platform stability and feature enhancements',
     date: 'Q1 2025',
     features: [
-      { name: 'Mobile app beta', completed: false },
+      { name: 'Mobile app beta', completed: true },
       { name: 'Advanced trading features', completed: false },
       { name: 'Enhanced marketplace analytics', completed: false },
       { name: 'Real-time race integration', completed: true },

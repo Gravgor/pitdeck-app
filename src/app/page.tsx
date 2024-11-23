@@ -140,10 +140,10 @@ export default async function Page() {
                 <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5 group-hover:translate-x-1 transition-transform" />
               </Link>
               <Link
-                href="/browse"
+                href="/download"
                 className="w-full sm:w-auto inline-flex items-center justify-center px-6 sm:px-8 py-3 text-sm sm:text-base font-medium rounded-full text-white border border-white/10 hover:bg-white/10 transition-colors backdrop-blur-sm"
               >
-                Browse Cards
+                Mobile App
               </Link>
             </div>
           </div>
