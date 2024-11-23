@@ -5,6 +5,7 @@ import { Footer } from '@/components/layout/Footer';
 import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import './globals.css';
+import EA from '@/components/layout/EA';
 
 // Font for headings - Orbitron has a modern, technical feel perfect for motorsports
 const orbitron = Orbitron({
@@ -37,6 +38,7 @@ export default function RootLayout({
         <SpeedInsights />
         <Providers>
           <Navbar />
+          <EA />
           <main className="pt-16">{children}</main>
           <Footer />
         </Providers>
