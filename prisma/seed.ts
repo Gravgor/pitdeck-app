@@ -37,6 +37,80 @@ async function generateCards(cardTemplate: any, prints: number) {
 
 async function main() {
 
+  const vegas = [
+    {
+      name: "George Russell: Vegas Glory Winner",
+      type: "WINNERS_EDITION",
+      rarity: "LEGENDARY",
+      imageUrl: "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/events/vegas2024/russell-vegas-2024-winner.png",
+      description: "Celebrating George Russell's spectacular victory at the Las Vegas Grand Prix, showcasing his skill and determination under the dazzling neon lights.",
+      series: "F1",
+      edition: "2024",
+      year: 2024,
+      isExclusive: true,
+      eventId: "F1-Las Vegas Grand Prix-2024",
+      isPromotional: false,
+      stats: {
+        speed: 96,
+        consistency: 95,
+        racecraft: 97,
+        defense: 94,
+        qualifying: 95,
+        overall: 96
+      },
+      championshipDetails: {
+        championshipPosition: 5,
+        totalPoints: 245,
+        winsInSeason: 1,
+        podiumsInSeason: 6,
+        championshipClinchRace: null
+      },
+      eventDetails: {
+        venue: "Las Vegas Street Circuit",
+        date: "2024-11-23",
+        raceResult: "P1",
+        qualifyingPosition: "P1",
+        fastestLap: false
+      }
+    },
+    {
+      name: "George Russell: Vegas Glory Winner",
+      type: "WINNERS_EDITION",
+      rarity: "EPIC",
+      imageUrl: "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/events/vegas2024/russell-vegas-2024-winner.png",
+      description: "Celebrating George Russell's spectacular victory at the Las Vegas Grand Prix, showcasing his skill and determination under the dazzling neon lights.",
+      series: "F1",
+      edition: "2024",
+      year: 2024,
+      isExclusive: true,
+      eventId: "F1-Las Vegas Grand Prix-2024",
+      isPromotional: false,
+      stats: {
+        speed: 96,
+        consistency: 95,
+        racecraft: 97,
+        defense: 94,
+        qualifying: 95,
+        overall: 96
+      },
+      championshipDetails: {
+        championshipPosition: 6,
+        totalPoints: 217,
+        winsInSeason: 2,
+        podiumsInSeason: 4,
+        championshipClinchRace: null
+      },
+      eventDetails: {
+        venue: "Las Vegas Street Circuit",
+        date: "2024-11-23",
+        raceResult: "P1",
+        qualifyingPosition: "P1",
+        fastestLap: false
+      }
+    }
+    
+  ]
+
 
   /* const f1Drivers = [
     {
@@ -862,7 +936,7 @@ const f1Cars = [
     //{ data: championship2021Cards, name: 'Championship 2021 Cards' },
     //{ data: seasonalCards, name: 'Seasonal Cards' },
     //{ data: legendaryHistoricCards, name: 'Legendary Historic Cards' },
-    { data: LasVegasEvent, name: '2024 F1 Las Vegas Grand Prix' }
+    { data: vegas, name: 'FORMULA 1 HEINEKEN SILVER LAS VEGAS GRAND PRIX 2024' }
   ];
 
   for (const category of categories) {

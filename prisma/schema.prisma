@@ -341,6 +341,7 @@ enum CardType {
   CHAMPIONSHIP
   SEASONAL
   LEGENDARY_HISTORIC
+  WINNERS_EDITION
 }
 
 enum Rarity {

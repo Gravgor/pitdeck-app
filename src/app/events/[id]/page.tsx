@@ -17,6 +17,7 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
 
   //create unique event id
   const uniqueEventId = `${event.series}-${event.name}-${event.date.getFullYear()}`;
+  console.log(uniqueEventId);
 
   // Fetch exclusive cards for this event
   const exclusiveCards = await prisma.card.findMany({
@@ -24,7 +25,11 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
       eventId: uniqueEventId,
       isExclusive: true,
     },
+    distinct: ['name'],
     take: 3,
+    orderBy: {
+      createdAt: 'desc',
+    },
   });
 
   return (
