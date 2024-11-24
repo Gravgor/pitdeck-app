@@ -91,6 +91,8 @@ export function PackStore({ packs, isLoading = false }: PackStoreProps) {
           >
             <div className="aspect-[2/1] relative overflow-hidden">
               <Image
+                loading="lazy"
+                placeholder="blur"
                 src={pack.imageUrl}
                 alt={pack.name}
                 className="w-full h-full object-cover transition-transform hover:scale-110 duration-300"

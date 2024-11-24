@@ -298,6 +298,8 @@ export default async function Page() {
                 <div className={`absolute inset-0 bg-gradient-to-t ${getSeriesColor(event.series)} to-transparent`} />
                 <Image
                   src={`/events/${event.series.toLowerCase()}/${event.circuitId}.jpg`}
+                  placeholder="blur"
+                  loading="lazy"
                   alt={event.name}
                   width={400}
                   height={300}
@@ -446,6 +448,8 @@ export default async function Page() {
               <div key={series.name} className="group relative rounded-xl overflow-hidden">
                 <div className={`absolute inset-0 bg-gradient-to-t ${series.color} to-transparent opacity-60`} />
                 <Image
+                  placeholder="blur"
+                  loading="lazy"
                   src={series.image}
                   alt={series.name}
                   width={300}
