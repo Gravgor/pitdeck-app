@@ -8,6 +8,8 @@ import { format } from 'date-fns';
 import Link from 'next/link';
 import { FeaturedCardsLoading } from '@/components/cards/FeaturedCardsLoading';
 import { Suspense } from 'react';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 
 
 
@@ -74,8 +76,14 @@ async function FeaturedCards() {
   );
 }
 
+async function getUser() {
+  const session = await getServerSession(authOptions);
+  return session?.user;
+}
+
 export default async function Page() {
   const upcomingEvents = await getUpcomingEvents(3);
+  const user = await getUser();
 
   return (
     <div className="min-h-screen bg-black">
@@ -116,7 +124,7 @@ export default async function Page() {
       {/* Buttons - Full width on mobile */}
       <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4 sm:px-0">
         <Link
-          href="/auth/signin"
+          href={user ? '/collection' : '/auth/signin'}
           className="w-full sm:w-auto group inline-flex items-center justify-center px-6 sm:px-8 py-3 text-sm sm:text-base font-medium rounded-full bg-gradient-to-r from-red-600 to-red-500 text-white hover:from-red-500 hover:to-red-400 transition-all duration-200 shadow-lg shadow-red-500/25"
         >
           Start Collecting
