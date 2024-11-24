@@ -4,7 +4,7 @@
 import { Card, Rarity } from '@prisma/client';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Crown, Star, Trophy, Medal, ShoppingCart, RefreshCw, X, Loader2 } from 'lucide-react';
+import { Crown, Star, Trophy, Medal, ShoppingCart, RefreshCw, X, Loader2, Package } from 'lucide-react';
 import { toast } from 'sonner';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -43,6 +43,20 @@ export function MarketplaceCardGrid({ cards }: MarketplaceCardGridProps) {
       setIsLoading(false);
     }
   };
+
+  if (!cards.length) {
+    return (
+      <div className="flex flex-col items-center justify-center py-24 px-4">
+        <div className="bg-white/5 rounded-full p-4 mb-4">
+          <Package className="h-8 w-8 text-gray-400" />
+        </div>
+        <h3 className="text-xl font-medium text-white mb-2">No Cards Available</h3>
+        <p className="text-gray-400 text-center max-w-md">
+          There are currently no cards listed in the marketplace. Check back later or be the first to list a card!
+        </p>
+      </div>
+    );
+  }
 
   return (
     <>
