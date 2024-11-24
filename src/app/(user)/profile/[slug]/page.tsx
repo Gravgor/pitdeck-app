@@ -4,7 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { getUserByUsername } from "@/lib/user";
 import { redirect } from "next/navigation";
 import Link from 'next/link';
-import { ChevronRight, ArrowRightLeft, Package, Trophy, Pencil } from 'lucide-react';
+import { ChevronRight, ArrowRightLeft, Package, Trophy, Pencil, Wallet, Car } from 'lucide-react';
 import { CardGrid } from '@/components/cards/CardGrid';
 import { ResolvingMetadata, Metadata } from 'next';
 import ProfileNotFound from './not-found';
@@ -212,14 +212,39 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
         {/* Stats Overview */}
         <div className="mt-8 grid grid-cols-1 md:grid-cols-4 gap-4">
           {[
-            { label: 'Total Cards', value: profileUser._count.cards },
-            { label: 'Trades', value: profileUser._count.sentTrades + profileUser._count.receivedTrades },
-            { label: 'Packs Opened', value: profileUser._count.packsPurchased },
-            { label: 'Coins', value: profileUser.coins.toLocaleString() }
+            { 
+              label: 'Total Cards', 
+              value: profileUser._count.cards,
+              icon: Car,
+              color: 'text-blue-400'
+            },
+            { 
+              label: 'Trades', 
+              value: profileUser._count.sentTrades + profileUser._count.receivedTrades,
+              icon: ArrowRightLeft,
+              color: 'text-green-400'
+            },
+            { 
+              label: 'Packs Opened', 
+              value: profileUser._count.packsPurchased,
+              icon: Package,
+              color: 'text-purple-400'
+            },
+            { 
+              label: 'Coins', 
+              value: profileUser.coins.toLocaleString(),
+              icon: Wallet,
+              color: 'text-yellow-400'
+            }
           ].map((stat, index) => (
             <div key={index} className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-4 border border-red-500/10 hover:border-red-500/20 transition-colors">
-              <p className="text-sm text-gray-400">{stat.label}</p>
-              <p className="text-2xl font-bold text-white mt-1">{stat.value}</p>
+              <div className="flex items-center gap-3 mb-2">
+                <div className={`${stat.color} bg-white/5 rounded-full p-2`}>
+                  <stat.icon className="h-4 w-4" />
+                </div>
+                <p className="text-sm text-gray-400">{stat.label}</p>
+              </div>
+              <p className="text-2xl font-bold text-white">{stat.value}</p>
             </div>
           ))}
         </div>
