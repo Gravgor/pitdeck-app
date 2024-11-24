@@ -30,19 +30,24 @@ export function DropMarker({ drop, selected, onClick }: DropMarkerProps) {
 }
 
 function createDropIcon(type: string, selected: boolean) {
-  const color = selected ? 'red' : 'gray';
   return L.divIcon({
     html: `
       <div class="relative">
-        <div class="h-6 w-6 bg-${color}-500 rounded-full flex items-center justify-center">
-          ${getDropIcon(type)}
+        <div class="w-10 h-14 bg-black/90 backdrop-blur-sm border ${selected ? 'border-red-500' : 'border-white/20'} rounded-lg flex items-center justify-center transform hover:scale-110 transition-all shadow-lg">
+          <div class="flex flex-col items-center">
+            <span class="text-xl text-white font-bold">?</span>
+            <span class="text-[8px] text-gray-400 uppercase mt-0.5">${type}</span>
+          </div>
         </div>
-        ${selected ? '<div class="absolute inset-0 animate-ping bg-red-500/50 rounded-full"></div>' : ''}
+        ${selected ? '<div class="absolute inset-0 animate-ping bg-red-500/30 rounded-lg"></div>' : ''}
       </div>
     `,
     className: 'custom-drop-marker',
+    iconSize: [40, 56],
+    iconAnchor: [20, 56],
+    popupAnchor: [0, -48]
   });
-} 
+}
 
 
 function getDropIcon(type: string) {
