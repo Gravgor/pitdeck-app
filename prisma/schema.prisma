@@ -46,6 +46,7 @@ model User {
   level          Int               @default(1)
   xp             Int               @default(0)
   totalXp        Int               @default(0)
+  role           UserRole          @default(USER)
   lastLocation   Location?
   discoveries    Drop[]
   accounts       Account[]
@@ -70,6 +71,11 @@ model User {
   createdQuests  Quest[]           @relation("QuestCreator")
   completedMilestones Json?
   needUsernameSetup Boolean @default(false)
+}
+
+enum UserRole {
+  USER
+  PITDECK_TEAM
 }
 
 model UserLocation {

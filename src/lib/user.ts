@@ -10,6 +10,7 @@ export async function getUserByUsername(username: string) {
         name: true,
         image: true,
         coins: true,
+        role: true,
         totalXp: true,
         cards: {
           take: 20, // Limit initial load

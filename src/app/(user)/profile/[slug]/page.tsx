@@ -4,7 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { getUserByUsername } from "@/lib/user";
 import { redirect } from "next/navigation";
 import Link from 'next/link';
-import { ChevronRight, ArrowRightLeft, Package, Trophy } from 'lucide-react';
+import { ChevronRight, ArrowRightLeft, Package, Trophy, Pencil } from 'lucide-react';
 import { CardGrid } from '@/components/cards/CardGrid';
 import { ResolvingMetadata, Metadata } from 'next';
 import ProfileNotFound from './not-found';
@@ -162,13 +162,22 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
           <UserAvatar name={profileUser.name} size={96} />
          )}
 
-          <div className="flex-grow">
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent">
-              {cleanName}
-            </h1>
+<div className="flex-grow">
+            <div className="flex items-center gap-3">
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent">
+                {cleanName}
+              </h1>
+              {profileUser.role === 'PITDECK_TEAM' && (
+                <span className="px-2 py-0.5 text-xs font-medium bg-red-500/10 text-red-500 rounded-full border border-red-500/20">
+                  PitDeck Team
+                </span>
+              )}
+            </div>
             <p className="text-gray-400">@{profileUser.name}</p>
+            <p className="text-gray-400 mt-2 text-sm">
+              {'Racing enthusiast, F1 fan, and avid collector.'}
+            </p>
           </div>
-
           <div className="flex items-center gap-4">
             <div className="flex gap-6 text-sm text-gray-400">
               <Link href={`/profile/${profileUser.name}/followers`} className="hover:text-white">
@@ -187,6 +196,18 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
             )}
           </div>
         </div>
+
+        {isOwner && (
+          <div className="mt-4">
+            <Link
+              href="/settings/profile"
+              className="inline-flex items-center gap-2 px-4 py-2 text-sm text-white bg-white/5 hover:bg-white/10 rounded-lg border border-white/10 transition-colors"
+            >
+              <Pencil className="h-4 w-4" />
+              Edit Profile
+            </Link>
+          </div>
+        )}
 
         {/* Stats Overview */}
         <div className="mt-8 grid grid-cols-1 md:grid-cols-4 gap-4">
