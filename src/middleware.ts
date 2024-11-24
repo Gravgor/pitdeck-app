@@ -25,7 +25,6 @@ export async function middleware(request: NextRequest) {
   // Check if user is authenticated
   if (!token) {
     const signInUrl = new URL('/auth/signin', request.url);
-    signInUrl.searchParams.set('callbackUrl', request.url);
     return NextResponse.redirect(signInUrl);
   }
 
