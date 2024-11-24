@@ -83,65 +83,76 @@ export default async function Page() {
 
       {/* Hero Section */}
       <div className="relative">
-        <div className="absolute inset-0 bg-gradient-to-br from-red-600/50 via-blue-600/30 to-slate-900/50" />
-        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-20" />
-        
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-32 pb-12 sm:pb-20">
-          <div className="text-center space-y-6 sm:space-y-8 animate-fade-in">
-            {/* Badge - Smaller on mobile */}
-            <div className="inline-flex items-center px-3 sm:px-4 py-1 sm:py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm">
-              <Sparkles className="h-3 w-3 sm:h-4 sm:w-4 text-yellow-400 mr-1.5 sm:mr-2" />
-              <span className="text-xs sm:text-sm text-white/80">New 2024 Season Cards Across All Series</span>
-            </div>
-            
-            {/* Title - Adjusted font sizes */}
-            <h1 className="text-3xl sm:text-5xl md:text-7xl font-display font-bold px-2 sm:px-0">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500">
-                The Ultimate
-              </span>
-              <br className="sm:block" />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-blue-500 to-yellow-500">
-                Motorsport Collection
-              </span>
-            </h1>
-            
-            {/* Description - Smaller text on mobile */}
-            <p className="text-base sm:text-xl text-gray-400 max-w-2xl mx-auto px-4">
-            Collect and trade cards from Formula 1, WEC, IndyCar, NASCAR, and more.
-            From legendary drivers to iconic moments across motorsport history.            </p>
-            
-            {/* Buttons - Full width on mobile */}
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4 sm:px-0">
-              <Link
-                href="/auth/signin"
-                className="w-full sm:w-auto group inline-flex items-center justify-center px-6 sm:px-8 py-3 text-sm sm:text-base font-medium rounded-full bg-gradient-to-r from-red-600 to-red-500 text-white hover:from-red-500 hover:to-red-400 transition-all duration-200 shadow-lg shadow-red-500/25"
-              >
-                Start Collecting
-                <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5 group-hover:translate-x-1 transition-transform" />
-              </Link>
-              <Link
-                href="/download"
-                className="w-full sm:w-auto inline-flex items-center justify-center px-6 sm:px-8 py-3 text-sm sm:text-base font-medium rounded-full text-white border border-white/10 hover:bg-white/10 transition-colors backdrop-blur-sm"
-              >
-                Mobile App
-              </Link>
-            </div>
-          </div>
-        </div>
+        {/* Hero Section */}
+<div className="relative">
+  <div className="absolute inset-0 bg-gradient-to-br from-red-600/50 via-blue-600/30 to-slate-900/50" />
+  <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-20" />
+  
+  <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 lg:pt-20 sm:pt-32 pb-12 sm:pb-20">
+    <div className="text-center space-y-6 sm:space-y-8 animate-fade-in">
+      {/* Badge - Smaller on mobile */}
+      <div className="inline-flex items-center px-3 sm:px-4 py-1 sm:py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm">
+        <Sparkles className="h-3 w-3 sm:h-4 sm:w-4 text-yellow-400 mr-1.5 sm:mr-2" />
+        <span className="text-xs sm:text-sm text-white/80">New 2024 Season Cards Across All Series</span>
+      </div>
+      
+      {/* Title - Adjusted font sizes */}
+      <h1 className="text-3xl sm:text-5xl md:text-7xl font-display font-bold px-2 sm:px-0">
+        <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500">
+          The Ultimate
+        </span>
+        <br className="sm:block" />
+        <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-blue-500 to-yellow-500">
+          Motorsport Collection
+        </span>
+      </h1>
+      
+      {/* Description - Smaller text on mobile */}
+      <p className="text-base sm:text-xl text-gray-400 max-w-2xl mx-auto px-4">
+        Collect and trade cards from Formula 1, WEC, IndyCar, NASCAR, and more.
+        From legendary drivers to iconic moments across motorsport history.
+      </p>
+      
+      {/* Buttons - Full width on mobile */}
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4 sm:px-0">
+        <Link
+          href="/auth/signin"
+          className="w-full sm:w-auto group inline-flex items-center justify-center px-6 sm:px-8 py-3 text-sm sm:text-base font-medium rounded-full bg-gradient-to-r from-red-600 to-red-500 text-white hover:from-red-500 hover:to-red-400 transition-all duration-200 shadow-lg shadow-red-500/25"
+        >
+          Start Collecting
+          <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5 group-hover:translate-x-1 transition-transform" />
+        </Link>
+        <Link
+          href="/download"
+          className="w-full sm:w-auto inline-flex items-center justify-center px-6 sm:px-8 py-3 text-sm sm:text-base font-medium rounded-full text-white border border-white/10 hover:bg-white/10 transition-colors backdrop-blur-sm"
+        >
+          Mobile App
+        </Link>
+      </div>
+    </div>
+  </div>
+</div>
 
         {/* Featured Cards Preview */}
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-          <div className="text-center mb-12">
-            <h2 className="text-2xl font-display font-bold text-white inline-flex items-center gap-2">
-              <Star className="h-6 w-6 text-yellow-400" />
-              Featured Cards
-            </h2>
-            <p className="text-gray-400 mt-2">Discover legendary moments across motorsports</p>
-          </div>
+        <div className="relative py-20">
+          {/* Background Layers */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black via-black/95 to-black" />
+          <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-40" />
           
-          <Suspense fallback={<FeaturedCardsLoading />}>
-            <FeaturedCards />
-          </Suspense>
+          {/* Content */}
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-2xl font-display font-bold text-white inline-flex items-center gap-2">
+                <Star className="h-6 w-6 text-yellow-400" />
+                Featured Cards
+              </h2>
+              <p className="text-gray-400 mt-2">Discover legendary moments across motorsports</p>
+            </div>
+            
+            <Suspense fallback={<FeaturedCardsLoading />}>
+              <FeaturedCards />
+            </Suspense>
+          </div>
         </div>
       </div>
 

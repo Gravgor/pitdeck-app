@@ -127,7 +127,7 @@ export async function getUpcomingEvents(limit: number = 3): Promise<RaceEvent[]>
       }));
 
     // Add other series events
-    const otherEvents: RaceEvent[] = [
+    /*const otherEvents: RaceEvent[] = [
       {
         id: 'wec-lemans',
         series: 'WEC',
@@ -150,9 +150,9 @@ export async function getUpcomingEvents(limit: number = 3): Promise<RaceEvent[]>
         imageUrl: '/events/indycar/indy500.jpg',
         dropMultiplier: 3,
       },
-    ];
+    ];*/
 
-    const allEvents = [...f1Events, ...otherEvents];
+    const allEvents = [...f1Events];
 
     // Sort by date and return nearest events
     return allEvents
