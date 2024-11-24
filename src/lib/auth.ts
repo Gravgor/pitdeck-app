@@ -52,6 +52,12 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
+    async signIn({ user, account }) {
+      if (account?.provider === 'google' && user.name) {
+        user.name = user.name.replace(/\s+/g, '-').toLowerCase();
+      }
+      return true;
+    },
     async session({ token, session }) {
       if (token) {
         session.user.id = token.id;
