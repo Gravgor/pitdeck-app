@@ -22,7 +22,12 @@ export async function middleware(request: NextRequest) {
   }
   const token = await getToken({ req: request });
 
-  // Check if user is authenticated
+
+  if (request.nextUrl.pathname === '/auth/signin' || request.nextUrl.pathname === '/auth/signup') {
+    return NextResponse.next();
+  }
+
+
   if (!token) {
     const signInUrl = new URL('/auth/signin', request.url);
     return NextResponse.redirect(signInUrl);
