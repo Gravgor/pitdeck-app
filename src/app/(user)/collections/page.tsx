@@ -2,6 +2,7 @@ import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Trophy, Star, Users, ChevronRight } from 'lucide-react';
+import { cleanNickname } from '@/lib/utils';
 
 async function getTopCollections() {
   const users = await prisma.user.findMany({
@@ -66,7 +67,7 @@ export default async function CollectionsPage() {
                 />
                 <div>
                   <h3 className="text-xl font-bold text-white group-hover:text-red-400 transition-colors">
-                    {collector.name}
+                    {cleanNickname(collector.name || '')}
                   </h3>
                   <p className="text-sm text-gray-400">
                     Joined {new Date(collector.createdAt).toLocaleDateString()}

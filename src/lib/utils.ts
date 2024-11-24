@@ -63,5 +63,5 @@ export function truncateText(text: string, length: number): string {
  * Removes hyphens and trims whitespace from a nickname
  */
 export function cleanNickname(nickname: string): string {
-  return nickname.replace(/-/g, '').trim();
+  return nickname.replace(/[-_]/g, ' ')
 } 

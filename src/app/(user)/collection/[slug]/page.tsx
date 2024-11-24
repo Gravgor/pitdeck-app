@@ -5,6 +5,7 @@ import { prisma } from '@/lib/prisma';
 import { CardGrid } from '@/components/cards/CardGrid';
 import { Trophy, Star, Wallet, Clock } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 async function getCollectionData(slug: string) {
   const user = await prisma.user.findUnique({
@@ -59,22 +60,26 @@ export default async function UserCollectionPage({ params }: { params: Promise<{
   }
 
   const isOwner = session?.user?.name === slug;
-
+   
+  // remove - and _ from name and add spaces
+  const cleanName = collectionData.user.name?.replace(/[-_]/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
   return (
     <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       {/* Header Section */}
       <div className="flex items-center gap-6">
-        <div className="relative w-16 h-16">
-          <Image
-            src={collectionData.user.image || '/default-avatar.png'}
-            alt={collectionData.user.name || 'User'}
-            fill
-            className="rounded-full object-cover"
-          />
-        </div>
+        <Link href={`/profile/${collectionData.user.name}`}>
+          <div className="relative w-16 h-16">
+            <Image
+              src={collectionData.user.image || '/default-avatar.png'}
+              alt={collectionData.user.name || 'User'}
+              fill
+              className="rounded-full object-cover"
+            />
+          </div>
+        </Link>
         <div>
           <h1 className="text-4xl font-bold text-white">
-            {isOwner ? 'My Collection' : `${collectionData.user.name}'s Collection`}
+            {isOwner ? 'My Collection' : `${cleanName}'s Collection`}
           </h1>
           <p className="text-gray-400">
             Member since {new Date(collectionData.user.createdAt).toLocaleDateString()}
