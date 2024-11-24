@@ -8,7 +8,7 @@ async function getPacksData() {
   const packs = await prisma.pack.findMany({
     where: {
       name: {
-        in: ['Standard Pack', 'Rare Pack', 'Legendary Pack']
+        in: ['Standard Pack', 'Premium Pack', 'Legendary Pack']
       }
     },
     orderBy: {
