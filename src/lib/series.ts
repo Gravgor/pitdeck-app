@@ -122,7 +122,7 @@ export async function getSeriesData(slug: string): Promise<Series> {
     where: { 
       series: seriesId.toUpperCase(),
       rarity: 'LEGENDARY' as Rarity
-    }
+    },
   });
 
   const collectors = await prisma.user.count({
@@ -142,6 +142,7 @@ export async function getSeriesData(slug: string): Promise<Series> {
       ]
     },
     take: 10,
+    distinct: ['name'],
     orderBy: {
       rarity: 'asc'
     }
@@ -160,6 +161,7 @@ export async function getSeriesData(slug: string): Promise<Series> {
         }
       },
       take: 10 - featuredCards.length,
+      distinct: ['name'],
       orderBy: {
         rarity: 'asc'
       }
