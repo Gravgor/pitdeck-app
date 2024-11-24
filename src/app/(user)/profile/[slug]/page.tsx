@@ -166,15 +166,15 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
             <h1 className="text-3xl font-bold bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent">
               {cleanName}
             </h1>
-            <p className="text-gray-400">@{cleanName}</p>
+            <p className="text-gray-400">@{profileUser.name}</p>
           </div>
 
           <div className="flex items-center gap-4">
             <div className="flex gap-6 text-sm text-gray-400">
-              <Link href={`/profile/${cleanName}/followers`} className="hover:text-white">
+              <Link href={`/profile/${profileUser.name}/followers`} className="hover:text-white">
                 <span className="font-bold text-white">{followData?._count.followers}</span> followers
               </Link>
-              <Link href={`/profile/${cleanName}/following`} className="hover:text-white">
+              <Link href={`/profile/${profileUser.name}/following`} className="hover:text-white">
                 <span className="font-bold text-white">{followData?._count.following}</span> following
               </Link>
             </div>
