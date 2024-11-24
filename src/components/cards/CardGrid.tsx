@@ -13,6 +13,7 @@ import { CardModal } from './CardModal';
 interface CardGridProps {
   cards: Card[];
   showActions?: boolean;
+  isOwner: boolean;
 }
 
 // Add this new function to check for special serials
@@ -31,7 +32,7 @@ function getOrdinalSuffix(num: number): string {
   return "th";
 }
 
-export function CardGrid({ cards, showActions = true }: CardGridProps) {
+export function CardGrid({ cards, showActions = true, isOwner = false }: CardGridProps) {
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
 
   const handleSellCard = async (cardId: string, price: number) => {
@@ -132,20 +133,20 @@ export function CardGrid({ cards, showActions = true }: CardGridProps) {
               <div className={`absolute inset-0 ${getRarityOverlay(card.rarity)}`} />
 
               {/* Sale/Trade Badges */}
-              {(card.isForSale || card.isForTrade) && (
-                <div className="absolute top-3 left-3 flex gap-2">
-                  {card.isForSale && (
-                    <span className="px-2 py-1 bg-green-500/90 text-white text-xs rounded-full">
-                      {card.price} RC
-                    </span>
-                  )}
-                  {card.isForTrade && (
-                    <span className="px-2 py-1 bg-blue-500/90 text-white text-xs rounded-full">
-                      For Trade
-                    </span>
-                  )}
-                </div>
-              )}
+              {isOwner && (card.isForSale || card.isForTrade) && (
+              <div className="absolute top-3 left-3 flex gap-2">
+                {card.isForSale && (
+                  <span className="px-2 py-1 bg-green-500/90 text-white text-xs rounded-full">
+                    {card.price} RC
+                  </span>
+                )}
+                {card.isForTrade && (
+                  <span className="px-2 py-1 bg-blue-500/90 text-white text-xs rounded-full">
+                    For Trade
+                  </span>
+                )}
+              </div>
+            )}
             </div>
             
             {/* Card Info */}

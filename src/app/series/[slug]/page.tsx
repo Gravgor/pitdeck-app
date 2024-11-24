@@ -81,7 +81,7 @@ export default async function SeriesPage({ params }: SeriesPageProps) {
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-white mb-8">Featured Cards</h2>
-          <CardGrid cards={series.featuredCards} />
+          <CardGrid cards={series.featuredCards} isOwner={false} />
         </div>
       </section>
 

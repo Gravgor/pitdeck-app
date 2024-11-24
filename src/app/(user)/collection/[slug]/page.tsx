@@ -123,7 +123,7 @@ export default async function UserCollectionPage({ params }: { params: Promise<{
         {/* Cards Grid */}
         <div>
           {collectionData.cards.length > 0 ? (
-            <CardGrid cards={collectionData.cards} showActions={isOwner} />
+            <CardGrid cards={collectionData.cards} showActions={isOwner} isOwner={isOwner} />
           ) : (
             <div className="flex flex-col items-center justify-center py-24 px-4 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10">
               <div className="bg-white/5 rounded-full p-4 mb-4">

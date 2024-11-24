@@ -261,7 +261,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
             </Link>
           </div>
           <div className="bg-black/50 rounded-xl p-6 border border-red-500/10">
-            <CardGrid cards={displayCards} />
+            <CardGrid cards={displayCards} isOwner={isOwner} />
           </div>
         </section>
 

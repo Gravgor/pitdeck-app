@@ -205,8 +205,9 @@ export default async function CollectionPage() {
               <CardGrid cards={userCards.map(userCard => ({
                 ...userCard,
                 userCardId: userCard.id,
-                quantity: 1
-              }))} />
+                quantity: 1,
+                isOwner: true
+              }))} isOwner={true} />
             )}
           </div>
         </div>
