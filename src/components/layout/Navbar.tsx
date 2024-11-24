@@ -93,6 +93,7 @@ export function Navbar() {
                       <Link
                         key={link.name}
                         href={link.href}
+                        onClick={() => setIsMobileMenuOpen(false)}
                         className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-white/10 hover:text-white transition-colors"
                       >
                         <link.icon className="h-4 w-4 mr-2" />
@@ -109,6 +110,7 @@ export function Navbar() {
               <Link
                 key={link.name}
                 href={link.href}
+                onClick={() => setIsMobileMenuOpen(false)}
                 className={`text-sm ${
                   pathname === link.href ? 'text-white' : 'text-gray-300 hover:text-white'
                 } transition-colors`}
@@ -209,12 +211,14 @@ export function Navbar() {
             ) : (
               <>
                 <Link
+                  onClick={() => setIsMobileMenuOpen(false)}
                   href="/auth/signin"
                   className="px-4 py-2 text-sm text-white hover:text-white/80 transition-colors"
                 >
                   Sign In
                 </Link>
                 <Link
+                  onClick={() => setIsMobileMenuOpen(false)}
                   href="/auth/signup"
                   className="px-4 py-2 text-sm bg-red-600 hover:bg-red-700 text-white rounded-full transition-colors"
                 >
@@ -255,6 +259,7 @@ export function Navbar() {
                   <Link
                     key={link.name}
                     href={link.href}
+                    onClick={() => setIsMobileMenuOpen(false)}
                     className="flex items-center px-2 py-2 text-base text-gray-300 hover:text-white transition-colors"
                   >
                     <link.icon className="h-5 w-5 mr-3" />
@@ -270,6 +275,7 @@ export function Navbar() {
                   <Link
                     key={link.name}
                     href={link.href}
+                    onClick={() => setIsMobileMenuOpen(false)}
                     className="block px-2 py-2 text-base text-gray-300 hover:text-white transition-colors"
                   >
                     {link.name}
@@ -277,20 +283,64 @@ export function Navbar() {
                 ))}
               </div>
 
-              {/* Mobile Auth Links */}
+              {/* Mobile Auth/User Menu */}
               <div className="pt-4 space-y-3">
-                <Link
-                  href="/auth/signin"
-                  className="block w-full px-4 py-2 text-center text-white border border-white/10 rounded-full hover:bg-white/10 transition-colors"
-                >
-                  Sign In
-                </Link>
-                <Link
-                  href="/auth/signup"
-                  className="block w-full px-4 py-2 text-center bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors"
-                >
-                  Get Started
-                </Link>
+                {status === 'loading' ? (
+                  <NavbarLoading />
+                ) : status === 'authenticated' ? (
+                  <>
+                    {/* Balance */}
+                    <div className="px-4 py-2 bg-white/5 rounded-full flex items-center space-x-2">
+                      <CreditCard className="h-4 w-4 text-yellow-400" />
+                      <span className="text-sm text-white font-display">
+                        {session.user.coins || 0} RC
+                      </span>
+                    </div>
+                    
+                    {/* User Menu Items */}
+                    <div className="space-y-2">
+                      {userMenuItems.map((item) => (
+                        <Link
+                          key={item.label}
+                          href={item.href}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className="flex items-center space-x-2 px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+                        >
+                          <item.icon className="h-4 w-4" />
+                          <span>{item.label}</span>
+                        </Link>
+                      ))}
+                      <hr className="my-2 border-white/10" />
+                      <button
+                        onClick={() => {
+                          signOut();
+                          setIsMobileMenuOpen(false);
+                        }}
+                        className="w-full flex items-center space-x-2 px-4 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-white/10 rounded-lg transition-colors"
+                      >
+                        <LogOut className="h-4 w-4" />
+                        <span>Sign Out</span>
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      href="/auth/signin"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="block w-full px-4 py-2 text-center text-white border border-white/10 rounded-full hover:bg-white/10 transition-colors"
+                    >
+                      Sign In
+                    </Link>
+                    <Link
+                      href="/auth/signup"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="block w-full px-4 py-2 text-center bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors"
+                    >
+                      Get Started
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </motion.div>
