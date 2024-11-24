@@ -343,6 +343,7 @@ enum CardType {
   LEGENDARY_HISTORIC
   WINNERS_EDITION
   MOMENT_IN_TIME
+  ICONIC_MOMENT
 }
 
 enum Rarity {
