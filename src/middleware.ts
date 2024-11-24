@@ -28,6 +28,11 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(signInUrl);
   }
 
+  if ((request.nextUrl.pathname === '/auth/signin' || request.nextUrl.pathname === '/auth/signup') && token) {
+    const collectionUrl = new URL('/collection', request.url);
+    return NextResponse.redirect(collectionUrl);
+  }
+
   try {
     // Run user checks in the background
     const userId = token.sub as string;
