@@ -39,11 +39,11 @@ async function main() {
 
   const vegas = [
     {
-      name: "George Russell: Vegas Glory Winner",
-      type: "WINNERS_EDITION",
+      name: "Mercedes-AMG Petronas: Vegas 1-2 Finish",
+      type: "MOMENT_IN_TIME",
       rarity: "LEGENDARY",
-      imageUrl: "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/events/vegas2024/russell-vegas-2024-winner.png",
-      description: "Celebrating George Russell's spectacular victory at the Las Vegas Grand Prix, showcasing his skill and determination under the dazzling neon lights.",
+      imageUrl: "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/events/vegas2024/mercedes-vegas-2024-1-2-finish.png",
+      description: "A historic moment as Mercedes-AMG Petronas F1 Team secures an incredible 1-2 finish at the Las Vegas Grand Prix, with George Russell taking the win and Lewis Hamilton finishing second.",
       series: "F1",
       edition: "2024",
       year: 2024,
@@ -51,34 +51,47 @@ async function main() {
       eventId: "F1-Las Vegas Grand Prix-2024",
       isPromotional: false,
       stats: {
-        speed: 96,
-        consistency: 95,
-        racecraft: 97,
-        defense: 94,
-        qualifying: 95,
-        overall: 96
-      },
-      championshipDetails: {
-        championshipPosition: 5,
-        totalPoints: 245,
-        winsInSeason: 1,
-        podiumsInSeason: 6,
-        championshipClinchRace: null
+        teamPerformance: 97,
+        strategy: 98,
+        pitStops: 96,
+        driverSynergy: 95,
+        overall: 97
       },
       eventDetails: {
         venue: "Las Vegas Street Circuit",
         date: "2024-11-23",
-        raceResult: "P1",
-        qualifyingPosition: "P1",
-        fastestLap: false
+        qualifyingResults: [
+          {
+            name: "George Russell",
+            position: "P1"
+          },
+          {
+            name: "Lewis Hamilton",
+            position: "P10"
+          }
+        ],
+        teamName: "Mercedes-AMG Petronas F1 Team",
+        drivers: [
+          {
+            name: "George Russell",
+            position: "P1",
+            fastestLap: false
+          },
+          {
+            name: "Lewis Hamilton",
+            position: "P2",
+            fastestLap: false
+          }
+        ],
+        raceHighlights: "A masterclass in racecraft and strategy as Mercedes dominated the field, with precise pit stops and incredible teamwork ensuring a dominant 1-2 finish."
       }
     },
     {
-      name: "George Russell: Vegas Glory Winner",
-      type: "WINNERS_EDITION",
+      name: "Mercedes-AMG Petronas: Vegas 1-2 Finish",
+      type: "MOMENT_IN_TIME",
       rarity: "EPIC",
-      imageUrl: "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/events/vegas2024/russell-vegas-2024-winner.png",
-      description: "Celebrating George Russell's spectacular victory at the Las Vegas Grand Prix, showcasing his skill and determination under the dazzling neon lights.",
+      imageUrl: "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/events/vegas2024/mercedes-vegas-2024-1-2-finish.png",
+      description: "A historic moment as Mercedes-AMG Petronas F1 Team secures an incredible 1-2 finish at the Las Vegas Grand Prix, with George Russell taking the win and Lewis Hamilton finishing second.",
       series: "F1",
       edition: "2024",
       year: 2024,
@@ -86,28 +99,90 @@ async function main() {
       eventId: "F1-Las Vegas Grand Prix-2024",
       isPromotional: false,
       stats: {
-        speed: 96,
-        consistency: 95,
-        racecraft: 97,
-        defense: 94,
-        qualifying: 95,
-        overall: 96
-      },
-      championshipDetails: {
-        championshipPosition: 6,
-        totalPoints: 217,
-        winsInSeason: 2,
-        podiumsInSeason: 4,
-        championshipClinchRace: null
+        teamPerformance: 97,
+        strategy: 98,
+        pitStops: 96,
+        driverSynergy: 95,
+        overall: 97
       },
       eventDetails: {
         venue: "Las Vegas Street Circuit",
         date: "2024-11-23",
-        raceResult: "P1",
-        qualifyingPosition: "P1",
-        fastestLap: false
+        qualifyingResults: [
+          {
+            name: "George Russell",
+            position: "P1"
+          },
+          {
+            name: "Lewis Hamilton",
+            position: "P10"
+          }
+        ],
+        teamName: "Mercedes-AMG Petronas F1 Team",
+        drivers: [
+          {
+            name: "George Russell",
+            position: "P1",
+            fastestLap: false
+          },
+          {
+            name: "Lewis Hamilton",
+            position: "P2",
+            fastestLap: false
+          }
+        ],
+        raceHighlights: "A masterclass in racecraft and strategy as Mercedes dominated the field, with precise pit stops and incredible teamwork ensuring a dominant 1-2 finish."
+      }
+    },
+    {
+      name: "Mercedes-AMG Petronas: Vegas 1-2 Finish",
+      type: "MOMENT_IN_TIME",
+      rarity: "RARE",
+      imageUrl: "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/events/vegas2024/mercedes-vegas-2024-1-2-finish.png",
+      description: "A historic moment as Mercedes-AMG Petronas F1 Team secures an incredible 1-2 finish at the Las Vegas Grand Prix, with George Russell taking the win and Lewis Hamilton finishing second.",
+      series: "F1",
+      edition: "2024",
+      year: 2024,
+      isExclusive: true,
+      eventId: "F1-Las Vegas Grand Prix-2024",
+      isPromotional: false,
+      stats: {
+        teamPerformance: 97,
+        strategy: 98,
+        pitStops: 96,
+        driverSynergy: 95,
+        overall: 97
+      },
+      eventDetails: {
+        venue: "Las Vegas Street Circuit",
+        date: "2024-11-23",
+        qualifyingResults: [
+          {
+            name: "George Russell",
+            position: "P1"
+          },
+          {
+            name: "Lewis Hamilton",
+            position: "P10"
+          }
+        ],
+        teamName: "Mercedes-AMG Petronas F1 Team",
+        drivers: [
+          {
+            name: "George Russell",
+            position: "P1",
+            fastestLap: false
+          },
+          {
+            name: "Lewis Hamilton",
+            position: "P2",
+            fastestLap: false
+          }
+        ],
+        raceHighlights: "A masterclass in racecraft and strategy as Mercedes dominated the field, with precise pit stops and incredible teamwork ensuring a dominant 1-2 finish."
       }
     }
+    
     
   ]
 

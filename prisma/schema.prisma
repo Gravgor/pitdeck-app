@@ -342,6 +342,7 @@ enum CardType {
   SEASONAL
   LEGENDARY_HISTORIC
   WINNERS_EDITION
+  MOMENT_IN_TIME
 }
 
 enum Rarity {
