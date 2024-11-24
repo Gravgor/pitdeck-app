@@ -112,18 +112,24 @@ export async function getSeriesData(slug: string): Promise<Series> {
   }
 
   // Get total cards count
-  const totalCards = await prisma.card.count({
-    where: { series: seriesId.toUpperCase() }
-  });
-  console.log(totalCards);
+  const totalCards = await prisma.card.groupBy({
+    by: ['name'],
+    where: { 
+      series: seriesId.toUpperCase() 
+    },
+    _count: true
+  }).then(groups => groups.length);
 
   // Get legendary cards count
-  const legendaryCards = await prisma.card.count({
+  const legendaryCards = await prisma.card.groupBy({
+    by: ['name'],
     where: { 
       series: seriesId.toUpperCase(),
       rarity: 'LEGENDARY' as Rarity
     },
-  });
+    _count: true
+  }).then(groups => groups.length);
+
 
   const collectors = await prisma.user.count({
     where: {
