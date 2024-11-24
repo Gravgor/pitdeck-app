@@ -19,11 +19,12 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
   const uniqueEventId = `${event.series}-${event.name}-${event.date.getFullYear()}`;
   console.log(uniqueEventId);
 
-  // Fetch exclusive cards for this event
+  // Fetch exclusive cards for this event, show only legendary rarity 
   const exclusiveCards = await prisma.card.findMany({
     where: {
       eventId: uniqueEventId,
       isExclusive: true,
+      rarity: 'LEGENDARY',
     },
     distinct: ['name'],
     take: 3,
