@@ -12,6 +12,7 @@ export const config = {
     '/profile/:path*',
     '/map/:path*',
     '/quests/:path*',
+    '/auth/:path*',
   ]
 };
 
