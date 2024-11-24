@@ -9,6 +9,7 @@
     "lint": "next lint",
     "db:seed": "npx ts-node --transpile-only prisma/seed.ts",
     "db:pack": "npx ts-node --transpile-only prisma/seed/data.ts",
+    "db:image-update": "npx ts-node --transpile-only prisma/image-update.ts",
     "favicon": "npx ts-node --transpile-only scripts/generate-favicon.ts"
   },
   "dependencies": {
