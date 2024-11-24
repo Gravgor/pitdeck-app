@@ -6,8 +6,16 @@ import { PackStore } from '@/components/packs/PackStore';
 
 async function getPacksData() {
   const packs = await prisma.pack.findMany({
-    orderBy: { price: "asc" },
+    where: {
+      name: {
+        in: ['Standard Pack', 'Rare Pack', 'Legendary Pack']
+      }
+    },
+    orderBy: {
+      price: "asc"
+    }
   });
+
   return packs;
 }
 
