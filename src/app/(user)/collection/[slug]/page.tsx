@@ -7,6 +7,7 @@ import { Trophy, Star, Wallet, Clock, Package, ShoppingCart } from 'lucide-react
 import Image from 'next/image';
 import Link from 'next/link';
 import { UserAvatar } from '@/components/ui/UserAvatar';
+import { cleanNickname } from '@/lib/utils';
 
 async function getCollectionData(slug: string) {
   const user = await prisma.user.findUnique({
@@ -63,7 +64,7 @@ export default async function UserCollectionPage({ params }: { params: Promise<{
   const isOwner = session?.user?.name === slug;
    
   // remove - and _ from name and add spaces
-  const cleanName = collectionData.user.name?.replace(/[-_]/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
+  const cleanName = cleanNickname(collectionData?.user.name || '');
   return (
     <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       {/* Header Section */}
