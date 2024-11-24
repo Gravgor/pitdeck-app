@@ -1,8 +1,9 @@
-import { prisma } from '@/lib/prisma';
-import Link from 'next/link';
-import Image from 'next/image';
-import { Trophy, Star, Users, ChevronRight } from 'lucide-react';
-import { cleanNickname } from '@/lib/utils';
+import { prisma } from "@/lib/prisma";
+import Link from "next/link";
+import Image from "next/image";
+import { Trophy, Star, Users, ChevronRight } from "lucide-react";
+import { cleanNickname } from "@/lib/utils";
+import { UserAvatar } from "@/components/ui/UserAvatar";
 
 async function getTopCollections() {
   const users = await prisma.user.findMany({
@@ -20,15 +21,16 @@ async function getTopCollections() {
     },
     orderBy: {
       cards: {
-        _count: 'desc',
+        _count: "desc",
       },
     },
     take: 50,
   });
 
-  return users.map(user => ({
+  return users.map((user) => ({
     ...user,
-    legendaryCount: user.cards.filter(card => card.rarity === 'LEGENDARY').length,
+    legendaryCount: user.cards.filter((card) => card.rarity === "LEGENDARY")
+      .length,
   }));
 }
 
@@ -41,7 +43,9 @@ export default async function CollectionsPage() {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-4xl font-bold text-white">Top Collections</h1>
-          <p className="text-gray-400 mt-2">Discover the most impressive card collections</p>
+          <p className="text-gray-400 mt-2">
+            Discover the most impressive card collections
+          </p>
         </div>
       </div>
 
@@ -54,20 +58,24 @@ export default async function CollectionsPage() {
             className="group relative bg-white/5 backdrop-blur-sm rounded-xl overflow-hidden border border-white/10 hover:border-white/20 transition-all duration-300"
           >
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/50 to-black" />
-            
+
             {/* Collector Info */}
             <div className="relative p-6">
               <div className="flex items-center gap-4">
-                <Image
-                  src={collector.image || '/default-avatar.png'}
-                  alt={collector.name || 'Collector'}
-                  width={56}
-                  height={56}
-                  className="rounded-full ring-2 ring-white/20"
-                />
+                {collector.image?.trim() ? (
+                  <Image
+                    src={collector.image}
+                    alt={collector.name || "Collector"}
+                    width={56}
+                    height={56}
+                    className="rounded-full ring-2 ring-white/20"
+                  />
+                ) : (
+                  <UserAvatar name={collector.name} size={56} />
+                )}
                 <div>
                   <h3 className="text-xl font-bold text-white group-hover:text-red-400 transition-colors">
-                    {cleanNickname(collector.name || '')}
+                    {cleanNickname(collector.name || "")}
                   </h3>
                   <p className="text-sm text-gray-400">
                     Joined {new Date(collector.createdAt).toLocaleDateString()}
@@ -81,14 +89,18 @@ export default async function CollectionsPage() {
                   <div className="p-2 bg-blue-500/10 rounded-lg mx-auto w-fit mb-2">
                     <Trophy className="h-5 w-5 text-blue-500" />
                   </div>
-                  <div className="text-lg font-bold text-white">{collector._count.cards}</div>
+                  <div className="text-lg font-bold text-white">
+                    {collector._count.cards}
+                  </div>
                   <div className="text-xs text-gray-400">Total Cards</div>
                 </div>
                 <div className="text-center">
                   <div className="p-2 bg-yellow-500/10 rounded-lg mx-auto w-fit mb-2">
                     <Star className="h-5 w-5 text-yellow-500" />
                   </div>
-                  <div className="text-lg font-bold text-white">{collector.legendaryCount}</div>
+                  <div className="text-lg font-bold text-white">
+                    {collector.legendaryCount}
+                  </div>
                   <div className="text-xs text-gray-400">Legendary</div>
                 </div>
                 <div className="text-center">
@@ -112,4 +124,4 @@ export default async function CollectionsPage() {
       </div>
     </div>
   );
-} 
+}

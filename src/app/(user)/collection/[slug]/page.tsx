@@ -6,6 +6,7 @@ import { CardGrid } from '@/components/cards/CardGrid';
 import { Trophy, Star, Wallet, Clock, Package, ShoppingCart } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { UserAvatar } from '@/components/ui/UserAvatar';
 
 async function getCollectionData(slug: string) {
   const user = await prisma.user.findUnique({
@@ -68,14 +69,18 @@ export default async function UserCollectionPage({ params }: { params: Promise<{
       {/* Header Section */}
       <div className="flex items-center gap-6">
         <Link href={`/profile/${collectionData.user.name}`}>
-          <div className="relative w-16 h-16">
-            <Image
-              src={collectionData.user.image || '/default-avatar.png'}
-              alt={collectionData.user.name || 'User'}
-              fill
-              className="rounded-full object-cover"
-            />
-          </div>
+        {collectionData.user.image?.trim() ? (
+            <div className="relative w-16 h-16">
+              <Image
+                src={collectionData.user.image}
+                alt={collectionData.user.name || 'User'}
+                fill
+                className="rounded-full object-cover ring-2 ring-white/20"
+              />
+            </div>
+          ) : (
+            <UserAvatar name={collectionData.user.name} size={64} />
+          )}
         </Link>
         <div>
           <h1 className="text-4xl font-bold text-white">

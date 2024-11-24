@@ -15,6 +15,7 @@ import { ActivityFeed } from '@/components/profile/ActivityFeed';
 import { LevelProgress } from '@/components/profile/LevelProgress';
 import Image from 'next/image';
 import { cleanNickname } from '@/lib/utils';
+import { UserAvatar } from '@/components/ui/UserAvatar';
 
 interface ProfilePageProps {
     params: Promise<{ 
@@ -148,13 +149,18 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
       <div className="bg-gradient-to-b from-gray-900 to-black rounded-2xl p-6 shadow-xl border border-red-500/10">
         {/* Profile Header */}
         <div className="flex items-center gap-6">
-          <div className="w-24 h-24 rounded-full overflow-hidden ring-4 ring-red-500/20 shadow-lg">
-            <Image 
-              src={profileUser.image || '/default-avatar.png'} 
+         {profileUser.image?.trim() ? (
+          <div className="relative w-24 h-24">
+            <Image
+              src={profileUser.image}
               alt={`${profileUser.name}'s profile`}
-              className="w-full h-full object-cover"
+              fill
+              className="rounded-full object-cover ring-2 ring-white/20"
             />
           </div>
+         ) : (
+          <UserAvatar name={profileUser.name} size={96} />
+         )}
 
           <div className="flex-grow">
             <h1 className="text-3xl font-bold bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent">
