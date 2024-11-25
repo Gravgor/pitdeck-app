@@ -1,4 +1,5 @@
 import { createNotification } from "./notifications";
+import { prisma } from "@/lib/prisma";
 
 interface Milestone {
     cards: number;
@@ -57,7 +58,7 @@ export async function checkCollectionMilestones(userId: string) {
       prisma.activity.create({
         data: {
           userId,
-          type: 'COLLECTION_MILESTONE',
+          type: 'COLLECTION_UPDATE',
           description: `Reached ${milestone.cards} cards collection milestone!`,
           metadata: {
             cardCount: milestone.cards,

@@ -13,11 +13,11 @@ const prisma = new PrismaClient();
 /** @type {CardImageMapping[]} */
 const cardImages = [
   {
-    name: 'Williams FW46',
-    imageUrl: 'https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/cars/Williams FW46.jpg',
-    type: 'F1_CAR',
+    name: "Red Bull Racing",
+    imageUrl: 'https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/teams/red-bull.jpg',
+    type: 'TEAM',
     series: 'F1'
-  },
+  }
 
 ];
 
