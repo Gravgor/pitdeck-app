@@ -1,11 +1,6 @@
 import type { MetadataRoute } from 'next'
-import { getSeriesData } from '@/lib/series'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  // Get all series for dynamic routes
-  const series = await getSeriesData('all')
-
-  // Static routes
   const staticRoutes = [
     {
       url: 'https://pitdeck.app',
