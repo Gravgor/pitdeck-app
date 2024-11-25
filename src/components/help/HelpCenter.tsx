@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Search, ChevronRight, Package, Wallet, Users, Trophy, Star, HelpCircle } from 'lucide-react';
 import { HelpArticle } from './HelpArticle';
+import { cardTypesContent } from './articles/cardTypesContent';
 const HELP_CATEGORIES = [
   {
     id: 'getting-started',
@@ -32,7 +33,8 @@ const HELP_CATEGORIES = [
       {
         id: 'card-types',
         title: 'Card Types & Rarity',
-        content: 'Understand different card types and rarity levels...'
+        content: cardTypesContent,
+        isMarkdown: true
       },
       {
         id: 'pack-types',
