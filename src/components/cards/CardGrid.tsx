@@ -123,6 +123,7 @@ export function CardGrid({ cards, showActions = true, isOwner = false }: CardGri
                 src={card.imageUrl}
                 alt={card.name}
                 placeholder="blur"
+                blurDataURL={card.imageUrl}
                 loading="lazy"
                 fill
                 className="object-cover"

@@ -33,3 +33,13 @@ export async function getUserByUsername(username: string) {
     return null;
   }
 } 
+
+export async function getUserByEmail(email: string) {
+  try {
+    const user = await prisma.user.findUnique({ where: { email }, include: { accounts: true } });
+    return user;
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    return null;
+  }
+}

@@ -24,6 +24,7 @@
     "@vercel/speed-insights": "^1.1.0",
     "axios": "^1.7.7",
     "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
     "canvas-confetti": "^1.9.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
@@ -39,6 +40,7 @@
     "next-auth": "^4.24.10",
     "react": "19.0.0-rc-66855b96-20241106",
     "react-dom": "19.0.0-rc-66855b96-20241106",
+    "react-hook-form": "^7.53.2",
     "react-leaflet": "^4.2.1",
     "react-map-gl": "^7.1.7",
     "sharp": "^0.33.5",
@@ -49,6 +51,7 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
+    "@types/bcryptjs": "^2.4.6",
     "@types/canvas-confetti": "^1.6.4",
     "@types/leaflet": "^1.9.14",
     "@types/node": "^20",
