@@ -12,6 +12,7 @@ export async function getUserByUsername(username: string) {
         coins: true,
         role: true,
         totalXp: true,
+        bio: true,
         cards: {
           take: 20, // Limit initial load
           orderBy: { createdAt: 'desc' },

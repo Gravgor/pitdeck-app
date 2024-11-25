@@ -175,7 +175,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
             </div>
             <p className="text-gray-400">@{profileUser.name}</p>
             <p className="text-gray-400 mt-2 text-sm">
-              {'Racing enthusiast, F1 fan, and avid collector.'}
+              {profileUser.bio || 'No bio yet.'}
             </p>
           </div>
           <div className="flex items-center gap-4">
