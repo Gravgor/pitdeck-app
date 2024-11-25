@@ -23,7 +23,7 @@ export async function middleware(request: NextRequest) {
   const token = await getToken({ req: request });
 
 
-  if (request.nextUrl.pathname === '/auth/signin' || request.nextUrl.pathname === '/auth/signup') {
+  if (request.nextUrl.pathname === '/auth/signin' || request.nextUrl.pathname === '/auth/register') {
     return NextResponse.next();
   }
 
@@ -33,7 +33,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(signInUrl);
   }
 
-  if ((request.nextUrl.pathname === '/auth/signin' || request.nextUrl.pathname === '/auth/signup') && token) {
+  if ((request.nextUrl.pathname === '/auth/signin' || request.nextUrl.pathname === '/auth/register') && token) {
     const collectionUrl = new URL('/collection', request.url);
     return NextResponse.redirect(collectionUrl);
   }
