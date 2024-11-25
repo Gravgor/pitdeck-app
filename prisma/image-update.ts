@@ -13,9 +13,9 @@ const prisma = new PrismaClient();
 /** @type {CardImageMapping[]} */
 const cardImages = [
   {
-    name: 'Max Verstappen - Las Vegas Launch Edition',
-    imageUrl: 'https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/events/vegas2023/Max Verstappen - Las Vegas Launch Edition.jpg',
-    type: 'F1_DRIVER',
+    name: 'Williams FW46',
+    imageUrl: 'https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/cars/Williams FW46.jpg',
+    type: 'F1_CAR',
     series: 'F1'
   },
 
