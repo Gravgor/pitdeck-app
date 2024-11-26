@@ -22,7 +22,7 @@ export function CardModal({ card, isOpen, onClose, isOwner = false }: CardModalP
 
   const handleSellCard = async (cardId: string, price: number) => {
     try {
-      const res = await fetch('/api/cards/trade', {
+      const res = await fetch('/api/cards/sell', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ cardId, price }),

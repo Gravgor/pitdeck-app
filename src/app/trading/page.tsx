@@ -12,7 +12,7 @@ export default function TradesPage() {
     <div className="container mx-auto py-8">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-2xl font-bold">Trading Hub</h1>
-        <Button onClick={() => router.push('/trades/new')} className="flex items-center gap-2">
+        <Button onClick={() => router.push('/trading/new')} className="flex items-center gap-2">
           <Plus className="w-4 h-4" />
           Create Trade
         </Button>
