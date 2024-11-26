@@ -3,7 +3,7 @@
 import { Card, Rarity } from '@prisma/client';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { X, Search, Filter, Crown, Star } from 'lucide-react';
+import { X, Search, Filter, Crown, Star, Trophy, Medal, ChevronRight, ChevronLeft } from 'lucide-react';
 import { getRarityColor } from '@/lib/utils';
 
 interface CardSelectorProps {
@@ -28,20 +28,32 @@ export function CardSelector({ selectedCards, onSelectCard, maxCards = 8 }: Card
     type: 'ALL'
   });
   const [showFilters, setShowFilters] = useState(false);
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    totalPages: 1,
+    totalItems: 0,
+    hasMore: false,
+    itemsPerPage: 50
+  });
+  const [isPageLoading, setIsPageLoading] = useState(false);
+
 
   useEffect(() => {
     fetchUserCards();
-  }, []);
+  }, [pagination.currentPage, pagination.itemsPerPage]);
 
   const fetchUserCards = async () => {
+    setIsPageLoading(true);
     try {
-      const response = await fetch('/api/user/cards');
+      const response = await fetch(`/api/user/cards?page=${pagination.currentPage}&limit=${pagination.itemsPerPage}`);
       const data = await response.json();
       setUserCards(data.cards);
+      setPagination(data.pagination);
     } catch (error) {
       console.error('Error fetching user cards:', error);
     } finally {
       setIsLoading(false);
+      setIsPageLoading(false);
     }
   };
 
@@ -65,10 +77,46 @@ export function CardSelector({ selectedCards, onSelectCard, maxCards = 8 }: Card
     return matchesSearch && matchesRarity && matchesSeries && matchesType;
   });
 
+  const PaginationControls = () => (
+    <div className="flex items-center justify-center gap-4 mt-6">
+      <button
+        onClick={() => setPagination(prev => ({ ...prev, currentPage: Math.max(1, prev.currentPage - 1) }))}
+        disabled={pagination.currentPage === 1}
+        className="p-2 rounded-lg border border-white/10 bg-[#12141A] disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        <ChevronLeft className="h-4 w-4" />
+      </button>
+      <span className="text-sm">
+        Page {pagination.currentPage} of {pagination.totalPages}
+      </span>
+      <button
+        onClick={() => setPagination(prev => ({ ...prev, currentPage: prev.currentPage + 1 }))}
+        disabled={!pagination.hasMore}
+        className="p-2 rounded-lg border border-white/10 bg-[#12141A] disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        <ChevronRight className="h-4 w-4" />
+      </button>
+    </div>
+  );
+
+  const CardSkeleton = () => (
+    <div className="relative aspect-[3/4] rounded-lg overflow-hidden bg-[#1A1D25] animate-pulse">
+      <div className="absolute top-2 left-2 h-4 w-12 bg-[#282C36] rounded" />
+      <div className="absolute top-2 right-2 h-4 w-20 bg-[#282C36] rounded" />
+      <div className="absolute bottom-0 left-0 right-0 p-2 bg-[#282C36]">
+        <div className="h-3 w-3/4 bg-[#353A47] rounded mb-1" />
+        <div className="h-3 w-1/2 bg-[#353A47] rounded" />
+      </div>
+    </div>
+  );
+
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+        {Array.from({ length: 16 }).map((_, index) => (
+          <CardSkeleton key={index} />
+        ))}
       </div>
     );
   }
@@ -180,45 +228,109 @@ export function CardSelector({ selectedCards, onSelectCard, maxCards = 8 }: Card
 
       {/* Available Cards Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3">
-        {filteredCards.map((card) => {
-          const isSelected = selectedCards.some(c => c.id === card.id);
-          return (
-            <div
-              key={card.id}
-              onClick={() => handleCardSelect(card)}
-              className={`relative cursor-pointer transition-transform hover:scale-105 ${
-                isSelected ? 'ring-2 ring-blue-500 rounded-lg' : ''
-              }`}
-            >
-              <div className="relative aspect-[3/4] rounded-lg overflow-hidden">
-                <Image
-                  src={card.imageUrl}
-                  alt={card.name}
-                  fill
-                  className="object-cover"
-                />
-                <div className={`absolute inset-0 ${getRarityColor(card.rarity)} opacity-20`} />
-                
-                {/* Rarity Badge */}
-                <div className="absolute top-2 right-2">
-                  {card.rarity === 'LEGENDARY' && <Crown className="h-4 w-4 text-yellow-400" />}
-                  {card.rarity === 'EPIC' && <Star className="h-4 w-4 text-purple-400" />}
+        {isLoading ? (
+          Array.from({ length: 16 }).map((_, index) => (
+            <CardSkeleton key={index} />
+          ))
+        ) : (
+          filteredCards.map((card) => {
+            const isSelected = selectedCards.some(c => c.id === card.id);
+            return (
+              <div
+                key={card.id}
+                onClick={() => handleCardSelect(card)}
+                className={`relative cursor-pointer transition-transform hover:scale-105 ${
+                  isSelected ? 'ring-2 ring-blue-500 rounded-lg' : ''
+                }`}
+              >
+                <div className="relative aspect-[3/4] rounded-lg overflow-hidden">
+                  <Image
+                    src={card.imageUrl}
+                    alt={card.name}
+                    fill
+                    className="object-cover"
+                  />
+                  <div className={`absolute inset-0 ${getRarityColor(card.rarity)} opacity-20`} />
+                  
+                  {/* Serial Number */}
+                  <div className="absolute top-2 left-2 bg-black/50 backdrop-blur-sm px-2 py-0.5 rounded text-xs">
+                    #{card.serialNumber}
+                  </div>
+  
+                  {/* Rarity Badge */}
+                  <div className="absolute top-8 left-2 bg-black/50 backdrop-blur-sm px-2 py-0.5 rounded flex items-center gap-1.5 text-xs">
+                    {getRarityIcon(card.rarity)}
+                    <span className={getRarityTextColor(card.rarity)}>{card.rarity}</span>
+                  </div>
+  
+                  {/* Card Info */}
+                  <div className="absolute bottom-0 left-0 right-0 bg-black/50 backdrop-blur-sm p-2">
+                    <p className="text-xs font-medium truncate">{card.name}</p>
+                    <p className="text-xs text-gray-300">{card.type}</p>
+                  </div>
+  
+                  {isSelected && (
+                    <div className="absolute inset-0 bg-blue-500/20 backdrop-blur-sm" />
+                  )}
                 </div>
-
-                {/* Card Info */}
-                <div className="absolute bottom-0 left-0 right-0 bg-black/50 backdrop-blur-sm p-2">
-                  <p className="text-xs font-medium truncate">{card.name}</p>
-                  <p className="text-xs text-gray-300">{card.type}</p>
-                </div>
-
-                {isSelected && (
-                  <div className="absolute inset-0 bg-blue-500/20 backdrop-blur-sm" />
-                )}
               </div>
-            </div>
-          );
-        })}
+            );
+          })
+        )}
       </div>
+      <PaginationControls />
     </div>
   );
+}
+
+function getRarityIcon(rarity: Rarity) {
+  switch (rarity) {
+    case 'LEGENDARY':
+      return <Crown className="h-4 w-4 text-yellow-400" />;
+    case 'EPIC':
+      return <Trophy className="h-4 w-4 text-purple-400" />;
+    case 'RARE':
+      return <Star className="h-4 w-4 text-blue-400" />;
+    default:
+      return <Medal className="h-4 w-4 text-gray-400" />;
+  }
+}
+
+function getRarityBorder(rarity: Rarity): string {
+  switch (rarity) {
+    case 'LEGENDARY':
+      return 'ring-2 ring-yellow-400/50 shadow-lg shadow-yellow-400/20';
+    case 'EPIC':
+      return 'ring-2 ring-purple-400/50 shadow-lg shadow-purple-400/20';
+    case 'RARE':
+      return 'ring-2 ring-blue-400/50 shadow-lg shadow-blue-400/20';
+    default:
+      return 'ring-1 ring-gray-400/30';
+  }
+}
+
+function getRarityOverlay(rarity: Rarity): string {
+  switch (rarity) {
+    case 'LEGENDARY':
+      return 'bg-gradient-to-t from-yellow-900/30 to-transparent';
+    case 'EPIC':
+      return 'bg-gradient-to-t from-purple-900/30 to-transparent';
+    case 'RARE':
+      return 'bg-gradient-to-t from-blue-900/30 to-transparent';
+    default:
+      return 'bg-gradient-to-t from-gray-900/30 to-transparent';
+  }
+}
+
+function getRarityTextColor(rarity: Rarity): string {
+  switch (rarity) {
+    case 'LEGENDARY':
+      return 'text-yellow-400';
+    case 'EPIC':
+      return 'text-purple-400';
+    case 'RARE':
+      return 'text-blue-400';
+    default:
+      return 'text-gray-400';
+  }
 }

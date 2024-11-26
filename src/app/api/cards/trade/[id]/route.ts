@@ -7,16 +7,17 @@ import { ActivityType } from '@prisma/client';
 
 export async function GET(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+    const { id } = await params;
 
     const trade = await prisma.trade.findUnique({
-      where: { id: params.id },
+      where: { id: id },
       include: {
         sender: {
           select: {
@@ -50,7 +51,7 @@ export async function GET(
 
 export async function POST(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -59,10 +60,10 @@ export async function POST(
     }
 
     const { action } = await req.json();
-    const tradeId = params.id;
+    const { id } = await params;
 
     const trade = await prisma.trade.findUnique({
-      where: { id: tradeId },
+      where: { id: id },
       include: {
         sender: true,
         receiver: true,
@@ -85,7 +86,7 @@ export async function POST(
 
     if (action === 'REJECT') {
       const updatedTrade = await prisma.trade.update({
-        where: { id: tradeId },
+        where: { id: id },
         data: { status: 'REJECTED' }
       });
 
@@ -152,7 +153,7 @@ export async function POST(
 
       // Update trade status
       const completedTrade = await tx.trade.update({
-        where: { id: tradeId },
+        where: { id: id },
         data: { status: 'COMPLETED' }
       });
 
