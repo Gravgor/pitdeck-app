@@ -22,10 +22,10 @@ mapboxgl.accessToken = 'pk.eyJ1IjoibWJvcm93Y3phazIxMTUiLCJhIjoiY20zMnk1bXA5MWF2N
 interface MapViewProps {
   drops: Drop[];
   isPremium?: boolean;
-
+  updateLocation: (latitude: number, longitude: number) => void;
 }
 
-export function MapView({ drops, isPremium = false }: MapViewProps) {
+export function MapView({ drops, isPremium = false, updateLocation }: MapViewProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const userMarkerRef = useRef<mapboxgl.Marker | null>(null);
@@ -48,6 +48,16 @@ export function MapView({ drops, isPremium = false }: MapViewProps) {
     enabled: !!location,
     refetchInterval: 30000, // Refetch every 30 seconds
   });
+
+  useEffect(() => {
+    if (!location) return;
+     const { latitude, longitude } = location;
+    
+    // Update backend with new location
+    updateLocation(latitude, longitude).catch(error => {
+      console.error('Failed to update location:', error);
+    });
+  }, [location, updateLocation]); 
 
   // Initialize map
   useEffect(() => {
