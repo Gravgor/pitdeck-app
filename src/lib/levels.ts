@@ -1,3 +1,4 @@
+import { prisma } from '@/lib/prisma';
 interface LevelConfig {
   level: number;
   xpRequired: number;
@@ -117,20 +118,6 @@ export async function addXP(userId: string, amount: number) {
             coins: { increment: rewards.coins }
           }
         });
-      }
-
-      if (rewards.packs) {
-        for (const pack of rewards.packs) {
-          await prisma.packPurchase.create({
-            data: {
-              userId,
-              packType: pack.type as any,
-              quantity: pack.quantity,
-              price: 0, // Free reward pack
-              isReward: true
-            }
-          });
-        }
       }
     }
 

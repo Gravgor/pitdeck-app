@@ -84,13 +84,6 @@ export function CardGrid({ cards, showActions = true, isOwner = false }: CardGri
                        cursor-pointer
                        hover:scale-105 hover:shadow-2xl transition-all duration-300`}
           >
-            {showActions && (
-              <CardActions
-                card={card}
-                onSell={(price) => handleSellCard(card.id, price)}
-                onTrade={() => handleTradeCard(card.id)}
-              />
-            )}
 
             {/* Special Serial Badge - Add this before the Rarity Badge */}
             {isSpecialSerial(card.serialNumber) && (
@@ -213,7 +206,7 @@ export function CardGrid({ cards, showActions = true, isOwner = false }: CardGri
         card={selectedCard!}
         isOpen={!!selectedCard}
         onClose={() => setSelectedCard(null)}
-        showActions={showActions}
+        isOwner={isOwner}
       />
     </>
   );

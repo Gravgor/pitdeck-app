@@ -6,16 +6,53 @@ import { X, Share2, Heart, Crown, Medal, Star, Trophy } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
 import { CardActions } from './CardActions';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 interface CardModalProps {
   card: Card;
   isOpen: boolean;
   onClose: () => void;
-  showActions?: boolean;
+  isOwner?: boolean;
 }
 
-export function CardModal({ card, isOpen, onClose, showActions = true }: CardModalProps) {
+export function CardModal({ card, isOpen, onClose, isOwner = false }: CardModalProps) {
   const [isLiked, setIsLiked] = useState(false);
+  const router = useRouter();
+
+  const handleSellCard = async (cardId: string, price: number) => {
+    try {
+      const res = await fetch('/api/cards/trade', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cardId, price }),
+      });
+
+      if (!res.ok) throw new Error('Failed to list card');
+
+      toast.success('Card listed for sale successfully');
+    } catch (error) {
+      toast.error('Failed to list card for sale');
+      console.error('Error listing card:', error);
+    }
+  };
+
+  const handleTradeCard = async (cardId: string) => {
+    try {
+      const res = await fetch('/api/cards/trade', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cardId }),
+      });
+
+      if (!res.ok) throw new Error('Failed to list card for trade');
+
+      toast.success('Card listed for trade successfully');
+    } catch (error) {
+      toast.error('Failed to list card for trade');
+      console.error('Error listing card for trade:', error);
+    }
+  };
 
   return (
     <AnimatePresence>
@@ -129,10 +166,13 @@ export function CardModal({ card, isOpen, onClose, showActions = true }: CardMod
                 </div>
 
                 {/* Actions */}
-                {showActions && (
+                {isOwner && (
                   <div className="mt-auto">
-                    {/* @ts-ignore */}
-                    <CardActions card={card} fullWidth />
+                    <CardActions 
+                      card={card} 
+                      onSell={(price) => handleSellCard(card.id, price)}
+                      onTrade={() => handleTradeCard(card.id)}
+                    />
                   </div>
                 )}
               </div>

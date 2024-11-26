@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { Rarity } from "@prisma/client";
 
 /**
  * Combines and merges Tailwind CSS classes using clsx and tailwind-merge
@@ -65,3 +66,19 @@ export function truncateText(text: string, length: number): string {
 export function cleanNickname(nickname: string): string {
   return nickname.replace(/[-_]/g, ' ')
 } 
+
+
+export function getRarityColor(rarity: Rarity): string {
+  switch (rarity) {
+    case 'COMMON':
+      return 'text-gray-400';
+    case 'RARE':
+      return 'text-blue-400';
+    case 'EPIC':
+      return 'text-purple-400';
+    case 'LEGENDARY':
+      return 'text-yellow-400';
+    default:
+      return 'text-gray-400';
+  }
+}
