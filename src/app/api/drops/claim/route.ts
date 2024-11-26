@@ -34,9 +34,11 @@ export async function POST(request: Request) {
       drop.latitude,
       drop.longitude
     );
-
+    // distance in meters
+    const distanceInMeters = distance * 1000; 
+    console.log("Distance:", distanceInMeters);
     const maxDistance = 100; // meters
-    if (distance > maxDistance) {
+    if (distanceInMeters > maxDistance) {
       return new NextResponse("Too far from drop", { status: 400 });
     }
 

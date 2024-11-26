@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { initiateDrops } from "@/lib/drop-initiator";
 
 export async function POST(request: Request) {
   try {
@@ -11,7 +12,7 @@ export async function POST(request: Request) {
     }
 
     const { latitude, longitude } = await request.json();
-
+    const drop = await initiateDrops(); 
     await prisma.userLocation.upsert({
       where: {
         userId: session.user.id,
@@ -26,8 +27,7 @@ export async function POST(request: Request) {
         longitude,
       },
     });
-    await fetch(`${process.env.NEXTAUTH_URL}/api/cron/generate-drops`);
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, drop });
   } catch (error) {
     console.error("[LOCATION_UPDATE_ERROR]", error);
     return new NextResponse("Internal error", { status: 500 });

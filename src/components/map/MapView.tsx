@@ -31,6 +31,7 @@ export function MapView({ drops, isPremium = false }: MapViewProps) {
   const userMarkerRef = useRef<mapboxgl.Marker | null>(null);
   const { location } = useGeolocation();
   const [selectedDrop, setSelectedDrop] = useState<Drop | null>(null);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   const { data: nearbyDrops, isLoading } = useQuery({
     queryKey: ['nearby-drops', location?.latitude, location?.longitude],
@@ -40,15 +41,15 @@ export function MapView({ drops, isPremium = false }: MapViewProps) {
         params: {
           lat: location.latitude,
           lng: location.longitude,
-          radius: 1000
+          radius: 5000
         }
       });
+      setIsInitialLoad(false);
       return data;
     },
     enabled: !!location,
-    refetchInterval: 30000, // Refetch every 30 seconds
+    refetchInterval: 30000,
   });
-
 
   // Initialize map
   useEffect(() => {
@@ -59,37 +60,38 @@ export function MapView({ drops, isPremium = false }: MapViewProps) {
       style: 'mapbox://styles/mapbox/dark-v11',
       center: [0, 0],
       zoom: LOCKED_ZOOM,
-      //dragPan: true,
       keyboard: false,
       scrollZoom: true,
     });
 
     // Wait for map style to load before adding markers
     map.current.on('style.load', () => {
-      // Add custom user marker element
-      const userMarkerElement = document.createElement('div');
-      userMarkerElement.className = 'user-marker';
-      userMarkerElement.innerHTML = `
-        <div class="relative">
-          <div class="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center border-2 border-white">
-            <div class="w-2 h-2 bg-white rounded-full"></div>
+      // Only create user marker if not in initial loading state
+      if (!isInitialLoad) {
+        const userMarkerElement = document.createElement('div');
+        userMarkerElement.className = 'user-marker';
+        userMarkerElement.innerHTML = `
+          <div class="relative">
+            <div class="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center border-2 border-white">
+              <div class="w-2 h-2 bg-white rounded-full"></div>
+            </div>
+            <div class="absolute -inset-1 bg-blue-500/30 rounded-full animate-ping"></div>
           </div>
-          <div class="absolute -inset-1 bg-blue-500/30 rounded-full animate-ping"></div>
-        </div>
-      `;
+        `;
 
-      userMarkerRef.current = new mapboxgl.Marker({
-        element: userMarkerElement,
-        rotationAlignment: 'map',
-      })
-        .setLngLat([0, 0])
-        .addTo(map.current);
+        userMarkerRef.current = new mapboxgl.Marker({
+          element: userMarkerElement,
+          rotationAlignment: 'map',
+        })
+          .setLngLat([0, 0])
+          .addTo(map.current);
+      }
     });
 
     return () => {
       map.current?.remove();
     };
-  }, []);
+  }, [isInitialLoad]);
 
   // Update user location and radius circles
   useEffect(() => {
@@ -102,9 +104,6 @@ export function MapView({ drops, isPremium = false }: MapViewProps) {
 
     // Center map on user
     map.current.setCenter([longitude, latitude]);
-
-    const metersPerPixel = 156543.03392 * Math.cos(latitude * Math.PI / 180) / Math.pow(2, LOCKED_ZOOM);
-
 
     // Add/update radius circles
     const radiusSource = {
@@ -120,7 +119,7 @@ export function MapView({ drops, isPremium = false }: MapViewProps) {
               coordinates: [longitude, latitude],
             },
             properties: {
-              radius: FREE_RADIUS / metersPerPixel,
+              radius: FREE_RADIUS,  // Now in meters
               color: '#4ADE80',
             },
           },
@@ -132,7 +131,7 @@ export function MapView({ drops, isPremium = false }: MapViewProps) {
               coordinates: [longitude, latitude],
             },
             properties: {
-              radius: PREMIUM_RADIUS / metersPerPixel,
+              radius: PREMIUM_RADIUS,  // Now in meters
               color: '#F472B6',
             },
           },
@@ -150,13 +149,24 @@ export function MapView({ drops, isPremium = false }: MapViewProps) {
         type: 'circle',
         source: 'radius',
         paint: {
-          'circle-radius': ['get', 'radius'],
+          'circle-radius': [
+            '*',
+            ['get', 'radius'],
+            ['/',
+              1,
+              ['cos', ['*', ['get', 'lat'], 0.017453292519943295]]
+            ]
+          ],
           'circle-color': ['get', 'color'],
           'circle-opacity': 0.15,
           'circle-stroke-width': 2,
           'circle-stroke-color': ['get', 'color'],
           'circle-stroke-opacity': 0.3,
+          'circle-pitch-alignment': 'map',
         },
+        layout: {
+          'circle-pitch-alignment': 'map'
+        }
       });
     }
 
@@ -187,7 +197,7 @@ export function MapView({ drops, isPremium = false }: MapViewProps) {
         <div class="w-8 h-8 ${getRarityColor(drop.rarity)} rounded-full 
                     flex items-center justify-center cursor-pointer 
                     transform transition-transform hover:scale-110
-                    ${isLoading ? 'opacity-50' : ''}">
+                    ${isInitialLoad && isLoading ? 'opacity-50' : ''}">
           ${getDropIcon(drop.type)}
         </div>
       `;
@@ -198,21 +208,50 @@ export function MapView({ drops, isPremium = false }: MapViewProps) {
         .setLngLat([drop.longitude, drop.latitude])
         .addTo(map.current!);
     });
-  }, [nearbyDrops, location, isLoading]);
+  }, [nearbyDrops, location, isLoading, isInitialLoad]);
 
   return (
     <div className="h-[calc(100vh-64px)] relative">
       <div ref={mapContainer} className="h-full w-full" />
+      
+      {isInitialLoad && isLoading && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80">
+          {/* Skeleton loading animation */}
+          <div className="space-y-6 w-full max-w-md px-4">
+            {/* Map skeleton pulse */}
+            <div className="w-24 h-24 mx-auto rounded-full bg-gray-700 animate-pulse">
+              <div className="w-full h-full rounded-full bg-gray-600 animate-ping opacity-75"></div>
+            </div>
+            
+            {/* Loading text */}
+            <div className="text-center space-y-3">
+              <div className="text-white text-xl font-medium">Loading Map</div>
+              <div className="text-gray-400 text-sm">Finding drops nearby...</div>
+            </div>
+
+            {/* Fake drop markers skeleton */}
+            <div className="flex justify-center space-x-4">
+              {[...Array(3)].map((_, i) => (
+                <div 
+                  key={i} 
+                  className="w-8 h-8 bg-gray-700 rounded-full animate-pulse"
+                  style={{ animationDelay: `${i * 150}ms` }}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       {selectedDrop && (
         <div className="absolute bottom-0 left-0 right-0 md:left-4 md:bottom-4 md:w-96">
           <DropDetails
             drop={selectedDrop}
             onClose={() => setSelectedDrop(null)}
+            userLocation={location}
           />
         </div>
       )}
-
     </div>
   );
 }

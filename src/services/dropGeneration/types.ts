@@ -25,6 +25,7 @@ export interface GenerationArea {
 
 export interface DropTypeConfig {
   type: DropType;
+  rarity: Rarity;
   weight: number;
   rewards: RewardConfig[];
   minDistance: number;

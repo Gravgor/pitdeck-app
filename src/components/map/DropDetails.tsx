@@ -10,20 +10,34 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { toast } from 'sonner';
 import { RedeemModal } from '@/components/drops/RedeemModal';
+import { calculateDistance } from '@/lib/location';
 
 interface DropDetailsProps {
   drop: Drop & {
     rewards: Reward[];
   };
   onClose: () => void;
+  userLocation: {
+    latitude: number;
+    longitude: number;
+  } | null;
 }
 
-export function DropDetails({ drop, onClose }: DropDetailsProps) {
-  const { location } = useGeolocation();
+export function DropDetails({ drop, onClose, userLocation }: DropDetailsProps) {
   const [isClaiming, setIsClaiming] = useState(false);
   const [cardDetails, setCardDetails] = useState<Card | null>(null);
   const queryClient = useQueryClient();
   const [showRedeemModal, setShowRedeemModal] = useState(false);
+
+  const isTooFar = userLocation ? 
+    calculateDistance(
+      userLocation.latitude,
+      userLocation.longitude,
+      drop.latitude,
+      drop.longitude
+    ) > 100 // Distance in meters
+    : false;
+
 
   const claimMutation = useMutation({
     mutationFn: async () => {
@@ -31,8 +45,8 @@ export function DropDetails({ drop, onClose }: DropDetailsProps) {
       
       const response = await axios.post('/api/drops/claim', {
         dropId: drop.id,
-        latitude: location?.latitude,
-        longitude: location?.longitude
+        latitude: userLocation?.latitude,
+        longitude: userLocation?.longitude
       });
       return response.data;
     },
@@ -51,6 +65,10 @@ export function DropDetails({ drop, onClose }: DropDetailsProps) {
   const handleClaim = () => {
     if (!location) {
       toast.error('Location not available');
+      return;
+    }
+    if (isTooFar) {
+      toast.error('You are too far from this drop');
       return;
     }
     setIsClaiming(true);
@@ -147,7 +165,7 @@ export function DropDetails({ drop, onClose }: DropDetailsProps) {
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.6 }}
               onClick={handleClaim}
-              disabled={isClaiming}
+              disabled={isClaiming || isTooFar}
               className="w-full py-4 px-6 bg-gradient-to-r from-red-500 to-red-600 
                          hover:from-red-600 hover:to-red-700 disabled:from-red-500/50 
                          disabled:to-red-600/50 text-white rounded-xl font-medium 
@@ -156,7 +174,7 @@ export function DropDetails({ drop, onClose }: DropDetailsProps) {
             >
               <Star className="h-5 w-5" />
               <span className="text-lg">
-                {isClaiming ? 'Claiming...' : 'Claim Drop'}
+                {isClaiming ? 'Claiming...' : isTooFar ? 'Too Far Away' : 'Claim Drop'}
               </span>
             </motion.button>
           </div>

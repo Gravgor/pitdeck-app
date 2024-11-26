@@ -69,6 +69,7 @@ model User {
   notifications         Notification[] @relation("UserNotifications")
   relatedNotifications  Notification[] @relation("RelatedUserNotifications") 
   quests         UserQuest[]
+  dropGenerations UserDropGeneration[]
   createdQuests  Quest[]           @relation("QuestCreator")
   completedMilestones Json?
   needUsernameSetup Boolean @default(false)
@@ -582,4 +583,11 @@ enum UserQuestStatus {
   COMPLETED
   FAILED
   ABANDONED
+}
+
+model UserDropGeneration {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  lastGenAt DateTime
+  user      User     @relation(fields: [userId], references: [id])
 }

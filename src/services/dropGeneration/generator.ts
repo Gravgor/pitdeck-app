@@ -140,7 +140,7 @@ export class DropGenerator {
     
     for (const rewardConfig of dropType.rewards) {
       if (rewardConfig.type === RewardType.CARD) {
-        const card = await this.getRandomCard();
+        const card = await this.getRandomCard(dropType.rarity);
         if (card) {
           rewards.push({
             type: RewardType.CARD,
@@ -163,12 +163,13 @@ export class DropGenerator {
     return rewards;
   }
 
-  private async getRandomCard() {
+  private async getRandomCard(rarity: Rarity) {
     const totalCards = await prisma.card.count({
       where: {
         AND: [
           { isExclusive: false },
-          { isPromotional: false }
+          { isPromotional: false },
+          { rarity }
         ]
       }
     });
@@ -181,7 +182,8 @@ export class DropGenerator {
       where: {
         AND: [
           { isExclusive: false },
-          { isPromotional: false }
+          { isPromotional: false },
+          { rarity }
         ]
       },
       skip: skip,
