@@ -1,5 +1,6 @@
 import { DEFAULT_CONFIG } from "@/services/dropGeneration/config";
 import { DEVELOPMENT_CONFIG } from "@/services/dropGeneration/config";
+import { prisma } from "@/lib/prisma";
 import { DropGenerator } from "@/services/dropGeneration/generator";
 
 const MIN_DROPS_PER_USER = 3;
