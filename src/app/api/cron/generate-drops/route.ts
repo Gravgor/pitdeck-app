@@ -30,10 +30,21 @@ export async function GET(request: Request) {
       const expirationDate = new Date();
       expirationDate.setDate(expirationDate.getDate() + EXPIRATION_DAYS);
 
+      // CHECK IF USER MOVED AT LEAST 1000 METERS FROM LAST LOCATION
+      const lastLocation = await prisma.userLocation.findFirst({
+        where: { userId: user.userId },
+        orderBy: { updatedAt: 'desc' }
+      });
+
+      // Skip if user hasn't moved far enough from their last location
+      if (lastLocation && distance(user.latitude, user.longitude, lastLocation.latitude, lastLocation.longitude) < 1000) {
+        continue;
+      }
+
       await generator.generateDrops({
         latitude: user.latitude,
         longitude: user.longitude,
-        radius: 300, // meters
+        radius: 1000, // meters
         count: dropsToGenerate,
         expiresAt: expirationDate
       });
@@ -54,3 +65,16 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 } 
+
+function distance(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  const R = 6371e3; // Earth's radius in meters
+  const φ1 = (lat1 * Math.PI) / 180;
+  const φ2 = (lat2 * Math.PI) / 180;
+  const Δφ = ((lat2 - lat1) * Math.PI) / 180;
+  const Δλ = ((lon2 - lon1) * Math.PI) / 180;
+   const a =
+    Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+    Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+   return R * c; // Returns distance in meters
+}

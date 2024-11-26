@@ -14,7 +14,7 @@ import axios from 'axios';
 
 const FREE_RADIUS = 100; 
 const PREMIUM_RADIUS = 400; 
-const LOCKED_ZOOM = 17;
+const LOCKED_ZOOM = 15;
 
 // Replace with your Mapbox token
 mapboxgl.accessToken = 'pk.eyJ1IjoibWJvcm93Y3phazIxMTUiLCJhIjoiY20zMnk1bXA5MWF2NTJxcXNhems4b2g1OCJ9.Jw4aE3ygRcqg9wXddMVVAQ';
@@ -22,10 +22,10 @@ mapboxgl.accessToken = 'pk.eyJ1IjoibWJvcm93Y3phazIxMTUiLCJhIjoiY20zMnk1bXA5MWF2N
 interface MapViewProps {
   drops: Drop[];
   isPremium?: boolean;
-  updateLocation: (latitude: number, longitude: number) => void;
+  //updateLocation: (latitude: number, longitude: number) => void;
 }
 
-export function MapView({ drops, isPremium = false, updateLocation }: MapViewProps) {
+export function MapView({ drops, isPremium = false }: MapViewProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const userMarkerRef = useRef<mapboxgl.Marker | null>(null);
@@ -40,7 +40,7 @@ export function MapView({ drops, isPremium = false, updateLocation }: MapViewPro
         params: {
           lat: location.latitude,
           lng: location.longitude,
-          radius: isPremium ? PREMIUM_RADIUS : FREE_RADIUS
+          radius: 1000
         }
       });
       return data;
@@ -49,15 +49,6 @@ export function MapView({ drops, isPremium = false, updateLocation }: MapViewPro
     refetchInterval: 30000, // Refetch every 30 seconds
   });
 
-  useEffect(() => {
-    if (!location) return;
-     const { latitude, longitude } = location;
-    
-    // Update backend with new location
-    updateLocation(latitude, longitude).catch(error => {
-      console.error('Failed to update location:', error);
-    });
-  }, [location, updateLocation]); 
 
   // Initialize map
   useEffect(() => {
@@ -68,9 +59,9 @@ export function MapView({ drops, isPremium = false, updateLocation }: MapViewPro
       style: 'mapbox://styles/mapbox/dark-v11',
       center: [0, 0],
       zoom: LOCKED_ZOOM,
-      dragPan: true,
+      //dragPan: true,
       keyboard: false,
-      scrollZoom: false,
+      scrollZoom: true,
     });
 
     // Wait for map style to load before adding markers
@@ -112,6 +103,9 @@ export function MapView({ drops, isPremium = false, updateLocation }: MapViewPro
     // Center map on user
     map.current.setCenter([longitude, latitude]);
 
+    const metersPerPixel = 156543.03392 * Math.cos(latitude * Math.PI / 180) / Math.pow(2, LOCKED_ZOOM);
+
+
     // Add/update radius circles
     const radiusSource = {
       type: 'geojson',
@@ -126,7 +120,7 @@ export function MapView({ drops, isPremium = false, updateLocation }: MapViewPro
               coordinates: [longitude, latitude],
             },
             properties: {
-              radius: FREE_RADIUS,
+              radius: FREE_RADIUS / metersPerPixel,
               color: '#4ADE80',
             },
           },
@@ -138,7 +132,7 @@ export function MapView({ drops, isPremium = false, updateLocation }: MapViewPro
               coordinates: [longitude, latitude],
             },
             properties: {
-              radius: PREMIUM_RADIUS,
+              radius: PREMIUM_RADIUS / metersPerPixel,
               color: '#F472B6',
             },
           },

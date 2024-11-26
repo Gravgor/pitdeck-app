@@ -18,14 +18,14 @@ export default async function MapPage() {
     redirect('/auth/signin');
   }
 
-  async function updateLocation(latitude: number, longitude: number) {
+  /*async function updateLocation(latitude: number, longitude: number) {
     'use server';
     
     try {
       const cookieStore = await cookies();
-      const sessionToken = cookieStore.get('__Secure-next-auth.session-token')?.value;
-
-      const response = await fetch(`${process.env.NEW_BACKEND_URL}/users/location/update`, {
+      const isDev = process.env.NODE_ENV === 'development';
+      const sessionToken = cookieStore.get(isDev ? 'next-auth.session-token' : '__Secure-next-auth.session-token')?.value;
+      const response = await fetch(`${process.env.NEW_BACKEND_URL}/api/users/location/update`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${sessionToken}`,
@@ -42,7 +42,7 @@ export default async function MapPage() {
     } catch (error) {
       console.error('Error updating location:', error);
     }
-  }
+  }*/
 
   const drops = await prisma.drop.findMany({
     where: {
@@ -61,7 +61,6 @@ export default async function MapPage() {
       <MapView 
         drops={drops} 
         isPremium={true} 
-        updateLocation={updateLocation}
       />
     </div>
   );

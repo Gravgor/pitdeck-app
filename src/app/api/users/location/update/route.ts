@@ -26,7 +26,7 @@ export async function POST(request: Request) {
         longitude,
       },
     });
-
+    await fetch(`${process.env.NEXTAUTH_URL}/api/cron/generate-drops`);
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("[LOCATION_UPDATE_ERROR]", error);
