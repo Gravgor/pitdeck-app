@@ -10,7 +10,9 @@ COPY . .
 
 RUN npx prisma generate
 ARG DATABASE_URL
+ARG REDIS_URL
 RUN echo $DATABASE_URL
+RUN echo $REDIS_URL
 
 RUN npm run build
 
