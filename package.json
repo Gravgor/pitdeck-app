@@ -2,6 +2,7 @@
   "name": "f1collector",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -10,7 +11,10 @@
     "db:seed": "npx ts-node --transpile-only prisma/seed.ts",
     "db:pack": "npx ts-node --transpile-only prisma/seed/data.ts",
     "db:image-update": "npx ts-node --transpile-only prisma/image-update.ts",
-    "favicon": "npx ts-node --transpile-only scripts/generate-favicon.ts"
+    "favicon": "npx ts-node --transpile-only scripts/generate-favicon.ts",
+    "worker:build": "tsc --project tsconfig.worker.json",
+    "worker:drop": "npx tsx src/workers/dropWorker.ts",
+    "worker:drop:dev": "npx tsx watch src/workers/dropWorker.ts"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.7.4",
@@ -32,6 +36,7 @@
     "favicon": "^0.0.2",
     "favicons": "^7.2.0",
     "framer-motion": "^11.11.17",
+    "ioredis": "^5.4.1",
     "leaflet": "^1.9.4",
     "lru-cache": "^11.0.2",
     "lucide-react": "^0.460.0",
@@ -48,7 +53,6 @@
     "sharp": "^0.33.5",
     "sonner": "^1.7.0",
     "tailwind-merge": "^2.5.4",
-    "ts-node": "^10.9.2",
     "zod": "^3.23.8"
   },
   "devDependencies": {
@@ -56,14 +60,16 @@
     "@types/bcryptjs": "^2.4.6",
     "@types/canvas-confetti": "^1.6.4",
     "@types/leaflet": "^1.9.14",
-    "@types/node": "^20",
+    "@types/node": "^20.17.8",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "15.0.3",
+    "nodemon": "^3.1.7",
     "postcss": "^8",
     "prisma": "^5.22.0",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2"
   }
 }

@@ -1,3 +1,4 @@
+import { redis } from '@/lib/redis';
 import { DEFAULT_CONFIG } from "@/services/dropGeneration/config";
 import { DEVELOPMENT_CONFIG } from "@/services/dropGeneration/config";
 import { prisma } from "@/lib/prisma";
@@ -6,9 +7,10 @@ import { DropGenerator } from "@/services/dropGeneration/generator";
 const MIN_DROPS_PER_USER = 3;
 const MAX_DROPS_PER_USER = 8;
 const FIRST_TIME_DROPS = 30;
-const NORMAL_RADIUS = 1000; // 1km in meters
-const FIRST_TIME_RADIUS = 5000; // 5km in meters
+const NORMAL_RADIUS = 1000;
+const FIRST_TIME_RADIUS = 5000;
 const EXPIRATION_DAYS = 7;
+const BATCH_SIZE = 100; // Number of drops to generate in each batch
 
 export async function initiateDrops() {
   const isDev = process.env.NODE_ENV === "development";
@@ -16,61 +18,46 @@ export async function initiateDrops() {
     isDev ? DEVELOPMENT_CONFIG : DEFAULT_CONFIG
   );
 
-  // Get all active users' locations
   const activeUsers = await prisma.userLocation.findMany({
     where: {
       updatedAt: {
-        gte: new Date(Date.now() - 15 * 60000), // Active in last 15 minutes
+        gte: new Date(Date.now() - 15 * 60000),
       },
     },
   });
 
-  // Generate drops around each active user
   for (const user of activeUsers) {
-    // Check when drops were last generated for this user
     const lastDropGeneration = await prisma.userDropGeneration.findUnique({
       where: { userId: user.userId }
     });
 
-    // Skip if drops were generated less than 15 minutes ago
     if (lastDropGeneration && 
         Date.now() - lastDropGeneration.lastGenAt.getTime() < 15 * 60000) {
-      console.log(
-        `Skipping drop generation for user ${user.userId} because drops were generated less than 15 minutes ago`
-      );
-      return false;
+      console.log(`Skipping drop generation for user ${user.userId}`);
+      continue;
     }
 
-    // Different settings for first-time drops
     const isFirstTime = !lastDropGeneration;
     const dropsToGenerate = isFirstTime 
-      ? FIRST_TIME_DROPS
+      ? FIRST_TIME_DROPS 
       : Math.floor(Math.random() * (MAX_DROPS_PER_USER - MIN_DROPS_PER_USER + 1)) + MIN_DROPS_PER_USER;
 
-    const radius = isFirstTime ? FIRST_TIME_RADIUS : NORMAL_RADIUS;
-
-    const expirationDate = new Date();
-    expirationDate.setDate(expirationDate.getDate() + EXPIRATION_DAYS);
-
-    const drops = await generator.generateDrops({
+    // Add drop generation task to Redis queue
+    const dropTask = {
+      userId: user.userId,
       latitude: user.latitude,
       longitude: user.longitude,
-      radius,
+      radius: isFirstTime ? FIRST_TIME_RADIUS : NORMAL_RADIUS,
       count: dropsToGenerate,
-      expiresAt: expirationDate,
-    });
+      expiresAt: new Date(Date.now() + EXPIRATION_DAYS * 24 * 60 * 60 * 1000),
+      isFirstTime
+    };
 
-    // Update or create the last generation time
-    await prisma.userDropGeneration.upsert({
-      where: { userId: user.userId },
-      update: { lastGenAt: new Date() },
-      create: { userId: user.userId, lastGenAt: new Date() }
-    });
-
-    console.log(
-      `Generated ${drops?.length} drops for user ${user.userId} ${isFirstTime ? '(first time)' : ''}`
-    );
+    await redis.lpush('drop-queue', JSON.stringify(dropTask));
   }
+
+  // Process queue in batches
+  await processDropQueue(generator);
 
   // Clean up expired drops
   await prisma.drop.deleteMany({
@@ -80,7 +67,54 @@ export async function initiateDrops() {
       },
     },
   });
+  
   return true;
+}
+
+async function processDropQueue(generator: DropGenerator) {
+  let processedCount = 0;
+  
+  while (true) {
+    // Process drops in batches
+    const batch = [];
+    for (let i = 0; i < BATCH_SIZE; i++) {
+      const task = await redis.rpop('drop-queue');
+      if (!task) break;
+      batch.push(JSON.parse(task));
+    }
+
+    if (batch.length === 0) break;
+
+    // Generate drops for batch
+    await Promise.all(batch.map(async (task) => {
+      try {
+        const drops = await generator.generateDrops({
+          latitude: task.latitude,
+          longitude: task.longitude,
+          radius: task.radius,
+          count: task.count,
+          expiresAt: new Date(task.expiresAt),
+        });
+
+        await prisma.userDropGeneration.upsert({
+          where: { userId: task.userId },
+          update: { lastGenAt: new Date() },
+          create: { userId: task.userId, lastGenAt: new Date() }
+        });
+
+        processedCount += drops?.length || 0;
+        console.log(
+          `Generated ${drops?.length} drops for user ${task.userId} ${task.isFirstTime ? '(first time)' : ''}`
+        );
+      } catch (error) {
+        console.error(`Error generating drops for user ${task.userId}:`, error);
+        // Optionally requeue failed tasks
+        await redis.lpush('drop-queue-failed', JSON.stringify(task));
+      }
+    }));
+  }
+
+  console.log(`Total drops generated: ${processedCount}`);
 }
 
 function distance(
