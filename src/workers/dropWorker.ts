@@ -1,5 +1,6 @@
-const { DropService } = require('../lib/services/dropService');
-const { startDropWorker } = require('../lib/drop-worker');
+import { DropService } from '@/lib/services/dropService';
+import { startDropWorker } from '@/lib/drop-worker';
+import { prisma } from '@/lib/prisma';
 
 async function runWorker() {
   console.log('Starting Drop Worker...');
@@ -24,4 +25,8 @@ process.on('SIGTERM', async () => {
   process.exit(0);
 });
 
-runWorker().catch(console.error); 
+// Start the worker
+runWorker().catch((error) => {
+  console.error('Fatal worker error:', error);
+  process.exit(1);
+});
