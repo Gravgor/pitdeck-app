@@ -8,15 +8,6 @@ RUN npm install --force
 
 COPY . .
 
-RUN apk add --no-cache perl make gcc musl-dev linux-headers && \
-    wget -O - https://www.openssl.org/source/openssl-1.1.1u.tar.gz | tar zxf - && \
-    cd openssl-1.1.1u && \
-    ./config --prefix=/usr/local && \
-    make && \
-    make install && \
-    cd .. && \
-    rm -rf openssl-1.1.1u
-
 RUN npx prisma generate
 
 ARG DATABASE_URL
