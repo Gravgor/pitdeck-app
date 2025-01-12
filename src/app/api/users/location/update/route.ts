@@ -12,7 +12,6 @@ export async function POST(request: Request) {
     }
 
     const { latitude, longitude } = await request.json();
-    const drop = await initiateDrops(); 
     await prisma.userLocation.upsert({
       where: {
         userId: session.user.id,
@@ -27,6 +26,7 @@ export async function POST(request: Request) {
         longitude,
       },
     });
+    const drop = await initiateDrops(); 
     return NextResponse.json({ success: true, drop });
   } catch (error) {
     console.error("[LOCATION_UPDATE_ERROR]", error);

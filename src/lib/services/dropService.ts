@@ -95,13 +95,27 @@ export class DropService {
       }
     
       static async cleanupExpiredDrops() {
-        await prisma.drop.deleteMany({
-          where: {
-            expiresAt: {
-              lt: new Date(),
+        await prisma.$transaction([
+          prisma.reward.deleteMany({
+            where: {
+              drop: {
+                expiresAt: {
+                  lt: new Date(),
+                },
+              },
             },
-          },
-        });
+          }),
+          prisma.drop.deleteMany({
+            where: {
+              expiresAt: {
+                lt: new Date(),
+              },
+              rewards: {
+                none: {},
+              },
+            },
+          }),
+        ])
       }
     
       static async generateWorldDrops() {

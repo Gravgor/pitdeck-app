@@ -59,14 +59,27 @@ export async function initiateDrops() {
   // Process queue in batches
   await processDropQueue(generator);
 
-  // Clean up expired drops
-  await prisma.drop.deleteMany({
-    where: {
-      expiresAt: {
-        lt: new Date(),
+  await prisma.$transaction([
+    prisma.reward.deleteMany({
+      where: {
+        drop: {
+          expiresAt: {
+            lt: new Date(),
+          },
+        },
       },
-    },
-  });
+    }),
+    prisma.drop.deleteMany({
+      where: {
+        expiresAt: {
+          lt: new Date(),
+        },
+        rewards: {
+          none: {},
+        },
+      },
+    }),
+  ])
   
   return true;
 }

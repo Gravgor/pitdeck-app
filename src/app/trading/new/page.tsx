@@ -32,7 +32,7 @@ export default function CreateTradePage() {
       });
 
       if (response.ok) {
-        router.push('/trades');
+        router.push('/trading');
       }
     } catch (error) {
       console.error('Error creating trade:', error);

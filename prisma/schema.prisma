@@ -318,6 +318,7 @@ model Card {
   listing         Listing?
  offeredInTrades    Trade[] @relation("OfferedCards")
   requestedInTrades  Trade[] @relation("RequestedCards")
+  offeredByReceiver    Trade[] @relation("ReceiverOfferedCards")
   pack            Pack?           @relation(fields: [packId], references: [id])
   packId          String?
   questRewards    QuestReward[]
@@ -383,18 +384,21 @@ enum ListingStatus {
 
 // Trading System
 model Trade {
-  id           String   @id @default(cuid())
-  senderId     String
-  receiverId   String
-  status       String   @default("PENDING") // PENDING, COMPLETED, REJECTED
-  coinsOffered Int      @default(0)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id                   String   @id @default(cuid())
+  senderId             String
+  receiverId           String?  // Made optional for open trades
+  status               String   @default("OPEN") // OPEN, PENDING, COMPLETED, REJECTED
+  isOpenTrade          Boolean  @default(true)
+  coinsOffered         Int      @default(0)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
 
-  sender        User     @relation("SentTrades", fields: [senderId], references: [id])
-  receiver      User     @relation("ReceivedTrades", fields: [receiverId], references: [id])
-  offeredCards  Card[]   @relation("OfferedCards")
-  requestedCards Card[]  @relation("RequestedCards")
+  // Relations
+  sender               User     @relation("SentTrades", fields: [senderId], references: [id])
+  receiver             User?    @relation("ReceivedTrades", fields: [receiverId], references: [id])
+  offeredCards         Card[]   @relation("OfferedCards")
+  requestedCards       Card[]   @relation("RequestedCards")
+  receiverOfferedCards Card[]   @relation("ReceiverOfferedCards") // New relation for cards offered by claimer
 
   @@index([senderId])
   @@index([receiverId])

@@ -3,7 +3,7 @@ import { Card, User } from '@prisma/client';
 export interface Trade {
   id: string;
   userId: string;
-  user: User;
+  sender: User;
   offeredCards: Card[];
   wantedCards?: Card[];
   coins: number;
