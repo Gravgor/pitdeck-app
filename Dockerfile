@@ -8,6 +8,7 @@ RUN npm install --force
 
 COPY . .
 
+RUN apk add --no-cache openssl
 RUN npx prisma generate
 
 ARG DATABASE_URL

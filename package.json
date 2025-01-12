@@ -1,6 +1,6 @@
 {
-  "name": "f1collector",
-  "version": "0.1.0",
+  "name": "pitdeck",
+  "version": "1.0.1",
   "private": true,
   "type": "module",
   "scripts": {
