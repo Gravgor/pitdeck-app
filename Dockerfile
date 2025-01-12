@@ -8,6 +8,10 @@ RUN npm install --force
 
 COPY . .
 
+RUN wget -O - https://www.openssl.org/source/openssl-1.1.1u.tar.gz | tar zxf -; \
+    cd openssl-1.1.1u; \
+    ./config --prefix=/usr/local
+
 RUN npx prisma generate
 ARG DATABASE_URL
 ARG REDIS_URL
