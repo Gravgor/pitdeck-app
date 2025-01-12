@@ -94,7 +94,7 @@ export async function POST(
         createActivity(
           trade.senderId,
           ActivityType.TRADE,
-          `Trade rejected by ${trade.receiver.name}`,
+          `Trade rejected by ${trade.receiver?.name}`,
           { trade }
         ),
         createActivity(
@@ -109,6 +109,9 @@ export async function POST(
     }
 
     // Handle acceptance
+    if (!trade.receiverId || !trade.offeredCards || !trade.requestedCards) {
+      return NextResponse.json({ error: "Invalid trade data" }, { status: 400 });
+    }
     const updatedTrade = await prisma.$transaction(async (tx) => {
       // Transfer cards
       const cardUpdates = [
@@ -118,7 +121,7 @@ export async function POST(
             data: {
               owners: {
                 disconnect: { id: trade.senderId },
-                connect: { id: trade.receiverId }
+                connect: { id: trade.receiverId ? trade.receiverId : undefined }
               }
             }
           })
@@ -128,7 +131,7 @@ export async function POST(
             where: { id: card.id },
             data: {
               owners: {
-                disconnect: { id: trade.receiverId },
+                disconnect: { id: trade.receiverId ? trade.receiverId : undefined },
                 connect: { id: trade.senderId }
               }
             }
@@ -145,7 +148,7 @@ export async function POST(
             data: { coins: { decrement: trade.coinsOffered } }
           }),
           tx.user.update({
-            where: { id: trade.receiverId },
+            where: { id: trade.receiverId ? trade.receiverId : undefined },
             data: { coins: { increment: trade.coinsOffered } }
           })
         );
@@ -167,7 +170,7 @@ export async function POST(
       createActivity(
         trade.senderId,
         ActivityType.TRADE,
-        `Trade accepted by ${trade.receiver.name}`,
+        `Trade accepted by ${trade.receiver?.name}`,
         { trade: updatedTrade }
       ),
       createActivity(
