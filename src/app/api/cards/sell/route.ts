@@ -59,32 +59,38 @@ export async function POST(req: Request) {
       }, { status: 400 });
     }
 
-    // Create listing
-    const listing = await prisma.listing.create({
-      data: {
-        status: 'ACTIVE',
-        price,
-        card: {
-          connect: {
-            id: cardId
+    const listing = await prisma.$transaction(async (tx) => {
+      await tx.card.update({
+        where: { id: cardId },
+        data: { isForSale: true }
+      });
+    
+      return tx.listing.create({
+        data: {
+          status: 'ACTIVE',
+          price,
+          card: {
+            connect: {
+              id: cardId
+            }
+          },
+          seller: {
+            connect: {
+              id: session.user.id
+            }
           }
         },
-        seller: {
-          connect: {
-            id: session.user.id
+        include: {
+          card: true,
+          seller: {
+            select: {
+              id: true,
+              name: true,
+              image: true
+            }
           }
         }
-      },
-      include: {
-        card: true,
-        seller: {
-          select: {
-            id: true,
-            name: true,
-            image: true
-          }
-        }
-      }
+      });
     });
 
     return NextResponse.json({ 

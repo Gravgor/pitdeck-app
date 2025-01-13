@@ -184,37 +184,11 @@ export async function PATCH(req: Request) {
 
 export async function GET(req: Request) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const url = new URL(req.url);
-    const status = url.searchParams.get('status');
-    const isOpenTrade = url.searchParams.get('isOpenTrade') === 'true';
-
-    // Base query conditions
-    const whereConditions: any = {};
-    
-    // Add status filter if provided
-    if (status) {
-      whereConditions.status = status;
-    }
-
-    // Filter for open trades
-    if (isOpenTrade) {
-      whereConditions.isOpenTrade = true;
-      whereConditions.status = 'OPEN';
-    } else {
-      // For personal trades, show where user is sender or receiver
-      whereConditions.OR = [
-        { senderId: session.user.id },
-        { receiverId: session.user.id }
-      ];
-    }
-
     const trades = await prisma.trade.findMany({
-      where: whereConditions,
+      where: {
+        isOpenTrade: true,
+        status: 'OPEN'
+      },
       include: {
         sender: {
           select: {
