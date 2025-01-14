@@ -20,7 +20,6 @@ export function TradeList() {
       const response = await fetch('/api/cards/trade');
       if (!response.ok) throw new Error('Failed to fetch trades');
       const data = await response.json();
-      console.log(data);
       setTrades(data);
     } catch (error) {
       console.error('Error fetching trades:', error);

@@ -4,10 +4,9 @@ import { prisma } from '@/lib/prisma';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
-// Validation schema for the request body
 const sellCardSchema = z.object({
   cardId: z.string(),
-  price: z.number().min(1).max(1000000), // Set reasonable price limits
+  price: z.number().min(1).max(1000000), 
 });
 
 export async function POST(req: Request) {

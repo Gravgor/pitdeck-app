@@ -1,23 +1,24 @@
-import { redis } from '@/lib/redis';
-import { DropGenerator } from "@/services/dropGeneration/generator";
-import { prisma } from "@/lib/prisma";
-import { DEFAULT_CONFIG, DEVELOPMENT_CONFIG } from '@/services/dropGeneration/config';
+import { DropService } from "./services/dropService.js";
 
-const BATCH_SIZE = 100;
+const REFRESH_INTERVAL = 24 * 60 * 60 * 1000; // 24 hours
+let isRunning = false;
 
-export async function startDropWorker() {
-  console.log('Drop worker started');
+async function startDropWorker() {
+  if (isRunning) {
+    console.log('Drop worker is already running');
+    return;
+  }
+
+  console.log('Global drop worker started');
+  isRunning = true;
   
-  while (true) {
+  while (isRunning) {
     try {
-      // Process failed drops first
-      await processFailedDrops();
+      console.log('Generating global drops...');
+      await DropService.generateGlobalDrops();
+      console.log('Global drops generated successfully');
       
-      // Process regular drop queue
-      await processDropQueue();
-      
-      // Wait before next batch
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, REFRESH_INTERVAL));
     } catch (error) {
       console.error('Error in drop worker:', error);
       await new Promise(resolve => setTimeout(resolve, 5000));
@@ -25,52 +26,42 @@ export async function startDropWorker() {
   }
 }
 
-async function processFailedDrops() {
-  const failedTasks = await redis.lrange('drop-queue-failed', 0, BATCH_SIZE - 1);
-  if (failedTasks.length === 0) return;
-
-  await redis.ltrim('drop-queue-failed', BATCH_SIZE, -1);
-  
-  for (const taskJson of failedTasks) {
-    await redis.lpush('drop-queue', taskJson);
-  }
+function stopDropWorker() {
+  console.log('Stopping drop worker...');
+  isRunning = false;
 }
 
-async function processDropQueue() {
-  const generator = new DropGenerator(
-    process.env.NODE_ENV === "development" 
-      ? DEVELOPMENT_CONFIG 
-      : DEFAULT_CONFIG
-  );
+// Handle process signals
+process.on('SIGTERM', () => {
+  console.log('SIGTERM received. Shutting down drop worker...');
+  stopDropWorker();
+});
 
-  const tasks = await redis.lrange('drop-queue', 0, BATCH_SIZE - 1);
-  if (tasks.length === 0) return;
+process.on('SIGINT', () => {
+  console.log('SIGINT received. Shutting down drop worker...');
+  stopDropWorker();
+  process.exit(0);
+});
 
-  await redis.ltrim('drop-queue', BATCH_SIZE, -1);
+// Handle uncaught errors
+process.on('uncaughtException', (error) => {
+  console.error('Uncaught Exception:', error);
+  stopDropWorker();
+  process.exit(1);
+});
 
-  await Promise.all(tasks.map(async (taskJson) => {
-    const task = JSON.parse(taskJson);
-    try {
-      const drops = await generator.generateDrops({
-        latitude: task.latitude,
-        longitude: task.longitude,
-        radius: task.radius,
-        count: task.count,
-        expiresAt: new Date(task.expiresAt),
-      });
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+  stopDropWorker();
+  process.exit(1);
+});
 
-      await prisma.userDropGeneration.upsert({
-        where: { userId: task.userId },
-        update: { lastGenAt: new Date() },
-        create: { userId: task.userId, lastGenAt: new Date() }
-      });
+// Start worker if running as standalone script
 
-      console.log(
-        `Worker generated ${drops?.length} drops for user ${task.userId}`
-      );
-    } catch (error) {
-      console.error(`Worker error generating drops for user ${task.userId}:`, error);
-      await redis.lpush('drop-queue-failed', taskJson);
-    }
-  }));
-} 
+  startDropWorker().catch((error) => {
+    console.error('Failed to start drop worker:', error);
+    process.exit(1);
+  });
+
+
+export { startDropWorker, stopDropWorker }; 
