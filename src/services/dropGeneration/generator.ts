@@ -1,4 +1,4 @@
-import { prisma } from '@/lib/prisma';
+import { prisma } from '../../lib/prisma';
 import { DropGenerationConfig, DropTypeConfig, GenerationArea } from './types';
 import { DEFAULT_CONFIG } from './config';
 import { Drop, DropType, Rarity, RewardType, Prisma } from '@prisma/client';
@@ -91,7 +91,7 @@ export class DropGenerator {
     const nearestCircuit = await this.getNearestCircuit(location.latitude, location.longitude);
 
     return {
-      type: dropType.type as DropType,
+      type: DropType.STANDARD,
       rarity: rarity as Rarity,
       latitude: location.latitude,
       longitude: location.longitude,
@@ -139,7 +139,6 @@ export class DropGenerator {
     const rewards: Prisma.RewardCreateWithoutDropInput[] = [];
     
     for (const rewardConfig of dropType.rewards) {
-      if (rewardConfig.type === RewardType.CARD) {
         const card = await this.getRandomCard(dropType.rarity);
         if (card) {
           rewards.push({
@@ -152,10 +151,6 @@ export class DropGenerator {
             }
           });
         }
-      } else {
-        console.log(`Unsupported reward type: ${rewardConfig.type}, skipping`);
-        continue;
-      }
     }
     
     return rewards;

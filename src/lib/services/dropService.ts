@@ -3,6 +3,7 @@ import { Drop, Circuit, Event, Rarity, DropType } from "@prisma/client";
 import { DropGenerator } from "@/services/dropGeneration/generator";
 import { DEFAULT_CONFIG } from "@/services/dropGeneration/config";
 import { DEVELOPMENT_CONFIG } from "@/services/dropGeneration/config";
+import { DropQueue, type DropAreaTask } from '@/lib/redis';
 
 const WORLD_CONFIG = {
   INITIAL_DROPS_PER_AREA: 100, // More drops for initial generation
@@ -41,12 +42,6 @@ export class DropService {
       return;
     }
 
-    const generator = this.getGenerator();
-    const expirationTime = new Date(
-      Date.now() + WORLD_CONFIG.EXPIRATION_HOURS * 60 * 60 * 1000
-    );
-
-    // Get all areas that had active users in the last 24 hours
     const activeAreas = await prisma.userLocation.findMany({
       distinct: ['latitude', 'longitude'],
       where: {
@@ -60,41 +55,31 @@ export class DropService {
       }
     });
 
-    // Group nearby locations to avoid overlap
     const generationAreas = this.groupNearbyLocations(activeAreas);
-    console.log(`Initial generation for ${generationAreas.length} areas`);
+    console.log(`Queueing initial generation for ${generationAreas.length} areas`);
 
-    // Generate initial drops for each area
-    for (const area of generationAreas) {
-      await generator.generateDrops({
-        latitude: area.latitude,
-        longitude: area.longitude,
-        radius: WORLD_CONFIG.ACTIVE_USER_RADIUS,
-        count: WORLD_CONFIG.INITIAL_DROPS_PER_AREA,
-        expiresAt: expirationTime
-      });
-    }
-
-    console.log('Initial global drops generation completed');
-  }
-
-  static async generateDropsForArea(latitude: number, longitude: number) {
-    const generator = this.getGenerator();
     const expirationTime = new Date(
       Date.now() + WORLD_CONFIG.EXPIRATION_HOURS * 60 * 60 * 1000
     );
 
-    // Check if area had recent generation
+    const tasks: DropAreaTask[] = generationAreas.map(area => ({
+      latitude: area.latitude,
+      longitude: area.longitude,
+      radius: WORLD_CONFIG.ACTIVE_USER_RADIUS,
+      count: WORLD_CONFIG.INITIAL_DROPS_PER_AREA,
+      expiresAt: expirationTime.toISOString(),
+      isInitialGeneration: true
+    }));
+
+    await DropQueue.addAreas(tasks);
+    console.log('Areas queued for drop generation');
+  }
+
+  static async generateDropsForArea(latitude: number, longitude: number, userId?: string) {
     const recentGeneration = await prisma.dropGeneration.findFirst({
       where: {
-        latitude: {
-          gte: latitude - 0.05,
-          lte: latitude + 0.05
-        },
-        longitude: {
-          gte: longitude - 0.05,
-          lte: longitude + 0.05
-        },
+        latitude: { gte: latitude - 0.05, lte: latitude + 0.05 },
+        longitude: { gte: longitude - 0.05, lte: longitude + 0.05 },
         createdAt: {
           gte: new Date(Date.now() - WORLD_CONFIG.SUBSEQUENT_GENERATION_COOLDOWN * 60000)
         }
@@ -106,25 +91,18 @@ export class DropService {
       return;
     }
 
-    // Generate new drops for the area
-    await generator.generateDrops({
+    const task: DropAreaTask = {
       latitude,
       longitude,
       radius: WORLD_CONFIG.ACTIVE_USER_RADIUS,
       count: WORLD_CONFIG.SUBSEQUENT_DROPS_PER_AREA,
-      expiresAt: expirationTime
-    });
+      expiresAt: new Date(Date.now() + WORLD_CONFIG.EXPIRATION_HOURS * 60 * 60 * 1000).toISOString(),
+      userId,
+      isInitialGeneration: false
+    };
 
-    // Record the generation
-    await prisma.dropGeneration.create({
-      data: {
-        latitude,
-        longitude,
-        createdAt: new Date()
-      }
-    });
-
-    console.log(`Generated ${WORLD_CONFIG.SUBSEQUENT_DROPS_PER_AREA} drops for area`);
+    await DropQueue.addArea(task);
+    console.log('Area queued for drop generation');
   }
 
   private static groupNearbyLocations(locations: { latitude: number; longitude: number }[]) {

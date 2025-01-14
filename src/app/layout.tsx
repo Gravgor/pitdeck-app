@@ -6,7 +6,7 @@ import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import './globals.css';
 import EA from '@/components/layout/EA';
-
+import { initializeServer } from '../workers/init';
 // Font for headings - Orbitron has a modern, technical feel perfect for motorsports
 const orbitron = Orbitron({
   subsets: ['latin'],
@@ -20,6 +20,10 @@ const inter = Inter({
   variable: '--font-inter',
   display: 'swap',
 });
+
+if (process.env.NODE_ENV === 'production') {
+  initializeServer();
+}
 
 export const metadata = {
   title: 'PitDeck - Motorsport Digital Collectibles',

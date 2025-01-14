@@ -1,6 +1,12 @@
 import { DropService } from "@/lib/services/dropService";
+import { DropQueue, type DropAreaTask } from './redis';
+import { DropGenerator } from '@/services/dropGeneration/generator';
+import { DEFAULT_CONFIG } from "@/services/dropGeneration/config";
+import { DEVELOPMENT_CONFIG } from "@/services/dropGeneration/config";
+import { prisma } from './prisma';
 
 const REFRESH_INTERVAL = 24 * 60 * 60 * 1000; // 24 hours
+const QUEUE_CHECK_INTERVAL = 1000; // 1 second
 let isRunning = false;
 
 async function startDropWorker() {
@@ -15,18 +21,75 @@ async function startDropWorker() {
     process.exit(1);
   }
 
-  console.log('Global drop worker started');
+  console.log('Drop worker started');
   isRunning = true;
+
+  const generator = new DropGenerator(
+    process.env.NODE_ENV === "development" ? DEVELOPMENT_CONFIG : DEFAULT_CONFIG
+  );
   
+  // Start both processes
+  await Promise.all([
+    runDailyGeneration(),
+    processQueue(generator)
+  ]);
+}
+
+async function runDailyGeneration() {
   while (isRunning) {
     try {
-      console.log('Generating global drops...');
+      console.log('Running daily global drops generation...');
       await DropService.generateGlobalDrops();
-      console.log('Global drops generated successfully');
+      console.log('Global drops queued successfully');
       
       await new Promise(resolve => setTimeout(resolve, REFRESH_INTERVAL));
     } catch (error) {
-      console.error('Error in drop worker:', error);
+      console.error('Error in daily generation:', error);
+      await new Promise(resolve => setTimeout(resolve, 5000));
+    }
+  }
+}
+
+async function processQueue(generator: DropGenerator) {
+  while (isRunning) {
+    try {
+      const batch = await DropQueue.getNextBatch();
+      
+      if (batch.length === 0) {
+        await new Promise(resolve => setTimeout(resolve, QUEUE_CHECK_INTERVAL));
+        continue;
+      }
+
+      console.log(`Processing batch of ${batch.length} areas`);
+
+      await Promise.all(batch.map(async (task) => {
+        try {
+          await generator.generateDrops({
+            latitude: task.latitude,
+            longitude: task.longitude,
+            radius: task.radius,
+            count: task.count,
+            expiresAt: new Date(task.expiresAt),
+          });
+
+          await prisma.dropGeneration.create({
+            data: {
+              latitude: task.latitude,
+              longitude: task.longitude,
+              createdAt: new Date()
+            }
+          });
+
+          await DropQueue.markProcessed(task);
+          console.log(`Generated drops for area at ${task.latitude}, ${task.longitude}`);
+        } catch (error) {
+          console.error(`Error generating drops for area:`, error);
+          await DropQueue.markFailed(task);
+        }
+      }));
+
+    } catch (error) {
+      console.error('Error processing queue:', error);
       await new Promise(resolve => setTimeout(resolve, 5000));
     }
   }
