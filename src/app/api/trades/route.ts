@@ -11,29 +11,35 @@ export async function GET(request: Request) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    // Get URL parameters
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get("page") || "1");
     const limit = parseInt(searchParams.get("limit") || "20");
-    const filter = searchParams.get("filter") || "all"; // all, mine, open
-    const sort = searchParams.get("sort") || "recent"; // recent, oldest, coins
+    const filter = searchParams.get("filter") || "all";
+    const sort = searchParams.get("sort") || "recent";
 
-    // Calculate pagination
     const skip = (page - 1) * limit;
 
-    // Base query
     const baseWhere = {
       status: TradeStatus.PENDING,
       expiresAt: {
         gt: new Date()
+      },
+      // Filter out trades where user has already made an offer
+      NOT: {
+        tradeOffers: {
+          some: {
+            userId: session.user.id
+          }
+        }
       }
     };
 
-    // Apply filters
     const where = {
       ...baseWhere,
       ...(filter === "mine" && {
-        senderId: session.user.id
+        senderId: session.user.id,
+        // Remove the NOT condition for "mine" filter
+        NOT: undefined
       }),
       ...(filter === "open" && {
         isOpenTrade: true,
@@ -43,14 +49,12 @@ export async function GET(request: Request) {
       })
     };
 
-    // Apply sorting
     const orderBy = {
       ...(sort === "recent" && { createdAt: "desc" }),
       ...(sort === "oldest" && { createdAt: "asc" }),
       ...(sort === "coins" && { coinsOffered: "desc" })
     };
 
-    // Get trades with pagination
     const [trades, total] = await prisma.$transaction([
       prisma.trade.findMany({
         where,
@@ -89,31 +93,12 @@ export async function GET(request: Request) {
       prisma.trade.count({ where })
     ]);
 
-    // Transform trades to include additional info
-    const enrichedTrades = trades.map(trade => ({
-      ...trade,
-      isOwner: trade.senderId === session.user.id,
-      hasUserOffer: trade.tradeOffers?.some(offer => 
-        offer.userId === session.user.id
-      ),
-      offersCount: trade._count?.tradeOffers
-    }));
-
     return NextResponse.json({
-      trades: enrichedTrades,
+      trades,
       pagination: {
         total,
         pages: Math.ceil(total / limit),
-        currentPage: page,
-        limit
-      },
-      filters: {
-        current: filter,
-        available: ["all", "mine", "open"]
-      },
-      sorting: {
-        current: sort,
-        available: ["recent", "oldest", "coins"]
+        current: page
       }
     });
 
