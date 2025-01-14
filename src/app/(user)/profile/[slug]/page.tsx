@@ -107,7 +107,7 @@ export async function generateMetadata(
   };
 }
 
-export default async function ProfilePage({ params }: { params: { slug: string } }) {
+export default async function ProfilePage({ params }: { params: Promise<{ slug: string }> }) {
   const session = await getServerSession(authOptions);
   const { slug } = await params;
   const profileUser = await getUserByUsername(slug);
