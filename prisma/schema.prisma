@@ -36,43 +36,45 @@ model Session {
 }
 
 model User {
-  id             String            @id @default(cuid())
-  name           String?           @unique
-  email          String?           @unique
-  emailVerified  DateTime?
-  image          String?
-  password       String? // For credentials login
-  coins          Int               @default(1000)
-  level          Int               @default(1)
-  xp             Int               @default(0)
-  totalXp        Int               @default(0)
-  bio            String?
-  role           UserRole          @default(USER)
-  lastLocation   Location?
-  discoveries    Drop[]
-  accounts       Account[]
-  sessions       Session[]
-  cards          Card[]            @relation("UserCards")
-  listings       Listing[]
-  sentTrades     Trade[]           @relation("SentTrades")
-  receivedTrades Trade[]           @relation("ReceivedTrades")
-  packsPurchased Pack[]
-  followers      User[]            @relation("UserFollows")
-  following      User[]            @relation("UserFollows")
-  createdAt      DateTime          @default(now())
-  updatedAt      DateTime          @updatedAt
-  lastLogin      DateTime?         @default(now())
-  lastActive     DateTime?         @default(now())
-  Activity       Activity[]
-  achievements   UserAchievement[]
-  locations      UserLocation[]
-  notifications         Notification[] @relation("UserNotifications")
-  relatedNotifications  Notification[] @relation("RelatedUserNotifications") 
-  quests         UserQuest[]
-  dropGenerations UserDropGeneration[]
-  createdQuests  Quest[]           @relation("QuestCreator")
-  completedMilestones Json?
-  needUsernameSetup Boolean @default(false)
+  id                   String               @id @default(cuid())
+  name                 String?              @unique
+  email                String?              @unique
+  emailVerified        DateTime?
+  image                String?
+  password             String? // For credentials login
+  coins                Int                  @default(1000)
+  level                Int                  @default(1)
+  xp                   Int                  @default(0)
+  packPurchased        Int                  @default(0)
+  totalXp              Int                  @default(0)
+  bio                  String?
+  role                 UserRole             @default(USER)
+  lastLocation         Location?
+  discoveries          Drop[]
+  accounts             Account[]
+  sessions             Session[]
+  cards                Card[]               @relation("UserCards")
+  listings             Listing[]
+  sentTrades           Trade[]              @relation("SentTrades")
+  receivedTrades       Trade[]              @relation("ReceivedTrades")
+  packsPurchased       Pack[]
+  followers            User[]               @relation("UserFollows")
+  following            User[]               @relation("UserFollows")
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @updatedAt
+  lastLogin            DateTime?            @default(now())
+  lastActive           DateTime?            @default(now())
+  Activity             Activity[]
+  achievements         UserAchievement[]
+  locations            UserLocation[]
+  notifications        Notification[]       @relation("UserNotifications")
+  relatedNotifications Notification[]       @relation("RelatedUserNotifications")
+  quests               UserQuest[]
+  dropGenerations      UserDropGeneration[]
+  createdQuests        Quest[]              @relation("QuestCreator")
+  completedMilestones  Json?
+  needUsernameSetup    Boolean              @default(false)
+  PackOpeningSession   PackOpeningSession[]
 }
 
 enum UserRole {
@@ -160,18 +162,18 @@ enum AchievementRarity {
 }
 
 model Notification {
-  id            String    @id @default(cuid())
+  id            String           @id @default(cuid())
   userId        String
   type          NotificationType // e.g., TRADE_OFFER, CARD_SOLD, LEVEL_UP
   message       String
-  read          Boolean   @default(false)
+  read          Boolean          @default(false)
   relatedUserId String?
   metadata      Json?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime?  @updatedAt
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime?        @updatedAt
 
-  user          User      @relation("UserNotifications", fields: [userId], references: [id])
-  relatedUser   User?     @relation("RelatedUserNotifications", fields: [relatedUserId], references: [id])
+  user        User  @relation("UserNotifications", fields: [userId], references: [id])
+  relatedUser User? @relation("RelatedUserNotifications", fields: [relatedUserId], references: [id])
 
   @@index([userId])
   @@index([relatedUserId])
@@ -309,21 +311,21 @@ model Card {
   seasonalDetails     Json?
   historicDetails     Json?
 
-  isQuestLocked Boolean @default(false)
+  isQuestLocked   Boolean   @default(false)
   questLockExpiry DateTime?
-  isForSale       Boolean @default(false)
-  isForTrade      Boolean @default(false)
+  isForSale       Boolean   @default(false)
+  isForTrade      Boolean   @default(false)
 
   // Relations
-  owners          User[]          @relation("UserCards")
-  listing         Listing?
- offeredInTrades    Trade[] @relation("OfferedCards")
-  requestedInTrades  Trade[] @relation("RequestedCards")
-  offeredByReceiver    Trade[] @relation("ReceiverOfferedCards")
-  pack            Pack?           @relation(fields: [packId], references: [id])
-  packId          String?
-  questRewards    QuestReward[]
-  lockedForQuests UserQuestCard[]
+  owners            User[]          @relation("UserCards")
+  listing           Listing?
+  offeredInTrades   Trade[]         @relation("OfferedCards")
+  requestedInTrades Trade[]         @relation("RequestedCards")
+  offeredByReceiver Trade[]         @relation("ReceiverOfferedCards")
+  pack              Pack?           @relation(fields: [packId], references: [id])
+  packId            String?
+  questRewards      QuestReward[]
+  lockedForQuests   UserQuestCard[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -385,26 +387,25 @@ enum ListingStatus {
 
 // Trading System
 model Trade {
-  id                   String   @id @default(cuid())
-  senderId             String
-  receiverId           String?  // Made optional for open trades
-  status               String   @default("OPEN") // OPEN, PENDING, COMPLETED, REJECTED
-  isOpenTrade          Boolean  @default(true)
-  coinsOffered         Int      @default(0)
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
+  id           String   @id @default(cuid())
+  senderId     String
+  receiverId   String? // Made optional for open trades
+  status       String   @default("OPEN") // OPEN, PENDING, COMPLETED, REJECTED
+  isOpenTrade  Boolean  @default(true)
+  coinsOffered Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   // Relations
-  sender               User     @relation("SentTrades", fields: [senderId], references: [id])
-  receiver             User?    @relation("ReceivedTrades", fields: [receiverId], references: [id])
-  offeredCards         Card[]   @relation("OfferedCards")
-  requestedCards       Card[]   @relation("RequestedCards")
-  receiverOfferedCards Card[]   @relation("ReceiverOfferedCards") // New relation for cards offered by claimer
+  sender               User   @relation("SentTrades", fields: [senderId], references: [id])
+  receiver             User?  @relation("ReceivedTrades", fields: [receiverId], references: [id])
+  offeredCards         Card[] @relation("OfferedCards")
+  requestedCards       Card[] @relation("RequestedCards")
+  receiverOfferedCards Card[] @relation("ReceiverOfferedCards") // New relation for cards offered by claimer
 
   @@index([senderId])
   @@index([receiverId])
 }
-
 
 enum TradeStatus {
   PENDING
@@ -438,8 +439,9 @@ model Pack {
   limitedQuantity Int?
   isPromotional   Boolean @default(false)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  PackOpeningSession PackOpeningSession[]
 }
 
 enum PackType {
@@ -562,7 +564,7 @@ model WaitlistEntry {
   email     String   @unique
   createdAt DateTime @default(now())
   status    String   @default("pending") // pending, approved, rejected
-  source    String?  // track where the signup came from
+  source    String? // track where the signup came from
   notes     String?
 }
 
@@ -605,4 +607,20 @@ model DropGeneration {
 
   @@index([latitude, longitude])
   @@index([createdAt])
+}
+
+model PackOpeningSession {
+  id                 String   @id @default(cuid())
+  userId             String
+  packId             String
+  availableCardIds   String[]
+  guaranteedRarities String[]
+  cardsToSelect      Int
+  createdAt          DateTime @default(now())
+  expiresAt          DateTime
+  user               User     @relation(fields: [userId], references: [id])
+  pack               Pack     @relation(fields: [packId], references: [id])
+
+  @@index([userId])
+  @@index([packId])
 }
