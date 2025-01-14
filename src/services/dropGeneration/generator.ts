@@ -153,10 +153,8 @@ export class DropGenerator {
           });
         }
       } else {
-        rewards.push({
-          type: rewardConfig.type as RewardType,
-          amount: Math.floor(Math.random() * (rewardConfig.maxAmount - rewardConfig.minAmount + 1)) + rewardConfig.minAmount
-        });
+        console.log(`Unsupported reward type: ${rewardConfig.type}, skipping`);
+        continue;
       }
     }
     
