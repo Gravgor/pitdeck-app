@@ -42,11 +42,16 @@ export async function POST(request: Request) {
       }
     }
 
+    if (!lastLocation) {
+      await DropService.generateInitialDropsForUser(session.user.id, latitude, longitude);
+    }
+
     // Query nearby drops
     const nearbyDrops = await DropsQueryService.getDropsNearUser({
       userLatitude: latitude,
       userLongitude: longitude,
-      radius: 10
+      radius: 10,
+      userId: session.user.id
     });
 
     return NextResponse.json({ 

@@ -43,7 +43,7 @@ export class DropService {
     }
 
     const activeAreas = await prisma.userLocation.findMany({
-      distinct: ['latitude', 'longitude'],
+      distinct: ['latitude', 'longitude', 'userId'],
       where: {
         updatedAt: {
           gte: new Date(Date.now() - 24 * 60 * 60 * 1000)
@@ -51,7 +51,8 @@ export class DropService {
       },
       select: {
         latitude: true,
-        longitude: true
+        longitude: true,
+        userId: true
       }
     });
 
@@ -68,7 +69,8 @@ export class DropService {
       radius: WORLD_CONFIG.ACTIVE_USER_RADIUS,
       count: WORLD_CONFIG.INITIAL_DROPS_PER_AREA,
       expiresAt: expirationTime.toISOString(),
-      isInitialGeneration: true
+      isInitialGeneration: true,
+      userId: area.userId
     }));
 
     await DropQueue.addAreas(tasks);
@@ -105,8 +107,42 @@ export class DropService {
     console.log('Area queued for drop generation');
   }
 
-  private static groupNearbyLocations(locations: { latitude: number; longitude: number }[]) {
-    const groups: { latitude: number; longitude: number }[] = [];
+  static async generateInitialDropsForUser(userId: string, latitude: number, longitude: number) {
+    const existingDrops = await prisma.drop.count({
+      where: {
+        userId,
+        expiresAt: {
+          gt: new Date()
+        }
+      }
+    });
+
+    if (existingDrops > 0) {
+      console.log(`User ${userId} already has active drops`);
+      return;
+    }
+
+    // Generate initial drops for the user
+    const expirationTime = new Date(
+      Date.now() + WORLD_CONFIG.EXPIRATION_HOURS * 60 * 60 * 1000
+    );
+
+    const task = {
+      latitude,
+      longitude,
+      radius: WORLD_CONFIG.ACTIVE_USER_RADIUS,
+      count: WORLD_CONFIG.INITIAL_DROPS_PER_AREA,
+      expiresAt: expirationTime.toISOString(),
+      userId,
+      isInitialGeneration: true
+    };
+
+    await DropQueue.addArea(task);
+    console.log(`Queued initial drops generation for user ${userId}`);
+  }
+
+  private static groupNearbyLocations(locations: { latitude: number; longitude: number; userId?: string }[]) {
+    const groups: { latitude: number; longitude: number; userId?: string }[] = [];
 
     for (const location of locations) {
       const isFarEnough = groups.every(group => 

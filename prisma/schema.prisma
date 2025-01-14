@@ -228,6 +228,7 @@ model Drop {
   circuit      Circuit? @relation(fields: [circuitId], references: [id])
   circuitId    String?
   expiresAt    DateTime
+  userId       String?
   discoveredBy User[]
   rewards      Reward[]
   isActive     Boolean  @default(true)

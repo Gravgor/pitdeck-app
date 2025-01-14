@@ -21,6 +21,7 @@ export interface GenerationArea {
   radius: number;
   count: number;
   expiresAt: Date;
+  userId?: string;
 }
 
 export interface DropTypeConfig {
