@@ -37,12 +37,9 @@ export function CardSelectionGame({
   const handleCardClick = (card: Card) => {
     setError(null);
 
-    // If card is already revealed, allow deselection
-    if (revealedCards.includes(card.id)) {
-      setSelectedCards(selectedCards.filter(c => c.id !== card.id));
-      setRevealedCards(revealedCards.filter(id => id !== card.id));
-      return;
-    }
+    if (selectedCards.some(c => c.id === card.id)) {
+        return;
+      }
 
     // Check if we can reveal more cards
     if (selectedCards.length >= packConfig.cardsToSelect) {
