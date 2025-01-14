@@ -24,6 +24,7 @@ import { NotificationBell } from '../notifications/NotificationBell';
 import { PitDeckLogo } from '../ui/logo';
 import EA from './EA';
 import { formatNumber } from '@/lib/utils/formatNumber';
+import { UserBalance } from '../user/UserBalance';
 const seriesLinks = [
   { name: 'Formula 1', href: '/series/f1', icon: Car },
   { name: 'WEC', href: '/series/wec', icon: Flag },
@@ -126,13 +127,7 @@ export function Navbar() {
               <NavbarLoading />
             ) : status === 'authenticated' ? (
               <>
-                {/* Balance */}
-                <div className="px-4 py-2 bg-white/5 rounded-full flex items-center space-x-2">
-                  <CreditCard className="h-4 w-4 text-yellow-400" />
-                  <span className="text-sm text-white font-display">
-                    {formatNumber(session.user.coins || 0)} Race Coins
-                  </span>
-                </div>
+                <UserBalance initialBalance={session?.user?.coins || 0} />
 
                <NotificationBell />
 
