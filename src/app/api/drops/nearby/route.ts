@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { NextResponse } from "next/server";
-import { getNearbyDrops } from "@/services/dropService";
+import { DropsQueryService } from "@/lib/services/drops-query-service";
 
 export async function GET(request: Request) {
   try {
@@ -17,11 +17,12 @@ export async function GET(request: Request) {
 
     const isPremium =  false;
 
-    const drops = await getNearbyDrops(
-      { latitude: lat, longitude: lng },
-      radius,
-      isPremium
-    );
+    const drops = await DropsQueryService.getDropsNearUser({
+      userLatitude: lat,
+      userLongitude: lng,
+      radius: radius,
+      userId: session.user.id
+    });
 
     return NextResponse.json(drops);
   } catch (error) {

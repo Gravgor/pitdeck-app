@@ -50,7 +50,7 @@ export async function POST(request: Request) {
     const nearbyDrops = await DropsQueryService.getDropsNearUser({
       userLatitude: latitude,
       userLongitude: longitude,
-      radius: 10,
+      radius: 10000,
       userId: session.user.id
     });
 
