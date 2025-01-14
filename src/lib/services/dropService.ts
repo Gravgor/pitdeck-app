@@ -6,11 +6,11 @@ import { DEFAULT_CONFIG } from "@/services/dropGeneration/config";
 import { DEVELOPMENT_CONFIG } from "@/services/dropGeneration/config";
 
 const WORLD_CONFIG = {
-  DROPS_PER_ACTIVE_AREA: 30,
+  DROPS_PER_ACTIVE_AREA: 100,
   EXPIRATION_HOURS: 24,
   ACTIVE_USER_RADIUS: 5000, // 5km radius around active users
   ACTIVE_USER_TIMEFRAME: 15, // minutes
-  MIN_DISTANCE_BETWEEN_AREAS: 10000, // 10km minimum between generation areas
+  MIN_DISTANCE_BETWEEN_AREAS: 5000, // 5km minimum between generation areas
 };
 
 export class DropService {
