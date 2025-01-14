@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { Trophy, Twitter, Instagram, Youtube, Facebook } from 'lucide-react';
 
+const APP_VERSION = 'Beta 1.0.2';
+
 export function Footer() {
   return (
     <footer className="bg-black border-t border-white/10">
@@ -63,9 +65,13 @@ export function Footer() {
         {/* Bottom Section */}
         <div className="mt-12 pt-8 border-t border-white/10">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <p className="text-sm text-gray-400">
-              © {new Date().getFullYear()} PitDeck. All rights reserved.
-            </p>
+            <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-2">
+              <p className="text-sm text-gray-400">
+                © {new Date().getFullYear()} PitDeck. All rights reserved.
+              </p>
+              <span className="hidden md:inline text-gray-600">•</span>
+              <span className="text-xs text-gray-600">{APP_VERSION}</span>
+            </div>
             <div className="flex space-x-6">
               <FooterLink href="/terms" text="Terms" />
               <FooterLink href="/privacy" text="Privacy" />
