@@ -6,13 +6,51 @@ import { useRouter } from 'next/navigation';
 import { formatDistance } from 'date-fns';
 import { Trade } from '@/types/trade';
 import { ArrowRight, MessageCircle, Coins } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 interface TradeCardProps {
   trade: Trade;
+  onUpdate?: () => void;
 }
 
-export function TradeCard({ trade }: TradeCardProps) {
+export function TradeCard({ trade: initialTrade, onUpdate }: TradeCardProps) {
   const router = useRouter();
+  const [trade, setTrade] = useState(initialTrade);
+  const [lastUpdate, setLastUpdate] = useState<number>(Date.now());
+
+  useEffect(() => {
+    // Update local state when prop changes
+    setTrade(initialTrade);
+  }, [initialTrade]);
+
+  useEffect(() => {
+    const fetchTradeUpdates = async () => {
+      try {
+        const response = await fetch(`/api/trades/${trade.id}`, {
+          cache: 'no-store',
+          headers: {
+            'Last-Update': lastUpdate.toString()
+          }
+        });
+
+        if (!response.ok) throw new Error('Failed to fetch trade updates');
+        
+        const data = await response.json();
+        
+        if (JSON.stringify(data.trade) !== JSON.stringify(trade)) {
+          setTrade(data.trade);
+          setLastUpdate(data.timestamp);
+          onUpdate?.();
+        }
+      } catch (error) {
+        console.error('Error fetching trade updates:', error);
+      }
+    };
+
+    const interval = setInterval(fetchTradeUpdates, 15000);
+
+    return () => clearInterval(interval);
+  }, [trade.id, lastUpdate, onUpdate]);
 
   return (
     <div 

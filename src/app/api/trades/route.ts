@@ -24,7 +24,6 @@ export async function GET(request: Request) {
       expiresAt: {
         gt: new Date()
       },
-      // Filter out trades where user has already made an offer
       NOT: {
         tradeOffers: {
           some: {
@@ -38,7 +37,6 @@ export async function GET(request: Request) {
       ...baseWhere,
       ...(filter === "mine" && {
         senderId: session.user.id,
-        // Remove the NOT condition for "mine" filter
         NOT: undefined
       }),
       ...(filter === "open" && {
@@ -50,7 +48,7 @@ export async function GET(request: Request) {
     };
 
     const orderBy = {
-      ...(sort === "recent" && { createdAt: "desc" }),
+      updatedAt: 'desc',
       ...(sort === "oldest" && { createdAt: "asc" }),
       ...(sort === "coins" && { coinsOffered: "desc" })
     };
@@ -65,7 +63,7 @@ export async function GET(request: Request) {
             select: {
               id: true,
               name: true,
-              image: true
+              image: true,
             }
           },
           offeredCards: {
@@ -73,13 +71,13 @@ export async function GET(request: Request) {
               id: true,
               name: true,
               imageUrl: true,
-              rarity: true
+              rarity: true,
+              type: true,
             }
           },
           tradeOffers: {
             select: {
               id: true,
-              userId: true,
               status: true
             }
           },
@@ -93,13 +91,23 @@ export async function GET(request: Request) {
       prisma.trade.count({ where })
     ]);
 
+    const enrichedTrades = trades.map(trade => ({
+      ...trade,
+      sender: {
+        ...trade.sender,
+        tradeSuccessRate: 0
+      },
+      timeRemaining: trade.expiresAt ? Math.max(0, new Date(trade.expiresAt).getTime() - Date.now()) : 0
+    }));
+
     return NextResponse.json({
-      trades,
+      trades: enrichedTrades,
       pagination: {
         total,
         pages: Math.ceil(total / limit),
         current: page
-      }
+      },
+      timestamp: Date.now()
     });
 
   } catch (error) {

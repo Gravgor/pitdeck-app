@@ -67,6 +67,9 @@ export async function GET(request: Request) {
       },
       skip,
       take: limit,
+      orderBy: {
+        updatedAt: 'desc',
+      },
     });
 
     const total = await prisma.trade.count({
@@ -95,7 +98,8 @@ export async function GET(request: Request) {
         total,
         pages: Math.ceil(total / limit),
         current: page
-      }
+      },
+      timestamp: Date.now()
     });
 
   } catch (error) {

@@ -40,6 +40,10 @@ export default function SentOffersPage() {
 
   useEffect(() => {
     fetchOffers();
+
+    const interval = setInterval(fetchOffers, 15000);
+
+    return () => clearInterval(interval);
   }, [statusFilter, currentPage]);
 
   const fetchOffers = async () => {

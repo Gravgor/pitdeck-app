@@ -42,17 +42,27 @@ export default function ReceivedOffersPage() {
 
   useEffect(() => {
     fetchTrades();
+
+    const interval = setInterval(fetchTrades, 15000);
+
+    return () => clearInterval(interval);
   }, [statusFilter, currentPage]);
 
   const fetchTrades = async () => {
     try {
       const response = await fetch(
-        `/api/trades/received-offers?status=${statusFilter}&page=${currentPage}`
+        `/api/trades/received-offers?status=${statusFilter}&page=${currentPage}`,
+        { cache: 'no-store' } // Ensure fresh data
       );
       if (!response.ok) throw new Error('Failed to fetch trades');
       const data = await response.json();
-      setTrades(data.trades);
-      setTotalPages(data.pagination.pages);
+      
+      // Compare with existing data to avoid unnecessary re-renders
+      const hasChanges = JSON.stringify(data.trades) !== JSON.stringify(trades);
+      if (hasChanges) {
+        setTrades(data.trades);
+        setTotalPages(data.pagination.pages);
+      }
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Failed to load trades');
     } finally {

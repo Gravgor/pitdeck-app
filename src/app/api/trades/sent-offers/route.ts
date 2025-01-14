@@ -33,7 +33,7 @@ export async function GET(request: Request) {
       prisma.tradeOffer.findMany({
         where,
         orderBy: {
-          createdAt: 'desc'
+          updatedAt: 'desc'
         },
         skip,
         take: limit,
@@ -100,7 +100,8 @@ export async function GET(request: Request) {
         total,
         pages: Math.ceil(total / limit),
         current: page
-      }
+      },
+      timestamp: Date.now()
     });
 
   } catch (error) {
