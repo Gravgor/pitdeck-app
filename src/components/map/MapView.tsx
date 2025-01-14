@@ -119,22 +119,22 @@ export function MapView({ drops, isPremium = false }: MapViewProps) {
               coordinates: [longitude, latitude],
             },
             properties: {
-              radius: FREE_RADIUS,  // Now in meters
+              radius: FREE_RADIUS,
               color: '#4ADE80',
             },
           },
-          // Premium radius
-          {
+          // Premium radius (only show if user is premium)
+          ...(isPremium ? [{
             type: 'Feature',
             geometry: {
               type: 'Point',
               coordinates: [longitude, latitude],
             },
             properties: {
-              radius: PREMIUM_RADIUS,  // Now in meters
+              radius: PREMIUM_RADIUS,
               color: '#F472B6',
             },
-          },
+          }] : []),
         ],
       },
     };
@@ -178,7 +178,7 @@ export function MapView({ drops, isPremium = false }: MapViewProps) {
       });
     });
 
-  }, [location]);
+  }, [location, isPremium]);
 
   // Update the drops rendering effect
   useEffect(() => {

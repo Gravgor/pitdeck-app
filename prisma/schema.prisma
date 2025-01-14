@@ -595,3 +595,13 @@ model UserDropGeneration {
   lastGenAt DateTime
   user      User     @relation(fields: [userId], references: [id])
 }
+
+model DropGeneration {
+  id        String   @id @default(cuid())
+  latitude  Float
+  longitude Float
+  createdAt DateTime @default(now())
+
+  @@index([latitude, longitude])
+  @@index([createdAt])
+}
