@@ -206,7 +206,7 @@ export function SignInForm() {
                          rounded-lg text-sm font-medium text-white 
                          transition-colors duration-200"
               >
-                <Image src="/google.svg" alt="Google" className="h-5 w-5" />
+                <Image src="/google.svg" alt="Google" className="h-5 w-5" width={20} height={20}/>
                 Google
               </button>
             </div>

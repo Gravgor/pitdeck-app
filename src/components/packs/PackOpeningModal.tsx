@@ -50,7 +50,7 @@ export function PackOpeningModal({ pack, isOpen, onClose }: PackOpeningModalProp
       }
 
       const { cards } = await response.json();
-      await new Promise(resolve => setTimeout(resolve, 2500)); // Pack opening animation delay
+      await new Promise(resolve => setTimeout(resolve, 2500)); 
       setAvailableCards(cards);
       playSound('pack_open');
     } catch (error) {
@@ -166,6 +166,8 @@ export function PackOpeningModal({ pack, isOpen, onClose }: PackOpeningModalProp
                 <Image 
                   src={pack.imageUrl} 
                   alt={pack.name}
+                  width={256}
+                  height={256}
                   className="w-64 h-64 object-cover mx-auto rounded-xl shadow-2xl relative z-10"
                 />
               </motion.div>

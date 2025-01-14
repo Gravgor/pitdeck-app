@@ -2,7 +2,6 @@ import { getServerSession } from "next-auth/next";
 import { NextResponse } from "next/server";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { addXP } from "@/lib/levels";
 
 export async function POST(request: Request) {
   try {
@@ -27,18 +26,8 @@ export async function POST(request: Request) {
       return new NextResponse("Pack opening session expired or not found", { status: 400 });
     }
 
-    // Validate selection
     if (selectedCardIds.length !== openingSession.cardsToSelect) {
       return new NextResponse("Invalid number of cards selected", { status: 400 });
-    }
-
-    // Validate cards are from available set
-    const invalidCards = selectedCardIds.filter(
-      (id: any) => !openingSession.availableCardIds.includes(id)
-    );
-
-    if (invalidCards.length > 0) {
-      return new NextResponse("Invalid card selection", { status: 400 });
     }
 
     // Get pack details
@@ -50,9 +39,7 @@ export async function POST(request: Request) {
       return new NextResponse("Pack not found", { status: 404 });
     }
 
-    // Execute the transaction
     const result = await prisma.$transaction(async (tx) => {
-      // Deduct coins
       const updatedUser = await tx.user.update({
         where: { id: session.user.id },
         data: { 
@@ -61,36 +48,51 @@ export async function POST(request: Request) {
         }
       });
 
-      const userCards = await Promise.all(
-        selectedCardIds.map((cardId: any) =>
-          tx.card.update({
-            where: { id: cardId },
-            data: {
-              owners: { connect: { id: session.user.id } }
+      for (const cardId of selectedCardIds) {
+        await tx.card.update({
+          where: { id: cardId },
+          data: {
+            owners: {
+              connect: { id: session.user.id }
             }
-          })
-        )
-      );
+          }
+        });
+      }
 
-      // Delete the opening session
       await tx.packOpeningSession.delete({
         where: { id: openingSession.id }
       });
 
-      // Award XP
-      await addXP(session.user.id, 100);
+      return { updatedUser };
+    }, {
+      timeout: 10000
+    });
 
-      return { userCards, updatedUser };
+    const userCards = await prisma.card.findMany({
+      where: {
+        id: { in: selectedCardIds },
+        owners: {
+          some: { id: session.user.id }
+        }
+      },
+      include: {
+        owners: {
+          where: { id: session.user.id }
+        }
+      }
     });
 
     return NextResponse.json({
       success: true,
-      userCards: result.userCards,
+      cards: userCards,
       newBalance: result.updatedUser.coins
     });
 
   } catch (error) {
     console.error("[PACK_OPEN_ERROR]", error);
-    return new NextResponse("Internal error", { status: 500 });
+    return new NextResponse(
+      error instanceof Error ? error.message : "Internal error", 
+      { status: 500 }
+    );
   }
 }
