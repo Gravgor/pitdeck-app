@@ -76,8 +76,9 @@ export default function CreateOfferPage({ params }: { params: Promise<{ id: stri
   // If user can't make an offer, redirect them
   useEffect(() => {
     async function redirectIfNoOffer() {
+        const {id} = await params;
       if (!isLoading && userContext && !userContext.canMakeOffer) {
-        router.push(`/trading/`);
+        router.push(`/trading/${id}/offers`);
       }
     }
     redirectIfNoOffer();
@@ -127,7 +128,6 @@ export default function CreateOfferPage({ params }: { params: Promise<{ id: stri
   }
 
   if (!trade || !userContext?.canMakeOffer) {
-    console.log(trade, userContext);
     return (
       <div className="min-h-screen bg-[#0A0B0F] flex items-center justify-center">
         <div className="text-center">

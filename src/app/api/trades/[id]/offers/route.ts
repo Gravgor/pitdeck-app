@@ -182,6 +182,9 @@ export async function GET(
             rarity: true,
             type: true,
             description: true,
+            series: true,
+            year: true,
+            serialNumber: true,
             owners: {
               select: {
                 id: true,
@@ -208,6 +211,7 @@ export async function GET(
                 rarity: true,
                 type: true,
                 description: true,
+                serialNumber: true,
               }
             }
           }
