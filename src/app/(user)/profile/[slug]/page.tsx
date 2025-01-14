@@ -158,37 +158,41 @@ export default async function ProfilePage({ params }: { params: { slug: string }
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="bg-gradient-to-b from-gray-900 to-black rounded-2xl p-4 sm:p-6 shadow-xl border border-red-500/10">
-        {/* Profile Header */}
         <div className="flex flex-col gap-6">
-          {/* User Info */}
-          <div className="flex items-start justify-between">
-            <div className="flex items-center gap-4">
+          {/* Profile Header - Redesigned for better mobile */}
+          <div className="flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-6">
+            {/* Profile Image - Centered on mobile */}
+            <div className="flex justify-center sm:justify-start">
               {profileUser.image?.trim() ? (
-                <div className="relative w-20 h-20 sm:w-24 sm:h-24">
+                <div className="relative w-24 h-24 sm:w-24 sm:h-24">
                   <Image
                     src={profileUser.image}
                     alt={`${profileUser.name}'s profile`}
                     fill
                     className="rounded-full object-cover ring-2 ring-white/20"
+                    priority
                   />
                 </div>
               ) : (
-                <UserAvatar name={profileUser.name} size={80} />
+                <UserAvatar name={profileUser.name} size={96} />
               )}
+            </div>
 
-              <div className="flex-grow">
-                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+            {/* User Info - Centered on mobile */}
+            <div className="flex-grow text-center sm:text-left">
+              <div className="flex flex-col items-center sm:items-start gap-2">
+                <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-3">
                   <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent">
                     {cleanName}
                   </h1>
                   {profileUser.role === 'PITDECK_TEAM' && (
                     <span className="inline-flex px-2 py-0.5 text-xs font-medium bg-red-500/10 text-red-500 rounded-full border border-red-500/20">
-                  PitDeck Team
-                </span>
+                    PitDeck Team
+                  </span>
                   )}
                 </div>
                 <p className="text-gray-400">@{profileUser.name}</p>
-                <p className="text-gray-400 mt-2 text-sm">
+                <p className="text-gray-400 mt-1 text-sm max-w-md">
                   {profileUser.bio || 'No bio yet.'}
                 </p>
               </div>
@@ -196,9 +200,10 @@ export default async function ProfilePage({ params }: { params: { slug: string }
           </div>
 
           {/* Followers and Actions */}
-          <div className="border-t border-b border-gray-800/60 py-4 px-2">
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div className="flex items-center gap-6">
+          <div className="border-t border-b border-gray-800/60 py-4">
+            <div className="flex flex-col-reverse sm:flex-row items-center justify-between gap-6">
+              {/* Followers/Following - Full width on mobile */}
+              <div className="flex items-center justify-center w-full sm:w-auto gap-8 sm:gap-6">
                 <Link 
                   href={`/profile/${profileUser.name}/followers`} 
                   className="flex flex-col items-center hover:bg-white/5 px-4 py-2 rounded-lg transition-colors"
@@ -206,7 +211,7 @@ export default async function ProfilePage({ params }: { params: { slug: string }
                   <span className="text-xl font-bold text-white">{followData?._count.followers}</span>
                   <span className="text-sm text-gray-400">Followers</span>
                 </Link>
-                <div className="h-8 w-px bg-gray-800/60 hidden sm:block" />
+                <div className="h-8 w-px bg-gray-800/60" />
                 <Link 
                   href={`/profile/${profileUser.name}/following`} 
                   className="flex flex-col items-center hover:bg-white/5 px-4 py-2 rounded-lg transition-colors"
@@ -216,7 +221,8 @@ export default async function ProfilePage({ params }: { params: { slug: string }
                 </Link>
               </div>
 
-              <div className="flex gap-3">
+              {/* Action Buttons - Centered on mobile */}
+              <div className="flex justify-center w-full sm:w-auto gap-3">
                 {!isOwner && session?.user && (
                   <FollowButton 
                     userId={profileUser.id} 
@@ -225,11 +231,11 @@ export default async function ProfilePage({ params }: { params: { slug: string }
                 )}
                 
                 {isOwner && (
-                  <Link href="/settings/profile">
+                  <Link href="/settings/profile" className="w-full sm:w-auto">
                     <Button 
                       variant="outline" 
                       size="sm"
-                      className="flex items-center gap-2 text-sm bg-gray-800/50 border-gray-700 hover:bg-gray-700/50"
+                      className="w-full flex items-center justify-center gap-2 text-sm bg-gray-800/50 border-gray-700 hover:bg-gray-700/50"
                     >
                       <Settings className="w-4 h-4" />
                       Customize Profile
