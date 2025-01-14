@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { prisma } from "../prisma.js";
+import { prisma } from "@/lib/prisma";
 import { Drop, Circuit, Event, Rarity, DropType } from "@prisma/client";
 import { DropGenerator } from "@/services/dropGeneration/generator";
 import { DEFAULT_CONFIG } from "@/services/dropGeneration/config";
