@@ -150,7 +150,8 @@ export async function POST(
 }
 
 export async function GET(
-  { params }: { params: { id: string } }
+    request: Request,
+    { params }: { params: { id: string } }
 ) {
   try {
     const session = await getServerSession(authOptions);
