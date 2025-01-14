@@ -4,7 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { getUserByUsername } from "@/lib/user";
 import { redirect } from "next/navigation";
 import Link from 'next/link';
-import { ChevronRight, ArrowRightLeft, Package, Trophy, Pencil, Wallet, Car } from 'lucide-react';
+import { ChevronRight, ArrowRightLeft, Package, Trophy, Pencil, Wallet, Car, Settings } from 'lucide-react';
 import { CardGrid } from '@/components/cards/CardGrid';
 import { ResolvingMetadata, Metadata } from 'next';
 import ProfileNotFound from './not-found';
@@ -16,6 +16,9 @@ import { LevelProgress } from '@/components/profile/LevelProgress';
 import Image from 'next/image';
 import { cleanNickname } from '@/lib/utils';
 import { UserAvatar } from '@/components/ui/UserAvatar';
+import { ProfileStats } from '@/components/profile/ProfileStats';
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 interface ProfilePageProps {
     params: Promise<{ 
@@ -104,7 +107,7 @@ export async function generateMetadata(
   };
 }
 
-export default async function ProfilePage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function ProfilePage({ params }: { params: { slug: string } }) {
   const session = await getServerSession(authOptions);
   const { slug } = await params;
   const profileUser = await getUserByUsername(slug);
@@ -144,138 +147,124 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
   const activities = await getRecentActivities(profileUser.id);
   const cleanName = cleanNickname(profileUser.name || '');
 
+  const stats = {
+    xp: profileUser.totalXp,
+    totalCards: profileUser._count.cards,
+    trades: profileUser._count.sentTrades + profileUser._count.receivedTrades,
+    packsOpened: profileUser._count.packsPurchased,
+    coins: profileUser.coins
+  };
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="bg-gradient-to-b from-gray-900 to-black rounded-2xl p-4 sm:p-6 shadow-xl border border-red-500/10">
         {/* Profile Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
-          {profileUser.image?.trim() ? (
-            <div className="relative w-20 h-20 sm:w-24 sm:h-24">
-              <Image
-                src={profileUser.image}
-                alt={`${profileUser.name}'s profile`}
-                fill
-                className="rounded-full object-cover ring-2 ring-white/20"
-              />
-            </div>
-          ) : (
-            <UserAvatar name={profileUser.name} size={80} />
-          )}
+        <div className="flex flex-col gap-6">
+          {/* User Info */}
+          <div className="flex items-start justify-between">
+            <div className="flex items-center gap-4">
+              {profileUser.image?.trim() ? (
+                <div className="relative w-20 h-20 sm:w-24 sm:h-24">
+                  <Image
+                    src={profileUser.image}
+                    alt={`${profileUser.name}'s profile`}
+                    fill
+                    className="rounded-full object-cover ring-2 ring-white/20"
+                  />
+                </div>
+              ) : (
+                <UserAvatar name={profileUser.name} size={80} />
+              )}
 
-          <div className="flex-grow">
-            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
-              <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent">
-                {cleanName}
-              </h1>
-              {profileUser.role === 'PITDECK_TEAM' && (
-                <span className="inline-flex px-2 py-0.5 text-xs font-medium bg-red-500/10 text-red-500 rounded-full border border-red-500/20">
+              <div className="flex-grow">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+                  <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent">
+                    {cleanName}
+                  </h1>
+                  {profileUser.role === 'PITDECK_TEAM' && (
+                    <span className="inline-flex px-2 py-0.5 text-xs font-medium bg-red-500/10 text-red-500 rounded-full border border-red-500/20">
                   PitDeck Team
                 </span>
-              )}
-            </div>
-            <p className="text-gray-400">@{profileUser.name}</p>
-            <p className="text-gray-400 mt-2 text-sm">
-              {profileUser.bio || 'No bio yet.'}
-            </p>
-          </div>
-
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-            <div className="flex gap-4 sm:gap-6 text-sm text-gray-400">
-              <Link href={`/profile/${profileUser.name}/followers`} className="hover:text-white">
-                <span className="font-bold text-white">{followData?._count.followers}</span> followers
-              </Link>
-              <Link href={`/profile/${profileUser.name}/following`} className="hover:text-white">
-                <span className="font-bold text-white">{followData?._count.following}</span> following
-              </Link>
-            </div>
-
-            {!isOwner && session?.user && (
-              <FollowButton 
-                userId={profileUser.id} 
-                initialIsFollowing={!!isFollowing}
-              />
-            )}
-          </div>
-        </div>
-
-        {isOwner && (
-          <div className="mt-4">
-            <Link
-              href="/settings/profile"
-              className="inline-flex items-center gap-2 px-4 py-2 text-sm text-white bg-white/5 hover:bg-white/10 rounded-lg border border-white/10 transition-colors"
-            >
-              <Pencil className="h-4 w-4" />
-              Edit Profile
-            </Link>
-          </div>
-        )}
-
-        {/* Stats Overview */}
-        <div className="mt-6 sm:mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-          {[
-            { 
-              label: 'Total Cards', 
-              value: profileUser._count.cards,
-              icon: Car,
-              color: 'text-blue-400'
-            },
-            { 
-              label: 'Trades', 
-              value: profileUser._count.sentTrades + profileUser._count.receivedTrades,
-              icon: ArrowRightLeft,
-              color: 'text-green-400'
-            },
-            { 
-              label: 'Packs Opened', 
-              value: profileUser._count.packsPurchased,
-              icon: Package,
-              color: 'text-purple-400'
-            },
-            { 
-              label: 'Coins', 
-              value: profileUser.coins.toLocaleString(),
-              icon: Wallet,
-              color: 'text-yellow-400'
-            }
-          ].map((stat, index) => (
-            <div key={index} className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-3 sm:p-4 border border-red-500/10 hover:border-red-500/20 transition-colors">
-              <div className="flex items-center gap-2 sm:gap-3 mb-2">
-                <div className={`${stat.color} bg-white/5 rounded-full p-1.5 sm:p-2`}>
-                  <stat.icon className="h-3 w-3 sm:h-4 sm:w-4" />
+                  )}
                 </div>
-                <p className="text-xs sm:text-sm text-gray-400">{stat.label}</p>
+                <p className="text-gray-400">@{profileUser.name}</p>
+                <p className="text-gray-400 mt-2 text-sm">
+                  {profileUser.bio || 'No bio yet.'}
+                </p>
               </div>
-              <p className="text-lg sm:text-2xl font-bold text-white">{stat.value}</p>
             </div>
-          ))}
+          </div>
+
+          {/* Followers and Actions */}
+          <div className="border-t border-b border-gray-800/60 py-4 px-2">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-6">
+                <Link 
+                  href={`/profile/${profileUser.name}/followers`} 
+                  className="flex flex-col items-center hover:bg-white/5 px-4 py-2 rounded-lg transition-colors"
+                >
+                  <span className="text-xl font-bold text-white">{followData?._count.followers}</span>
+                  <span className="text-sm text-gray-400">Followers</span>
+                </Link>
+                <div className="h-8 w-px bg-gray-800/60 hidden sm:block" />
+                <Link 
+                  href={`/profile/${profileUser.name}/following`} 
+                  className="flex flex-col items-center hover:bg-white/5 px-4 py-2 rounded-lg transition-colors"
+                >
+                  <span className="text-xl font-bold text-white">{followData?._count.following}</span>
+                  <span className="text-sm text-gray-400">Following</span>
+                </Link>
+              </div>
+
+              <div className="flex gap-3">
+                {!isOwner && session?.user && (
+                  <FollowButton 
+                    userId={profileUser.id} 
+                    initialIsFollowing={!!isFollowing}
+                  />
+                )}
+                
+                {isOwner && (
+                  <Link href="/settings/profile">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      className="flex items-center gap-2 text-sm bg-gray-800/50 border-gray-700 hover:bg-gray-700/50"
+                    >
+                      <Settings className="w-4 h-4" />
+                      Customize Profile
+                    </Button>
+                  </Link>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Profile Stats */}
+          <ProfileStats stats={stats} />
+
+          {/* Collection Preview */}
+          <section className="mt-8 sm:mt-12">
+            <div className="flex items-center justify-between mb-4 sm:mb-6">
+              <h2 className="text-xl sm:text-2xl font-bold text-white">Collection Preview</h2>
+              <Link 
+                href={`/collection/${cleanName}`}
+                className="flex items-center gap-1 px-3 py-1.5 sm:px-4 sm:py-2 text-sm text-red-400 hover:text-red-300 transition-colors"
+              >
+                View All <ChevronRight className="h-4 w-4" />
+              </Link>
+            </div>
+            <div className="bg-black/50 rounded-xl p-3 sm:p-6 border border-red-500/10">
+              <CardGrid cards={displayCards} isOwner={isOwner} />
+            </div>
+          </section>
+
+          {/* Recent Activity */}
+          <section className="mt-8 sm:mt-12">
+            <h2 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6">Recent Activity</h2>
+            <ActivityFeed activities={activities} />
+          </section>
         </div>
-
-        {/* Collection Preview */}
-        <section className="mt-8 sm:mt-12">
-          <div className="flex items-center justify-between mb-4 sm:mb-6">
-            <h2 className="text-xl sm:text-2xl font-bold text-white">Collection Preview</h2>
-            <Link 
-              href={`/collection/${cleanName}`}
-              className="flex items-center gap-1 px-3 py-1.5 sm:px-4 sm:py-2 text-sm text-red-400 hover:text-red-300 transition-colors"
-            >
-              View All <ChevronRight className="h-4 w-4" />
-            </Link>
-          </div>
-          <div className="bg-black/50 rounded-xl p-3 sm:p-6 border border-red-500/10">
-            <CardGrid cards={displayCards} isOwner={isOwner} />
-          </div>
-        </section>
-
-        {/* Recent Activity */}
-        <section className="mt-8 sm:mt-12">
-          <h2 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6">Recent Activity</h2>
-          <ActivityFeed activities={activities} />
-        </section>
-
-        {/* Level Progress */}
-        <section className="mt-6 sm:mt-8">
-          <LevelProgress xp={profileUser.totalXp} />
-        </section>
       </div>
     </div>
   );
