@@ -39,6 +39,7 @@ export async function startQueueWorkerServer() {
               longitude: task.longitude,
               radius: task.radius,
               count: task.count,
+              userId: task.userId,
               expiresAt: new Date(task.expiresAt),
             });
 
