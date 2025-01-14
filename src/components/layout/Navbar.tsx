@@ -43,9 +43,9 @@ export function Navbar() {
 
   const mainLinks = status === 'authenticated' 
     ? [
+        {name: 'My Collection', href: '/collection'},
         { name: 'Marketplace', href: '/marketplace' },
         { name: 'Packs', href: '/packs' },
-        { name: 'Collections', href: '/collections' },
         { name: 'Trading', href: '/trading' },
       ]
     : [
@@ -54,8 +54,6 @@ export function Navbar() {
 
   const userMenuItems = [
     { label: 'Profile', href: `/profile/${session?.user?.name}`, icon: User },
-    { label: 'My Collection', href: '/collection', icon: Package },
-    { label: 'Trading', href: '/trading', icon: Users },
     { label: 'Map', href: '/map', icon: MapPin },
     { label: 'Quests', href: '/quests', icon: Scroll },
     { label: 'Achievements', href: '/achievements', icon: Crown },
