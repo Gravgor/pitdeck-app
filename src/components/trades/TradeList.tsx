@@ -17,10 +17,10 @@ export function TradeList() {
 
   const fetchTrades = async () => {
     try {
-      const response = await fetch('/api/cards/trade');
+      const response = await fetch('/api/trades');
       if (!response.ok) throw new Error('Failed to fetch trades');
       const data = await response.json();
-      setTrades(data);
+      setTrades(data.trades);
     } catch (error) {
       console.error('Error fetching trades:', error);
       setError('Failed to load trades. Please try again later.');

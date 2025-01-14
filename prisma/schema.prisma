@@ -55,7 +55,7 @@ model User {
   sessions             Session[]
   cards                Card[]               @relation("UserCards")
   listings             Listing[]
-  sentTrades           Trade[]              @relation("SentTrades")
+  sentTrades           Trade[]              @relation("SenderTrades")
   receivedTrades       Trade[]              @relation("ReceivedTrades")
   packsPurchased       Pack[]
   followers            User[]               @relation("UserFollows")
@@ -75,6 +75,7 @@ model User {
   completedMilestones  Json?
   needUsernameSetup    Boolean              @default(false)
   PackOpeningSession   PackOpeningSession[]
+  tradeOffers           TradeOffer[]
 }
 
 enum UserRole {
@@ -330,6 +331,9 @@ model Card {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   Reward    Reward[]
+
+  // Trade Relations
+  offeredInOffers   TradeOffer[] @relation("TradeOfferCards")
 }
 
 enum CardType {
@@ -387,24 +391,60 @@ enum ListingStatus {
 
 // Trading System
 model Trade {
-  id           String   @id @default(cuid())
-  senderId     String
-  receiverId   String? // Made optional for open trades
-  status       String   @default("OPEN") // OPEN, PENDING, COMPLETED, REJECTED
-  isOpenTrade  Boolean  @default(true)
-  coinsOffered Int      @default(0)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id            String   @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  // Sender (Trade Creator)
+  sender        User     @relation("SenderTrades", fields: [senderId], references: [id])
+  senderId      String
+  
+  // Trade Details
+  status        TradeStatus @default(PENDING)
+  isOpenTrade   Boolean     @default(false)
+  note          String?
+  expiresAt     DateTime?
+  
+  // Offered Items
+  offeredCards  Card[]   @relation("OfferedCards")
+  coinsOffered  Int      @default(0)
+  
+  // Trade Offers
+  tradeOffers   TradeOffer[]
 
-  // Relations
-  sender               User   @relation("SentTrades", fields: [senderId], references: [id])
-  receiver             User?  @relation("ReceivedTrades", fields: [receiverId], references: [id])
-  offeredCards         Card[] @relation("OfferedCards")
-  requestedCards       Card[] @relation("RequestedCards")
-  receiverOfferedCards Card[] @relation("ReceiverOfferedCards") // New relation for cards offered by claimer
-
+  @@index([status])
   @@index([senderId])
-  @@index([receiverId])
+  @@index([isOpenTrade])
+  User User[] @relation("ReceivedTrades")
+  Card Card[] @relation("ReceiverOfferedCards")
+  RequestedCards Card[] @relation("RequestedCards")
+}
+
+model TradeOffer {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Trade Reference
+  trade     Trade    @relation(fields: [tradeId], references: [id], onDelete: Cascade)
+  tradeId   String
+
+  // Offer Creator
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+
+  // Offered Items
+  offeredCards Card[] @relation("TradeOfferCards")
+  coins        Int    @default(0)
+  note         String?
+
+  // Offer Status
+  status    TradeOfferStatus @default(PENDING)
+  expiresAt DateTime?
+
+  @@index([tradeId])
+  @@index([userId])
+  @@index([status])
 }
 
 enum TradeStatus {
@@ -412,6 +452,14 @@ enum TradeStatus {
   ACCEPTED
   REJECTED
   CANCELLED
+}
+
+enum TradeOfferStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  CANCELLED
+  EXPIRED
 }
 
 // Pack System
