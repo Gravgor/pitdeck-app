@@ -6,8 +6,8 @@ import { revalidatePath } from "next/cache";
 import { TradeStatus } from "@prisma/client";
 
 export async function POST(
-  request: Request,
-  { params }: { params: { id: string } }
+    request: Request,
+    { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -151,7 +151,7 @@ export async function POST(
 
 export async function GET(
     request: Request,
-    { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
