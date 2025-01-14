@@ -1,8 +1,6 @@
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { authOptions } from "@/lib/auth";
-import { DropService } from "@/lib/services/dropService";
+import { DropsQueryService } from "@/lib/services/drops-query-service";
 
 export async function GET(req: NextRequest) {
   try {
@@ -28,12 +26,10 @@ export async function GET(req: NextRequest) {
       );
     }
     // Get drops, circuits, and events
-    const drops = await DropService.getDrops({
+    const drops = await DropsQueryService.getDropsNearUser({
       userLatitude: latitude,
       userLongitude: longitude,
       radius,
-      includeCircuits: true,
-      includeEvents: true,
     });
 
     return NextResponse.json({

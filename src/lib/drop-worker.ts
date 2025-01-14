@@ -1,4 +1,4 @@
-import { DropService } from "./services/dropService.js";
+import { DropService } from "@/lib/services/dropService";
 
 const REFRESH_INTERVAL = 24 * 60 * 60 * 1000; // 24 hours
 let isRunning = false;
@@ -7,6 +7,12 @@ async function startDropWorker() {
   if (isRunning) {
     console.log('Drop worker is already running');
     return;
+  }
+
+  // Verify environment
+  if (!process.env.CRON_SECRET_KEY) {
+    console.error('CRON_SECRET_KEY is not set');
+    process.exit(1);
   }
 
   console.log('Global drop worker started');
@@ -56,12 +62,12 @@ process.on('unhandledRejection', (reason, promise) => {
   process.exit(1);
 });
 
-// Start worker if running as standalone script
-
+// Only start if this file is being run directly
+if (process.env.ENABLE_DROP_WORKER === 'true' || process.argv[1] === import.meta.url) {
   startDropWorker().catch((error) => {
     console.error('Failed to start drop worker:', error);
     process.exit(1);
   });
-
+}
 
 export { startDropWorker, stopDropWorker }; 

@@ -1,8 +1,31 @@
 //@ts-nocheck
 import { prisma } from "../prisma.js";
-import { Drop, Circuit, Event, Rarity, DropType, Prisma } from "@prisma/client";
+import { Drop, Circuit, Event, Rarity, DropType } from "@prisma/client";
+import { DropGenerator } from "@/services/dropGeneration/generator";
+import { DEFAULT_CONFIG } from "@/services/dropGeneration/config";
+import { DEVELOPMENT_CONFIG } from "@/services/dropGeneration/config";
+
+const WORLD_CONFIG = {
+  DROPS_PER_ACTIVE_AREA: 30,
+  EXPIRATION_HOURS: 24,
+  ACTIVE_USER_RADIUS: 5000, // 5km radius around active users
+  ACTIVE_USER_TIMEFRAME: 15, // minutes
+  MIN_DISTANCE_BETWEEN_AREAS: 10000, // 10km minimum between generation areas
+};
 
 export class DropService {
+  private static generator: DropGenerator;
+
+  private static getGenerator() {
+    if (!this.generator) {
+      const isDev = process.env.NODE_ENV === "development";
+      this.generator = new DropGenerator(
+        isDev ? DEVELOPMENT_CONFIG : DEFAULT_CONFIG
+      );
+    }
+    return this.generator;
+  }
+
   static async generateGlobalDrops() {
     await this.cleanupExpiredDrops();
     
@@ -14,16 +37,68 @@ export class DropService {
     });
 
     if (existingDrops > 0) {
+      console.log('Drops already generated for today');
       return;
     }
 
-    await prisma.$transaction([
-      this.generateWorldDrops(),
-      this.generateCircuitDrops(),
-      this.generateEventDrops()
-    ]);
+    const generator = this.getGenerator();
+    const expirationTime = new Date(
+      Date.now() + WORLD_CONFIG.EXPIRATION_HOURS * 60 * 60 * 1000
+    );
+
+    // Get active user locations from the last 15 minutes
+    const activeLocations = await prisma.userLocation.findMany({
+      where: {
+        updatedAt: {
+          gte: new Date(Date.now() - WORLD_CONFIG.ACTIVE_USER_TIMEFRAME * 60000)
+        }
+      },
+      select: {
+        latitude: true,
+        longitude: true
+      }
+    });
+
+    console.log(`Found ${activeLocations.length} active user locations`);
+
+    const generationAreas = this.groupNearbyLocations(activeLocations);
+    console.log(`Grouped into ${generationAreas.length} generation areas`);
+
+    for (const area of generationAreas) {
+      console.log(`Generating drops around location: ${area.latitude}, ${area.longitude}`);
+      
+      await generator.generateDrops({
+        latitude: area.latitude,
+        longitude: area.longitude,
+        radius: WORLD_CONFIG.ACTIVE_USER_RADIUS,
+        count: WORLD_CONFIG.DROPS_PER_ACTIVE_AREA,
+        expiresAt: expirationTime
+      });
+    }
+
+    console.log('Global drops generation completed');
   }
 
+  private static groupNearbyLocations(locations: { latitude: number; longitude: number }[]) {
+    const groups: { latitude: number; longitude: number }[] = [];
+
+    for (const location of locations) {
+      const isFarEnough = groups.every(group => 
+        this.calculateDistance(
+          location.latitude,
+          location.longitude,
+          group.latitude,
+          group.longitude
+        ) * 1000 >= WORLD_CONFIG.MIN_DISTANCE_BETWEEN_AREAS
+      );
+
+      if (isFarEnough) {
+        groups.push(location);
+      }
+    }
+
+    return groups;
+  }
 
   static async cleanupExpiredDrops() {
     await prisma.$transaction([
@@ -46,210 +121,11 @@ export class DropService {
           },
         },
       }),
-    ])
-  }
-
-  static async generateWorldDrops() {
-    const dropCount = Math.floor(Math.random() * DEFAULT_CONFIG.maxDrops.WORLD);
-
-    const drops = Array.from({ length: dropCount }, () => {
-      const rarity = this.determineRarity();
-      const location = this.generateRandomWorldLocation();
-
-      return {
-        type: DropType.STANDARD,
-        rarity,
-        latitude: location.latitude,
-        longitude: location.longitude,
-        expiresAt: new Date(
-          Date.now() + DEFAULT_CONFIG.expirationTime.STANDARD * 60 * 60 * 1000
-        ),
-        isActive: true,
-      };
-    });
-
-    await prisma.drop.createMany({ data: drops });
-  }
-
-  static async generateCircuitDrops() {
-    const circuits = await prisma.circuit.findMany();
-
-    for (const circuit of circuits) {
-      const dropCount = Math.floor(
-        Math.random() * DEFAULT_CONFIG.maxDrops.CIRCUIT * DEFAULT_CONFIG.circuitMultiplier
-      );
-
-      const drops = Array.from({ length: dropCount }, () => {
-        const rarity = this.determineRarity();
-        const location = this.generateLocationNearCircuit(
-          circuit.latitude,
-          circuit.longitude,
-          DEFAULT_CONFIG.dropRadius.CIRCUIT
-        );
-
-        return {
-          type: DropType.CIRCUIT,
-          rarity,
-          latitude: location.latitude,
-          longitude: location.longitude,
-          circuitId: circuit.id,
-          expiresAt: new Date(
-            Date.now() + DEFAULT_CONFIG.expirationTime.CIRCUIT * 60 * 60 * 1000
-          ),
-          isActive: true,
-        };
-      });
-
-      await prisma.drop.createMany({ data: drops });
-    }
-  }
-
-  static async generateEventDrops() {
-    const activeEvents = await prisma.event.findMany({
-      where: {
-        startDate: { lte: new Date() },
-        endDate: { gte: new Date() },
-      },
-      include: { circuit: true },
-    });
-
-    for (const event of activeEvents) {
-      const dropCount = Math.floor(
-        Math.random() * DEFAULT_CONFIG.maxDrops.EVENT * DEFAULT_CONFIG.eventMultiplier
-      );
-
-      const drops = Array.from({ length: dropCount }, () => {
-        const rarity = this.determineRarity();
-        const location = this.generateLocationNearCircuit(
-          event.circuit.latitude,
-          event.circuit.longitude,
-          DEFAULT_CONFIG.dropRadius.EVENT
-        );
-
-        return {
-          type: DropType.EVENT,
-          rarity,
-          latitude: location.latitude,
-          longitude: location.longitude,
-          circuitId: event.circuit.id,
-          expiresAt: new Date(
-            Date.now() + DEFAULT_CONFIG.expirationTime.EVENT * 60 * 60 * 1000
-          ),
-          isActive: true,
-        };
-      });
-
-      await prisma.drop.createMany({ data: drops });
-    }
-  }
-
-  static async pickupDrop(dropId: string, userId: string) {
-    const [drop, user] = await Promise.all([
-      prisma.drop.findUnique({
-        where: { id: dropId },
-        include: { circuit: true },
-      }),
-      prisma.user.findUnique({
-        where: { id: userId },
-        include: { lastLocation: true },
-      }),
     ]);
-
-    if (!drop || !user || !user.lastLocation) {
-      throw new Error('Drop or user not found');
-    }
-
-    // Check if drop is still active
-    if (!drop.isActive || drop.expiresAt < new Date()) {
-      throw new Error('Drop has expired');
-    }
-
-    // Check if user is within pickup radius
-    const distance = this.calculateDistance(
-      user.lastLocation.latitude,
-      user.lastLocation.longitude,
-      drop.latitude,
-      drop.longitude
-    );
-
-    if (distance * 1000 > DEFAULT_CONFIG.pickupRadius) {
-      throw new Error('Too far from drop');
-    }
-
-    // Calculate rewards
-    const baseReward = 100; // Base coins reward
-    const rewardMultiplier = DEFAULT_CONFIG.rewardMultiplier[drop.rarity];
-    const totalReward = baseReward * rewardMultiplier;
-
-    // Generate random card based on drop type and rarity
-    const card = await this.generateCardFromDrop(drop);
-
-    // Update everything in a transaction
-    return prisma.$transaction(async (tx) => {
-      // Mark drop as collected
-      await tx.drop.update({
-        where: { id: dropId },
-        data: { isActive: false },
-      });
-
-      // Update user's coins and add card to collection
-      await tx.user.update({
-        where: { id: userId },
-        data: {
-          coins: { increment: totalReward },
-          cards: { connect: { id: card.id } },
-        },
-      });
-
-      return {
-        card,
-        coinsEarned: totalReward,
-      };
-    });
   }
 
-  private static determineRarity(): Rarity {
-    const rand = Math.random() * 100;
-    const dist = DEFAULT_CONFIG.rarityDistribution;
 
-    if (rand < dist.LEGENDARY) return "LEGENDARY";
-    if (rand < dist.LEGENDARY + dist.EPIC) return "EPIC";
-    if (rand < dist.LEGENDARY + dist.EPIC + dist.RARE) return "RARE";
-    return "COMMON";
-  }
-
-  private static generateLocationNearCircuit(
-    baseLat: number,
-    baseLng: number,
-    radiusKm: number
-  ) {
-    const radiusDegrees = radiusKm / 111.32;
-    const u = Math.random();
-    const v = Math.random();
-    const w = radiusDegrees * Math.sqrt(u);
-    const t = 2 * Math.PI * v;
-    const x = w * Math.cos(t);
-    const y = w * Math.sin(t);
-
-    return {
-      latitude: baseLat + x,
-      longitude: baseLng + y,
-    };
-  }
-
-  private static generateRandomWorldLocation() {
-    return {
-      latitude: (Math.random() * 180) - 90,
-      longitude: (Math.random() * 360) - 180,
-    };
-  }
-
-  private static calculateDistance(
-    lat1: number,
-    lon1: number,
-    lat2: number,
-    lon2: number
-  ): number {
+  private static calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
     const R = 6371;
     const dLat = this.toRad(lat2 - lat1);
     const dLon = this.toRad(lon2 - lon1);
@@ -265,33 +141,5 @@ export class DropService {
 
   private static toRad(degrees: number): number {
     return degrees * (Math.PI / 180);
-  }
-
-  private static sortDropsByPriority(drops: ExtendedDrop[]) {
-    return drops.sort((a, b) => {
-      const rarityOrder = {
-        LEGENDARY: 0,
-        EPIC: 1,
-        RARE: 2,
-        COMMON: 3,
-      };
-
-      // First, sort by rarity
-      const rarityDiff = rarityOrder[a.rarity] - rarityOrder[b.rarity];
-      if (rarityDiff !== 0) return rarityDiff;
-
-      // Then by distance
-      return (a.distance || 0) - (b.distance || 0);
-    });
-  }
-
-  private static async generateCardFromDrop(drop: Drop) {
-    // Implement card generation logic based on drop type and rarity
-    // This would connect to your card generation service
-    return prisma.card.create({
-      data: {
-        // Add your card generation logic here
-      },
-    });
   }
 }

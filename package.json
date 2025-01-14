@@ -4,17 +4,14 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"next dev\" \"cross-env ENABLE_DROP_WORKER=true npm run worker:drops:dev\"",
-    "start": "concurrently \"next start\" \"cross-env ENABLE_DROP_WORKER=true npm run worker:drops\"",
+    "dev": "next dev",
+    "start": "next start",
     "build": "next build",
     "lint": "next lint",
     "db:seed": "npx ts-node --transpile-only prisma/seed.ts",
     "db:pack": "npx ts-node --transpile-only prisma/seed/data.ts",
     "db:image-update": "npx ts-node --transpile-only prisma/image-update.ts",
-    "favicon": "npx ts-node --transpile-only scripts/generate-favicon.ts",
-    "worker:build": "tsc --project tsconfig.worker.json",
-    "worker:drops": "cross-env ENABLE_DROP_WORKER=true node --loader ts-node/esm src/lib/drop-worker.ts",
-    "worker:drops:dev": "cross-env ENABLE_DROP_WORKER=true nodemon --exec src/lib/drop-worker.ts"
+    "favicon": "npx ts-node --transpile-only scripts/generate-favicon.ts"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.7.4",
