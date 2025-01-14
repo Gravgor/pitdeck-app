@@ -49,6 +49,7 @@ model User {
   totalXp              Int                  @default(0)
   bio                  String?
   role                 UserRole             @default(USER)
+  isPremium            Boolean              @default(false)
   lastLocation         Location?
   discoveries          Drop[]
   accounts             Account[]
@@ -76,6 +77,8 @@ model User {
   needUsernameSetup    Boolean              @default(false)
   PackOpeningSession   PackOpeningSession[]
   tradeOffers           TradeOffer[]
+  customization        ProfileCustomization?
+  unlockedCustomizations CustomizationOption[]
 }
 
 enum UserRole {
@@ -671,4 +674,29 @@ model PackOpeningSession {
 
   @@index([userId])
   @@index([packId])
+}
+
+model ProfileCustomization {
+  id             String   @id @default(cuid())
+  userId         String   @unique
+  backgroundStyle String  @default("default")
+  avatarFrame    String  @default("none")
+  nameColor      String  @default("default")
+  badgeStyle     String  @default("default")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model CustomizationOption {
+  id            String   @id @default(cuid())
+  type          String   // BACKGROUND, AVATAR_FRAME, NAME_COLOR, BADGE_STYLE
+  name          String
+  value         String   @unique
+  previewUrl    String?
+  requiredLevel Int?
+  isPremium     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  users         User[]   // For tracking which premium users have access
 }
