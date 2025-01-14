@@ -24,56 +24,6 @@ export class DropService {
     ]);
   }
 
-  static async getDropsNearUser({
-    userLatitude,
-    userLongitude,
-    radius = 10,
-  }) {
-    const radiusInDegrees = radius / 111.32;
-
-    const drops = await prisma.drop.findMany({
-      where: {
-        AND: [
-          {
-            latitude: {
-              gte: userLatitude - radiusInDegrees,
-              lte: userLatitude + radiusInDegrees,
-            },
-          },
-          {
-            longitude: {
-              gte: userLongitude - radiusInDegrees,
-              lte: userLongitude + radiusInDegrees,
-            },
-          },
-          { isActive: true },
-          { expiresAt: { gt: new Date() } }
-        ],
-      },
-      include: {
-        circuit: {
-          include: {
-            events: {
-              where: {
-                startDate: { lte: new Date() },
-                endDate: { gte: new Date() },
-              },
-            },
-          },
-        },
-      },
-    });
-
-    return drops.map(drop => ({
-      ...drop,
-      distance: this.calculateDistance(
-        userLatitude,
-        userLongitude,
-        drop.latitude,
-        drop.longitude
-      ),
-    })).sort((a, b) => a.distance - b.distance);
-  }
 
   static async cleanupExpiredDrops() {
     await prisma.$transaction([

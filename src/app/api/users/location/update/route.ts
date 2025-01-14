@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { DropService } from "@/lib/services/dropService";
+import { DropsQueryService } from "@/lib/services/drops-query-service";
 
 export async function POST(request: Request) {
   try {
@@ -19,7 +19,7 @@ export async function POST(request: Request) {
       create: { userId: session.user.id, latitude, longitude },
     });
 
-    const nearbyDrops = await DropService.getDropsNearUser({
+    const nearbyDrops = await DropsQueryService.getDropsNearUser({
       userLatitude: latitude,
       userLongitude: longitude,
       radius: 10
