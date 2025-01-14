@@ -1,11 +1,16 @@
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { DropsQueryService } from "@/lib/services/drops-query-service";
+import { authOptions } from "@/lib/auth";
 
 export async function GET(req: NextRequest) {
   try {
 
     // Get query parameters
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
     const url = new URL(req.url);
     const latitude = parseFloat(url.searchParams.get("latitude") || "0");
     const longitude = parseFloat(url.searchParams.get("longitude") || "0");
@@ -30,6 +35,7 @@ export async function GET(req: NextRequest) {
       userLatitude: latitude,
       userLongitude: longitude,
       radius,
+      userId: session.user.id
     });
 
     return NextResponse.json({
