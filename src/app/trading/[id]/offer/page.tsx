@@ -42,7 +42,7 @@ interface UserContext {
   canMakeOffer: boolean;
 }
 
-export default function CreateOfferPage({ params }: { params: { id: string } }) {
+export default function CreateOfferPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
   const [trade, setTrade] = useState<TradeDetails | null>(null);
   const [userContext, setUserContext] = useState<UserContext | null>(null);
