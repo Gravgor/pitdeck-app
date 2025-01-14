@@ -289,9 +289,9 @@ function getRarityColor(rarity: string) {
     case 'LEGENDARY':
       return 'bg-yellow-500';
     case 'RARE':
-      return 'bg-purple-500';
-    case 'UNCOMMON':
       return 'bg-blue-500';
+    case 'UNCOMMON':
+      return 'bg-gree-500';
     case 'COMMON':
     default:
       return 'bg-gray-500';

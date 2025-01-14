@@ -146,29 +146,29 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="bg-gradient-to-b from-gray-900 to-black rounded-2xl p-6 shadow-xl border border-red-500/10">
+      <div className="bg-gradient-to-b from-gray-900 to-black rounded-2xl p-4 sm:p-6 shadow-xl border border-red-500/10">
         {/* Profile Header */}
-        <div className="flex items-center gap-6">
-         {profileUser.image?.trim() ? (
-          <div className="relative w-24 h-24">
-            <Image
-              src={profileUser.image}
-              alt={`${profileUser.name}'s profile`}
-              fill
-              className="rounded-full object-cover ring-2 ring-white/20"
-            />
-          </div>
-         ) : (
-          <UserAvatar name={profileUser.name} size={96} />
-         )}
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
+          {profileUser.image?.trim() ? (
+            <div className="relative w-20 h-20 sm:w-24 sm:h-24">
+              <Image
+                src={profileUser.image}
+                alt={`${profileUser.name}'s profile`}
+                fill
+                className="rounded-full object-cover ring-2 ring-white/20"
+              />
+            </div>
+          ) : (
+            <UserAvatar name={profileUser.name} size={80} />
+          )}
 
-<div className="flex-grow">
-            <div className="flex items-center gap-3">
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent">
+          <div className="flex-grow">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+              <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent">
                 {cleanName}
               </h1>
               {profileUser.role === 'PITDECK_TEAM' && (
-                <span className="px-2 py-0.5 text-xs font-medium bg-red-500/10 text-red-500 rounded-full border border-red-500/20">
+                <span className="inline-flex px-2 py-0.5 text-xs font-medium bg-red-500/10 text-red-500 rounded-full border border-red-500/20">
                   PitDeck Team
                 </span>
               )}
@@ -178,8 +178,9 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
               {profileUser.bio || 'No bio yet.'}
             </p>
           </div>
-          <div className="flex items-center gap-4">
-            <div className="flex gap-6 text-sm text-gray-400">
+
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <div className="flex gap-4 sm:gap-6 text-sm text-gray-400">
               <Link href={`/profile/${profileUser.name}/followers`} className="hover:text-white">
                 <span className="font-bold text-white">{followData?._count.followers}</span> followers
               </Link>
@@ -210,7 +211,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
         )}
 
         {/* Stats Overview */}
-        <div className="mt-8 grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="mt-6 sm:mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
           {[
             { 
               label: 'Total Cards', 
@@ -237,42 +238,42 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
               color: 'text-yellow-400'
             }
           ].map((stat, index) => (
-            <div key={index} className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-4 border border-red-500/10 hover:border-red-500/20 transition-colors">
-              <div className="flex items-center gap-3 mb-2">
-                <div className={`${stat.color} bg-white/5 rounded-full p-2`}>
-                  <stat.icon className="h-4 w-4" />
+            <div key={index} className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-3 sm:p-4 border border-red-500/10 hover:border-red-500/20 transition-colors">
+              <div className="flex items-center gap-2 sm:gap-3 mb-2">
+                <div className={`${stat.color} bg-white/5 rounded-full p-1.5 sm:p-2`}>
+                  <stat.icon className="h-3 w-3 sm:h-4 sm:w-4" />
                 </div>
-                <p className="text-sm text-gray-400">{stat.label}</p>
+                <p className="text-xs sm:text-sm text-gray-400">{stat.label}</p>
               </div>
-              <p className="text-2xl font-bold text-white">{stat.value}</p>
+              <p className="text-lg sm:text-2xl font-bold text-white">{stat.value}</p>
             </div>
           ))}
         </div>
 
         {/* Collection Preview */}
-        <section className="mt-12">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-white">Collection Preview</h2>
+        <section className="mt-8 sm:mt-12">
+          <div className="flex items-center justify-between mb-4 sm:mb-6">
+            <h2 className="text-xl sm:text-2xl font-bold text-white">Collection Preview</h2>
             <Link 
               href={`/collection/${cleanName}`}
-              className="flex items-center gap-1 px-4 py-2 text-sm text-red-400 hover:text-red-300 transition-colors"
+              className="flex items-center gap-1 px-3 py-1.5 sm:px-4 sm:py-2 text-sm text-red-400 hover:text-red-300 transition-colors"
             >
               View All <ChevronRight className="h-4 w-4" />
             </Link>
           </div>
-          <div className="bg-black/50 rounded-xl p-6 border border-red-500/10">
+          <div className="bg-black/50 rounded-xl p-3 sm:p-6 border border-red-500/10">
             <CardGrid cards={displayCards} isOwner={isOwner} />
           </div>
         </section>
 
         {/* Recent Activity */}
-        <section className="mt-12">
-          <h2 className="text-2xl font-bold text-white mb-6">Recent Activity</h2>
-         <ActivityFeed activities={activities} />
+        <section className="mt-8 sm:mt-12">
+          <h2 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6">Recent Activity</h2>
+          <ActivityFeed activities={activities} />
         </section>
 
         {/* Level Progress */}
-        <section className="mt-8">
+        <section className="mt-6 sm:mt-8">
           <LevelProgress xp={profileUser.totalXp} />
         </section>
       </div>

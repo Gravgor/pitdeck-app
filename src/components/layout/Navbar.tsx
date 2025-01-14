@@ -23,6 +23,7 @@ import Image from 'next/image';
 import { NotificationBell } from '../notifications/NotificationBell';
 import { PitDeckLogo } from '../ui/logo';
 import EA from './EA';
+import { formatNumber } from '@/lib/utils/formatNumber';
 const seriesLinks = [
   { name: 'Formula 1', href: '/series/f1', icon: Car },
   { name: 'WEC', href: '/series/wec', icon: Flag },
@@ -93,7 +94,7 @@ export function Navbar() {
                       <Link
                         key={link.name}
                         href={link.href}
-                        onClick={() => setIsMobileMenuOpen(false)}
+                        onClick={() => setIsSeriesMenuOpen(false)}
                         className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-white/10 hover:text-white transition-colors"
                       >
                         <link.icon className="h-4 w-4 mr-2" />
@@ -110,7 +111,6 @@ export function Navbar() {
               <Link
                 key={link.name}
                 href={link.href}
-                onClick={() => setIsMobileMenuOpen(false)}
                 className={`text-sm ${
                   pathname === link.href ? 'text-white' : 'text-gray-300 hover:text-white'
                 } transition-colors`}
@@ -130,7 +130,7 @@ export function Navbar() {
                 <div className="px-4 py-2 bg-white/5 rounded-full flex items-center space-x-2">
                   <CreditCard className="h-4 w-4 text-yellow-400" />
                   <span className="text-sm text-white font-display">
-                    {session.user.coins || 0} RC
+                    {formatNumber(session.user.coins || 0)} Race Coins
                   </span>
                 </div>
 
@@ -252,23 +252,7 @@ export function Navbar() {
             className="md:hidden bg-black/95 border-t border-white/10"
           >
             <div className="px-4 py-6 space-y-4">
-              {/* Series Links */}
-              <div className="space-y-2">
-                <h3 className="text-sm font-semibold text-gray-400">Series</h3>
-                {seriesLinks.map((link) => (
-                  <Link
-                    key={link.name}
-                    href={link.href}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="flex items-center px-2 py-2 text-base text-gray-300 hover:text-white transition-colors"
-                  >
-                    <link.icon className="h-5 w-5 mr-3" />
-                    {link.name}
-                  </Link>
-                ))}
-              </div>
-
-              {/* Main Links */}
+              {/* Main Links Only - No Series */}
               <div className="space-y-2">
                 <h3 className="text-sm font-semibold text-gray-400">Navigation</h3>
                 {mainLinks.map((link) => (
