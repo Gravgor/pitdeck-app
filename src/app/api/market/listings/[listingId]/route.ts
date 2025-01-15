@@ -85,6 +85,11 @@ export async function DELETE(
       where: { id: listingId }
     });
 
+    await prisma.card.update({
+      where: { id: listing.cardId },
+      data: { isForSale: false }
+    });
+
     return new NextResponse(null, { status: 204 });
   } catch (error) {
     console.error("Error deleting listing:", error);
