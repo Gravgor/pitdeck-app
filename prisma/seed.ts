@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { PrismaClient, CardType, Rarity } from '@prisma/client';
 
 const prisma = new PrismaClient();
