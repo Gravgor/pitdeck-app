@@ -111,7 +111,7 @@ export default function CreateOfferPage({ params }: { params: Promise<{ id: stri
         throw new Error(data.error || 'Failed to create offer');
       }
 
-      router.push(`/trading/${id}`);
+      router.push(`/trading/sent-offers`);
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Failed to create offer');
     } finally {
