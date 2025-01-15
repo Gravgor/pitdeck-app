@@ -2,7 +2,7 @@
 
 import { Trade } from '@/types/trade';
 import { TradeCard } from './TradeCard';
-import TradeListSkeleton from '@/app/trading/loading';
+import TradeListSkeleton from '@/app/(user)/trading/loading';
 import { EmptyTrades } from './EmptyTrades';
 import { useEffect, useState } from 'react';
 

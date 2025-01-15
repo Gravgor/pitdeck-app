@@ -21,6 +21,7 @@
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.1.5",
     "@prisma/client": "^5.22.0",
+    "@radix-ui/react-avatar": "^1.1.2",
     "@radix-ui/react-separator": "^1.1.1",
     "@radix-ui/react-slider": "^1.2.1",
     "@radix-ui/react-tabs": "^1.1.2",
