@@ -1,11 +1,79 @@
 //@ts-nocheck
-const { PrismaClient, CardType, Rarity } = require('@prisma/client');
-const { CARD_CONFIG } = require('../src/config/cardGeneration');
-const { generateSerialNumber } = require('../src/lib/utils/cardGeneration');
+import { PrismaClient, CardType, Rarity } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-// Track card counts for serial numbers
+const CARD_CONFIG = {
+  // Total cards per series
+  SERIES_LIMITS: {
+    F1: {
+      DRIVERS: 20,
+      CARS: 10,
+      HISTORIC: 50,
+      TEAMS: 10,
+      CIRCUITS: 24
+    },
+    F2: {
+      DRIVERS: 22,
+      CARS: 11,
+      TEAMS: 11,
+      CIRCUITS: 14
+    }
+  },
+
+  // Rarity distribution percentages
+  RARITY_DISTRIBUTION: {
+    COMMON: 70,
+    RARE: 20,
+    EPIC: 8,
+    LEGENDARY: 2
+  },
+
+  // Maximum prints per rarity
+  MAX_PRINTS: {
+    COMMON: 10000,
+    RARE: 5000,
+    EPIC: 1000,
+    LEGENDARY: 100
+  },
+
+  // Serial number format
+  SERIAL_NUMBER_FORMAT: {
+    PREFIX: {
+      F1: 'F1',
+      F2: 'F2',
+      F3: 'F3',
+      WEC: 'WEC',
+      INDYCAR: 'IND',
+      NASCAR: 'NSC'
+    },
+    YEAR_FORMAT: 'YY',
+    SEPARATOR: '-',
+    RARITY_CODE: {
+      COMMON: 'C',
+      RARE: 'R',
+      EPIC: 'E',
+      LEGENDARY: 'L'
+    },
+    DIGITS: 6
+  }
+};
+
+
+function generateSerialNumber({ series, type, rarity, year, currentCount }:any) {
+  const config = CARD_CONFIG;
+  
+  const prefix = config.SERIAL_NUMBER_FORMAT.PREFIX[series] || 'GEN';
+  const yearCode = year.toString().slice(-2);
+  const rarityCode = config.SERIAL_NUMBER_FORMAT.RARITY_CODE[rarity];
+  const separator = config.SERIAL_NUMBER_FORMAT.SEPARATOR;
+  const sequentialNumber = (currentCount + 1)
+    .toString()
+    .padStart(config.SERIAL_NUMBER_FORMAT.DIGITS, '0');
+
+  return `${prefix}${separator}${yearCode}${separator}${rarityCode}${separator}${sequentialNumber}`;
+}
+
 const cardCounts = {
   F1: { COMMON: 0, RARE: 0, EPIC: 0, LEGENDARY: 0 },
   F2: { COMMON: 0, RARE: 0, EPIC: 0, LEGENDARY: 0 },
@@ -39,29 +107,25 @@ async function main() {
 
   const vegas = [
     {
-      name: "Max Verstappen: 4th World Championship Victory",
+      name: "Robert Kubica F1 Last Dance",
       type: "ICONIC_MOMENT",
       rarity: "LEGENDARY",
-      imageUrl: "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/events/vegas2024/verstappen-4th-title.png",
-      description: "Max Verstappen celebrates his historic fourth Formula 1 World Championship title after the 2024 Las Vegas Grand Prix, solidifying his place among the legends of the sport.",
+      imageUrl: "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/drivers/z25462025AMPRobert-Kubica-podczas-mistrzostw-F1-w-Singapurze--.jpg",
+      description: "Half a second was missing. Robert Kubica says goodbye to Formula One In Williams Racing Team",
       series: "F1",
-      edition: "2024",
-      year: 2024,
-      isExclusive: true,
-      eventId: "F1-Las Vegas Grand Prix-2024",
+      edition: "2019",
+      year: 2019,
+      isExclusive: false,
       isPromotional: false,
       stats: {
-        dominance: 99,
-        qualifyingPerformance: 96,
-        raceCraft: 97,
-        strategyAdaptation: 95,
-        overall: 98
-      },
-      eventDetails: {
-        venue: "Las Vegas Street Circuit",
-        date: "2024-11-23",
+        dominance: 79,
+        qualifyingPerformance: 76,
+        raceCraft: 87,
+        strategyAdaptation: 69,
+        overall: 78
       }
-    }
+    } 
+
     
   ]
 
@@ -890,7 +954,7 @@ const f1Cars = [
     //{ data: championship2021Cards, name: 'Championship 2021 Cards' },
     //{ data: seasonalCards, name: 'Seasonal Cards' },
     //{ data: legendaryHistoricCards, name: 'Legendary Historic Cards' },
-    { data: vegas, name: 'FORMULA 1 HEINEKEN SILVER LAS VEGAS GRAND PRIX 2024' }
+    { data: vegas, name: 'F1 Retired Drivers' }
   ];
 
   for (const category of categories) {

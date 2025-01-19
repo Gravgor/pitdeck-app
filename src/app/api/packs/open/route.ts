@@ -1,72 +1,97 @@
+import { getServerSession } from "next-auth/next";
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { generatePack } from "@/lib/packs";
-import { createActivity } from "@/lib/activity";
-import { addXP } from "@/lib/levels";
-import { ActivityType } from "@prisma/client";
-import { createNotification } from "@/lib/notifications";
 
-export async function POST(req: Request) {
+export async function POST(request: Request) {
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const { packId } = await req.json();
+    const { packId, selectedCardIds } = await request.json();
 
-    // Get pack and user
-    const [pack, user] = await Promise.all([
-      prisma.pack.findUnique({ where: { id: packId } }),
-      prisma.user.findUnique({ where: { id: session.user.id } }),
-    ]);
-
-    if (!pack || !user) {
-      return NextResponse.json({ error: "Invalid request" }, { status: 400 });
-    }
-
-    // Check if user has enough coins
-    if (user.coins < pack.price) {
-      return NextResponse.json(
-        { error: "Insufficient funds" },
-        { status: 400 }
-      );
-    }
-
-    // Generate pack contents
-    const cardIds = await generatePack(packId);
-
-    // Update user's collection and coins in a transaction
-    const result = await prisma.$transaction(async (tx) => {
-      // Deduct coins
-      const updatedUser = await tx.user.update({
-        where: { id: user.id },
-        data: {
-          coins: user.coins - pack.price,
-          cards: {
-            connect: cardIds.map((id) => ({ id })),
-          },
-        },
-      });
-
-      // Get the cards details
-      const cards = await tx.card.findMany({
-        where: { id: { in: cardIds } },
-      });
-      await createActivity(user.id, ActivityType.PACK_OPENED, `Opened pack ${pack.name}`, { cards });
-      //await addXP(user.id, 10);
-      return { user: updatedUser, cards };
+    // Get the pack opening session
+    const openingSession = await prisma.packOpeningSession.findFirst({
+      where: {
+        userId: session.user.id,
+        packId,
+        expiresAt: { gt: new Date() }
+      },
+      orderBy: { createdAt: 'desc' }
     });
-    console.log(cardIds);
 
+    if (!openingSession) {
+      return new NextResponse("Pack opening session expired or not found", { status: 400 });
+    }
 
-    return NextResponse.json(result);
+    if (selectedCardIds.length !== openingSession.cardsToSelect) {
+      return new NextResponse("Invalid number of cards selected", { status: 400 });
+    }
+
+    // Get pack details
+    const pack = await prisma.pack.findUnique({
+      where: { id: packId }
+    });
+
+    if (!pack) {
+      return new NextResponse("Pack not found", { status: 404 });
+    }
+
+    const result = await prisma.$transaction(async (tx) => {
+      const updatedUser = await tx.user.update({
+        where: { id: session.user.id },
+        data: { 
+          coins: { decrement: pack.price },
+          packPurchased: { increment: 1 }
+        }
+      });
+
+      for (const cardId of selectedCardIds) {
+        await tx.card.update({
+          where: { id: cardId },
+          data: {
+            owners: {
+              connect: { id: session.user.id }
+            }
+          }
+        });
+      }
+
+      await tx.packOpeningSession.delete({
+        where: { id: openingSession.id }
+      });
+
+      return { updatedUser };
+    }, {
+      timeout: 10000
+    });
+
+    const userCards = await prisma.card.findMany({
+      where: {
+        id: { in: selectedCardIds },
+        owners: {
+          some: { id: session.user.id }
+        }
+      },
+      include: {
+        owners: {
+          where: { id: session.user.id }
+        }
+      }
+    });
+
+    return NextResponse.json({
+      success: true,
+      cards: userCards,
+      newBalance: result.updatedUser.coins
+    });
+
   } catch (error) {
-    console.error("Pack opening error:", error);
-    return NextResponse.json(
-      { error: "Error opening pack" },
+    console.error("[PACK_OPEN_ERROR]", error);
+    return new NextResponse(
+      error instanceof Error ? error.message : "Internal error", 
       { status: 500 }
     );
   }

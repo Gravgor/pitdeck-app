@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Trophy, Twitter, Instagram, Youtube, Facebook } from 'lucide-react';
 
-const APP_VERSION = 'Beta 1.0.2';
+const APP_VERSION = 'Beta 1.1.0';
 
 export function Footer() {
   return (
