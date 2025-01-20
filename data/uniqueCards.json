@@ -736,7 +736,7 @@
         "name": "Lewis Hamilton is Ferrari's new driver",
         "type": "ICONIC_MOMENT",
         "rarity": "LEGENDARY",
-        "imageUrl": "hhttps://pitdeck-app.s3.eu-north-1.amazonaws.com/2025/cards/iconic_lewis.png",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/2025/cards/iconic_lewis.png",
         "description": "Lewis Hamilton arrives in Maranello to be officially presented as Ferrari's new driver",
         "edition": "2025",
         "series": "F1",

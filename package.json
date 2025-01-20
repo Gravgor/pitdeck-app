@@ -10,7 +10,7 @@
     "lint": "next lint",
     "db:seed": "tsx prisma/seed.ts",
     "db:pack": "npx ts-node --transpile-only prisma/seed/data.ts",
-    "db:image-update": "npx ts-node --transpile-only prisma/image-update.ts",
+    "db:image-update": "tsx prisma/image-update.ts",
     "favicon": "npx ts-node --transpile-only scripts/generate-favicon.ts",
     "export-cards": "tsx scripts/exportUniqueCards.ts",
     "queue-worker:dev": "tsx workers/queue-worker.ts",
