@@ -72,132 +72,140 @@ export function CardGrid({ cards, showActions = true, isOwner = false }: CardGri
   return (
     <>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-      {cards.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
-      .map((card, index) => (   
-               <motion.div
+        {cards.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
+        .map((card, index) => (   
+          <motion.div
             key={card.id}
             onClick={() => setSelectedCard(card)}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: index * 0.05 }}
-            className={`group relative aspect-[2/3] rounded-xl overflow-hidden 
-                       ${getRarityBorder(card.rarity)}
-                       cursor-pointer
-                       hover:scale-105 hover:shadow-2xl transition-all duration-300`}
+            className="group relative aspect-[2/3] rounded-xl overflow-hidden 
+                     backdrop-blur-sm cursor-pointer transform-gpu
+                     hover:scale-[1.02] transition-all duration-300"
           >
-
-            {/* Special Serial Badge - Add this before the Rarity Badge */}
-            {isSpecialSerial(card.serialNumber) && (
-              <div className="absolute top-3 left-3 z-30">
+            {/* Status Badges */}
+            <div className="absolute top-3 right-3 z-30 flex flex-col gap-2">
+              {card.isForSale && (
                 <motion.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
-                  className="bg-gradient-to-r from-amber-500 to-yellow-500 
-                             p-2 rounded-full shadow-lg shadow-yellow-500/20"
+                  className="relative"
                 >
-                  <div className="text-center">
-                    <span className="text-xs font-bold text-black">
-                      {parseInt(card.serialNumber || '0')}
-                      {getOrdinalSuffix(parseInt(card.serialNumber || '0'))}
-                    </span>
+                  <div className="absolute -inset-1 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full blur opacity-50" />
+                  <div className="relative px-3 py-1 bg-black/50 backdrop-blur-sm rounded-full border border-green-500/50">
+                    <span className="text-xs font-bold text-green-400">For Sale</span>
                   </div>
                 </motion.div>
-              </div>
-            )}
-
-            {/* Rarity Badge */}
-            <div className={`absolute top-3 right-3 z-20 
-                            ${getRarityBadgeStyle(card.rarity)}`}>
-              {getRarityIcon(card.rarity)}
+              )}
+              {card.isForTrade && (
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  className="relative"
+                >
+                  <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full blur opacity-50" />
+                  <div className="relative px-3 py-1 bg-black/50 backdrop-blur-sm rounded-full border border-blue-500/50">
+                    <span className="text-xs font-bold text-blue-400">For Trade</span>
+                  </div>
+                </motion.div>
+              )}
             </div>
 
-            {/* Card Image */}
+            {/* Serial Number Badge */}
+            <div className="absolute bottom-3 right-3 z-30">
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                className="relative"
+              >
+                <div className={`absolute -inset-1 rounded-full blur opacity-50
+                              ${isSpecialSerial(card.serialNumber) 
+                                ? 'bg-gradient-to-r from-amber-500 to-yellow-500'
+                                : 'bg-gradient-to-r from-white/30 to-white/20'}`} 
+                />
+                <div className={`relative px-3 py-1 bg-black/50 backdrop-blur-sm rounded-full
+                              ${isSpecialSerial(card.serialNumber)
+                                ? 'border border-yellow-500/50'
+                                : 'border border-white/20'}`}
+                >
+                  <span className={`text-xs font-bold
+                                ${isSpecialSerial(card.serialNumber)
+                                  ? 'text-yellow-400'
+                                  : 'text-white/70'}`}
+                  >
+                    #{card.serialNumber}
+                    {isSpecialSerial(card.serialNumber) && 
+                      <span className="ml-1">{getOrdinalSuffix(parseInt(card.serialNumber))}</span>
+                    }
+                  </span>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Card Image with Gradient Overlay */}
             <div className="relative w-full h-full">
               <Image
                 src={card.imageUrl}
                 alt={card.name}
-                placeholder="blur"
-                blurDataURL={card.imageUrl}
-                loading="lazy"
                 fill
-                className="object-cover"
+                className="object-cover transition-transform duration-500 group-hover:scale-110"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
               
-              {/* Rarity Overlay Effect */}
-              <div className={`absolute inset-0 ${getRarityOverlay(card.rarity)}`} />
-
-              {/* Sale/Trade Badges */}
-              {isOwner && (card.isForSale || card.isForTrade) && (
-              <div className="absolute top-3 left-3 flex gap-2">
-                {card.isForSale && (
-                  <span className="px-2 py-1 bg-green-500/90 text-white text-xs rounded-full">
-                    {card.price} RC
-                  </span>
-                )}
-                {card.isForTrade && (
-                  <span className="px-2 py-1 bg-blue-500/90 text-white text-xs rounded-full">
-                    For Trade
-                  </span>
-                )}
-              </div>
-            )}
+              {/* Rarity Glow Effect */}
+              <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300
+                            ${getRarityGlow(card.rarity)}`} />
+              
+              {/* Rarity Border Glow */}
+              <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300
+                            border-2 rounded-xl ${getRarityBorder(card.rarity)}`} />
             </div>
-            
-            {/* Card Info */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent">
-              <div className="absolute bottom-0 left-0 right-0 p-4">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium uppercase tracking-wider 
-                                  ${getRarityTagStyle(card.rarity)}`}>
+
+            {/* Card Info Overlay */}
+            <div className="absolute inset-0 p-4 flex flex-col justify-end">
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium
+                                ${getRarityTagStyle(card.rarity)}`}>
+                    {getRarityIcon(card.rarity)}
                     {card.rarity}
                   </span>
-                  <span className="text-xs text-white/80">{card.type.replace(/_/g, ' ')}</span>
                 </div>
-                <h3 className="text-white font-medium tracking-wide text-lg truncate">{card.name}</h3>
-                <p className={`text-xs ${
-                  card.serialNumber && isSpecialSerial(card.serialNumber)
-                    ? 'text-yellow-400 font-semibold'
-                    : 'text-white/60'
-                } mt-1`}>
-                  #{card.serialNumber}
-                  {card.serialNumber && isSpecialSerial(card.serialNumber) && (
-                    <span className="ml-1 text-yellow-500">
-                      {parseInt(card.serialNumber)}
-                      {getOrdinalSuffix(parseInt(card.serialNumber))} Mint
-                    </span>
-                  )}
-                </p>
+                <h3 className="text-lg font-bold text-white truncate">{card.name}</h3>
+                <p className="text-sm text-white/60">{card.type.replace(/_/g, ' ')}</p>
               </div>
             </div>
 
-            {/* Stats Overlay on Hover */}
-            <div className="absolute inset-0 bg-black/95 opacity-0 group-hover:opacity-100 
-                          transition-all duration-300 p-6 flex flex-col">
-              <h3 className="text-white font-bold text-lg mb-2">{card.name}</h3>
-              <p className="text-sm text-white/80 mb-4 line-clamp-3">{card.description}</p>
-              
-              {card.stats && (
-                <div className="mt-auto space-y-2">
-                  <h4 className="text-sm font-semibold text-white/90 mb-3">Statistics</h4>
-                  {Object.entries(card.stats as Record<string, number>).map(([key, value]) => (
-                    <div key={key} className="relative w-full">
-                      <div className="flex justify-between text-xs mb-1">
-                        <span className="text-white/70 capitalize">{key.replace(/_/g, ' ')}</span>
-                        <span className="text-white font-medium">{value}</span>
+            {/* Hover Stats Overlay */}
+            <div className="absolute inset-0 bg-black/95 backdrop-blur-sm opacity-0 
+                          group-hover:opacity-100 transition-all duration-300 p-6">
+              <div className="h-full flex flex-col">
+                <h3 className="text-lg font-bold text-white mb-2">{card.name}</h3>
+                <p className="text-sm text-white/70 line-clamp-3 mb-4">{card.description}</p>
+                
+                {card.stats && (
+                  <div className="mt-auto space-y-3">
+                    {Object.entries(card.stats as Record<string, number>).map(([key, value]) => (
+                      <div key={key}>
+                        <div className="flex justify-between text-xs mb-1">
+                          <span className="text-white/70 capitalize">{key.replace(/_/g, ' ')}</span>
+                          <span className="text-white font-medium">{value}</span>
+                        </div>
+                        <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
+                          <motion.div
+                            initial={{ width: 0 }}
+                            animate={{ width: `${value}%` }}
+                            transition={{ duration: 0.5, delay: 0.1 }}
+                            className={`h-full rounded-full ${getStatBarColor(card.rarity)}`}
+                          />
+                        </div>
                       </div>
-                      <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
-                        <motion.div
-                          initial={{ width: 0 }}
-                          animate={{ width: `${value}%` }}
-                          transition={{ duration: 0.5, delay: 0.1 }}
-                          className={`h-full rounded-full ${getStatBarColor(card.rarity)}`}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           </motion.div>
         ))}
@@ -288,5 +296,19 @@ function getStatBarColor(rarity: Rarity): string {
       return 'bg-gradient-to-r from-blue-600 to-blue-400';
     default:
       return 'bg-gradient-to-r from-gray-600 to-gray-400';
+  }
+}
+
+// Add new function for rarity glow effect
+function getRarityGlow(rarity: Rarity): string {
+  switch (rarity) {
+    case 'LEGENDARY':
+      return 'bg-gradient-to-t from-yellow-500/20 via-yellow-500/5 to-transparent';
+    case 'EPIC':
+      return 'bg-gradient-to-t from-purple-500/20 via-purple-500/5 to-transparent';
+    case 'RARE':
+      return 'bg-gradient-to-t from-blue-500/20 via-blue-500/5 to-transparent';
+    default:
+      return 'bg-gradient-to-t from-gray-500/20 via-gray-500/5 to-transparent';
   }
 }

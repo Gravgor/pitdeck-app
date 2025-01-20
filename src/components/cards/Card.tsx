@@ -5,22 +5,27 @@ import Image from 'next/image';
 import { Crown, Star, Trophy, Medal } from 'lucide-react';
 import { useState } from 'react';
 import Link from 'next/link';
+import { Prisma, Rarity, CardType } from '@prisma/client';
 
-interface CardProps {
-  id: string;
-  name: string;
-  type: string;
-  rarity: 'LEGENDARY' | 'EPIC' | 'RARE' | 'COMMON';
-  imageUrl: string;
-  description?: string | null;
-  stats?: any;
-  edition?: string | null;
-  serialNumber?: string | null;
-  owner?: {
-    name: string | null;
-    image: string | null;
-  } | null;
-}
+type CardProps = {
+  card: {
+    id: string;
+    name: string;
+    type: CardType;
+    rarity: Rarity;
+    imageUrl: string;
+    serialNumber: string | null;
+    series: string;
+    year: number;
+    description?: string | null;
+    stats: Prisma.JsonValue;
+    owner?: {
+      id: string;
+      name: string;
+      image: string;
+    } | null;
+  };
+};
 
 function isSpecialSerial(serialNumber?: string | null): boolean {
   if (!serialNumber) return false;
@@ -37,16 +42,7 @@ function getOrdinalSuffix(num: number): string {
   return "th";
 }
 
-export function Card({ 
-  name, 
-  type, 
-  rarity, 
-  imageUrl, 
-  description, 
-  stats, 
-  serialNumber,
-  owner 
-}: CardProps) {
+export function Card({ card }: CardProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -57,18 +53,18 @@ export function Card({
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
       className={`group relative aspect-[2/3] sm:aspect-[2/3] rounded-lg sm:rounded-xl overflow-hidden 
-                 ${getRarityBorder(rarity)}
+                 ${getRarityBorder(card.rarity)}
                  hover:scale-105 hover:shadow-2xl transition-all duration-300`}
     >
       {/* Top badges container */}
       <div className="absolute top-0 left-0 right-0 z-30 p-2 sm:p-3 flex justify-between items-start">
         {/* Available/Owner badge */}
-        {owner ? (
+        {card.owner ? (
           <div className="flex items-center gap-1.5 sm:gap-2 bg-black/50 backdrop-blur-sm rounded-full pl-1 pr-2 sm:pr-3 py-0.5 sm:py-1">
-            {owner.image ? (
+            {card.owner.image ? (
               <Image
-                src={owner.image}
-                alt={owner.name || 'Owner'}
+                src={card.owner.image}
+                alt={card.owner.name || 'Owner'}
                 width={20}
                 height={20}
                 className="rounded-full w-5 h-5 sm:w-6 sm:h-6"
@@ -76,12 +72,12 @@ export function Card({
             ) : (
               <div className="w-5 h-5 sm:w-6 sm:h-6 bg-gray-600 rounded-full flex items-center justify-center">
                 <span className="text-[10px] sm:text-xs text-white">
-                  {owner.name?.[0]?.toUpperCase() || '?'}
+                  {card.owner.name?.[0]?.toUpperCase() || '?'}
                 </span>
               </div>
             )}
             <span className="text-[10px] sm:text-xs text-white/90 truncate max-w-[80px] sm:max-w-[100px]">
-              {owner.name || 'Anonymous'}
+              {card.owner.name || 'Anonymous'}
             </span>
           </div>
         ) : (
@@ -95,17 +91,16 @@ export function Card({
         )}
 
         {/* Rarity Badge */}
-        <div className={`${getRarityBadgeStyle(rarity)} scale-75 sm:scale-100`}>
-          {getRarityIcon(rarity)}
+        <div className={`${getRarityBadgeStyle(card.rarity)} scale-75 sm:scale-100`}>
+          {getRarityIcon(card.rarity)}
         </div>
       </div>
 
       {/* Card Image */}
       <div className="relative w-full h-full">
         <Image
-          src={imageUrl}
-          alt={name}
-          placeholder="blur"
+          src={card.imageUrl}
+          alt={card.name}
           loading="lazy"
           fill
           className="object-cover"
@@ -119,22 +114,22 @@ export function Card({
             {/* Type and Rarity Tags */}
             <div className="flex items-center gap-1.5 sm:gap-2 mb-1.5 sm:mb-2">
               <span className={`px-1.5 sm:px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-medium uppercase tracking-wider 
-                            ${getRarityTagStyle(rarity)}`}>
-                {rarity}
+                            ${getRarityTagStyle(card.rarity)}`}>
+                {card.rarity}
               </span>
-              <span className="text-[10px] sm:text-xs text-white/80">{type.replace(/_/g, ' ')}</span>
+              <span className="text-[10px] sm:text-xs text-white/80">{card.type.replace(/_/g, ' ')}</span>
             </div>
 
             {/* Title */}
-            <h3 className="text-white font-medium tracking-wide text-base sm:text-lg mb-1.5 sm:mb-2">{name}</h3>
+            <h3 className="text-white font-medium tracking-wide text-base sm:text-lg mb-1.5 sm:mb-2">{card.name}</h3>
 
             {/* Description - Hidden on mobile unless touched */}
             <p className="text-xs sm:text-sm text-white/80 mb-2 sm:mb-3 line-clamp-2 hidden sm:block">
-              {description}
+              {card.description}
             </p>
 
             {/* Availability Status */}
-            {!owner && (
+            {!card.owner && (
               <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs">
                 <span className="text-emerald-400">Available to Collect</span>
                 <Link 
@@ -147,17 +142,17 @@ export function Card({
             )}
 
             {/* Serial Number */}
-            {serialNumber && (
+            {card.serialNumber && (
               <p className={`text-[10px] sm:text-xs ${
-                isSpecialSerial(serialNumber)
+                isSpecialSerial(card.serialNumber)
                   ? 'text-yellow-400 font-semibold'
                   : 'text-white/60'
               } mt-1.5 sm:mt-2`}>
-                #{serialNumber}
-                {isSpecialSerial(serialNumber) && (
+                #{card.serialNumber}
+                {isSpecialSerial(card.serialNumber) && (
                   <span className="ml-1 text-yellow-500">
-                    {parseInt(serialNumber)}
-                    {getOrdinalSuffix(parseInt(serialNumber))} Mint
+                    {parseInt(card.serialNumber)}
+                    {getOrdinalSuffix(parseInt(card.serialNumber))} Mint
                   </span>
                 )}
               </p>
@@ -169,7 +164,7 @@ export function Card({
   );
 }
 
-function getRarityIcon(rarity: CardProps['rarity']) {
+function getRarityIcon(rarity: CardProps['card']['rarity']) {
   switch (rarity) {
     case 'LEGENDARY':
       return <Crown className="h-5 w-5" />;
@@ -182,7 +177,7 @@ function getRarityIcon(rarity: CardProps['rarity']) {
   }
 }
 
-function getRarityBorder(rarity: CardProps['rarity']): string {
+function getRarityBorder(rarity: CardProps['card']['rarity']): string {
   switch (rarity) {
     case 'LEGENDARY':
       return 'ring-2 ring-yellow-400/50 shadow-lg shadow-yellow-400/20';
@@ -195,7 +190,7 @@ function getRarityBorder(rarity: CardProps['rarity']): string {
   }
 }
 
-function getRarityOverlay(rarity: CardProps['rarity']): string {
+function getRarityOverlay(rarity: CardProps['card']['rarity']): string {
   switch (rarity) {
     case 'LEGENDARY':
       return 'bg-gradient-to-t from-yellow-900/30 to-transparent';
@@ -208,7 +203,7 @@ function getRarityOverlay(rarity: CardProps['rarity']): string {
   }
 }
 
-function getRarityBadgeStyle(rarity: CardProps['rarity']): string {
+function getRarityBadgeStyle(rarity: CardProps['card']['rarity']): string {
   switch (rarity) {
     case 'LEGENDARY':
       return 'bg-yellow-400/90 text-yellow-900 p-1.5 rounded-full';
@@ -221,7 +216,7 @@ function getRarityBadgeStyle(rarity: CardProps['rarity']): string {
   }
 }
 
-function getRarityTagStyle(rarity: CardProps['rarity']): string {
+function getRarityTagStyle(rarity: CardProps['card']['rarity']): string {
   switch (rarity) {
     case 'LEGENDARY':
       return 'bg-yellow-400/20 text-yellow-400 border border-yellow-400/50';
@@ -234,7 +229,7 @@ function getRarityTagStyle(rarity: CardProps['rarity']): string {
   }
 }
 
-function getStatBarColor(rarity: CardProps['rarity']): string {
+function getStatBarColor(rarity: CardProps['card']['rarity']): string {
   switch (rarity) {
     case 'LEGENDARY':
       return 'bg-gradient-to-r from-yellow-600 to-yellow-400';

@@ -31,18 +31,21 @@ export function CardActions({ card, onSell, onTrade }: CardActionsProps) {
 
   return (
     <>
-      <div className="absolute top-3 left-3 z-20 flex gap-2">
+      <div className="flex gap-2">
         <button
           onClick={() => setShowSellModal(true)}
-          className="p-2 bg-black/80 hover:bg-black rounded-full text-white/80 
-                   hover:text-white transition-colors"
+          className="flex-1 flex items-center justify-center gap-2 px-4 py-2 
+                   bg-gradient-to-r from-red-500 to-blue-500 rounded-lg 
+                   text-white font-medium hover:opacity-90 transition-opacity"
         >
           <DollarSign className="h-4 w-4" />
+          <span>Sell Card</span>
         </button>
         <button
           onClick={onTrade}
-          className="p-2 bg-black/80 hover:bg-black rounded-full text-white/80 
-                   hover:text-white transition-colors"
+          className="flex items-center justify-center px-4 py-2 
+                   bg-white/5 hover:bg-white/10 rounded-lg border border-white/10 
+                   text-white transition-colors"
         >
           <RefreshCw className="h-4 w-4" />
         </button>
@@ -61,52 +64,58 @@ export function CardActions({ card, onSell, onTrade }: CardActionsProps) {
               initial={{ scale: 0.95 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0.95 }}
-              className="bg-black/90 border border-white/10 rounded-xl p-6 
-                       max-w-md w-full relative"
+              className="relative max-w-md w-full"
             >
-              <button
-                onClick={() => setShowSellModal(false)}
-                className="absolute top-4 right-4 text-gray-400 
-                         hover:text-white transition-colors"
-              >
-                <X className="h-5 w-5" />
-              </button>
-
-              <h3 className="text-xl font-bold text-white mb-4">
-                List Card for Sale
-              </h3>
-
-              <form onSubmit={handleSell} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">
-                    Price (RC)
-                  </label>
-                  <input
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    required
-                    value={price}
-                    onChange={(e) => setPrice(e.target.value)}
-                    className="w-full px-4 py-2 bg-white/5 border border-white/10 
-                             rounded-lg text-white placeholder:text-gray-500
-                             focus:border-red-500 focus:ring-1 focus:ring-red-500"
-                    placeholder="Enter price in RaceCoins"
-                  />
-                </div>
-
+              <div className="absolute -inset-1 bg-gradient-to-r from-red-500 to-blue-500 rounded-xl opacity-20 blur-xl" />
+              <div className="relative bg-black/90 backdrop-blur-sm border border-white/10 rounded-xl p-6">
                 <button
-                  type="submit"
-                  disabled={isLoading}
-                  className="w-full flex justify-center items-center px-4 py-2
-                           bg-red-500 hover:bg-red-600 rounded-lg 
-                           text-sm font-medium text-white
-                           disabled:opacity-50 disabled:cursor-not-allowed 
-                           transition-colors"
+                  onClick={() => setShowSellModal(false)}
+                  className="absolute top-4 right-4 p-2 rounded-full hover:bg-white/5 
+                           text-white/60 hover:text-white transition-colors"
                 >
-                  {isLoading ? 'Listing...' : 'List for Sale'}
+                  <X className="h-5 w-5" />
                 </button>
-              </form>
+
+                <h3 className="text-xl font-bold text-white mb-4">
+                  List Card for Sale
+                </h3>
+
+                <form onSubmit={handleSell} className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-white/70 mb-1">
+                      Price (RC)
+                    </label>
+                    <div className="group relative">
+                      <div className="absolute -inset-1 bg-gradient-to-r from-red-500 to-blue-500 rounded-xl opacity-0 group-focus-within:opacity-20 transition-opacity blur-xl" />
+                      <input
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        required
+                        value={price}
+                        onChange={(e) => setPrice(e.target.value)}
+                        className="relative w-full px-4 py-2 bg-white/5 border border-white/10 
+                                 rounded-lg text-white placeholder:text-white/30
+                                 focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50
+                                 transition-colors"
+                        placeholder="Enter price in RaceCoins"
+                      />
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={isLoading}
+                    className="w-full flex justify-center items-center gap-2 px-4 py-2
+                             bg-gradient-to-r from-red-500 to-blue-500 rounded-lg 
+                             text-sm font-medium text-white
+                             disabled:opacity-50 disabled:cursor-not-allowed 
+                             hover:opacity-90 transition-opacity"
+                  >
+                    {isLoading ? 'Listing...' : 'List for Sale'}
+                  </button>
+                </form>
+              </div>
             </motion.div>
           </motion.div>
         )}

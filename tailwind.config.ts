@@ -9,13 +9,15 @@ export default {
   theme: {
     extend: {
       animation: {
-        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'sparkle': 'sparkle 2s linear infinite',
         'legendary-border': 'legendary-border 4s linear infinite',
         'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'pulse-faster': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'pulse-fastest': 'pulse 0.75s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         legendary: 'legendary 2s ease-in-out infinite',
+        'float': 'float 6s ease-in-out infinite',
+        'spin-slow': 'spin 8s linear infinite',
+        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         epic: 'epic 2s ease-in-out infinite',
         rare: 'rare 2s ease-in-out infinite',
       },
@@ -27,6 +29,10 @@ export default {
         'legendary-border': {
           '0%': { transform: 'rotate(0deg)' },
           '100%': { transform: 'rotate(360deg)' },
+        },
+        float: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-20px)' },
         },
         legendary: {
           '0%, 100%': {

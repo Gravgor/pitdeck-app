@@ -1,5 +1,5 @@
 //@ts-nocheck
-const { PrismaClient } = require('@prisma/client');
+import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 /**
@@ -13,9 +13,9 @@ const prisma = new PrismaClient();
 /** @type {CardImageMapping[]} */
 const cardImages = [
   {
-    name: "Red Bull Racing",
-    imageUrl: 'https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/teams/red-bull.jpg',
-    type: 'TEAM',
+    name: "Isack Hadjar",
+    imageUrl: 'https://pitdeck-app.s3.eu-north-1.amazonaws.com/2025/formula1-commons/hadjar.avif',
+    type: 'F1_DRIVER',
     series: 'F1'
   }
 

@@ -700,3 +700,29 @@ model CustomizationOption {
   updatedAt     DateTime @updatedAt
   users         User[]   // For tracking which premium users have access
 }
+
+enum WaitlistPlatform {
+  WEB
+  MOBILE
+  BOTH
+}
+
+enum WaitlistStatus {
+  PENDING
+  APPROVED
+  INVITED
+  JOINED
+}
+
+model Waitlist {
+  id         String           @id @default(cuid())
+  email      String           @unique
+  platform   WaitlistPlatform
+  status     WaitlistStatus
+  signupDate DateTime
+  inviteDate DateTime?
+  joinDate   DateTime?
+
+  @@index([email])
+  @@index([status])
+}
