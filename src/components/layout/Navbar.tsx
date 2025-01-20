@@ -22,7 +22,6 @@ import { NavbarLoading } from './NavbarLoading';
 import Image from 'next/image';
 import { NotificationBell } from '../notifications/NotificationBell';
 import { PitDeckLogo } from '../ui/logo';
-import EA from './EA';
 import { formatNumber } from '@/lib/utils/formatNumber';
 import { UserBalance } from '../user/UserBalance';
 const seriesLinks = [
@@ -323,7 +322,6 @@ export function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
-      <EA />
     </nav>
   );
 }
