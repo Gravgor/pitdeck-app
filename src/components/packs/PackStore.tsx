@@ -92,9 +92,10 @@ export function PackStore({ packs, isLoading = false }: PackStoreProps) {
             <div className="aspect-[2/1] relative overflow-hidden">
               <Image
                 loading="lazy"
-                placeholder="blur"
                 src={pack.imageUrl}
                 alt={pack.name}
+                width={500}
+                height={500}
                 className="w-full h-full object-cover transition-transform hover:scale-110 duration-300"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />

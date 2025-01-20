@@ -1,26 +1,54 @@
 import { withAuth } from '@/middleware/withAuth';
 import { prisma } from "@/lib/prisma";
 import { CardGrid } from '@/components/cards/CardGrid';
-import { Filter, Search, Sparkles, Trophy, Clock, Wallet } from 'lucide-react';
+import { Filter, Search, Sparkles, Trophy, Clock, Wallet, Package } from 'lucide-react';
 import { CardType, Rarity } from "@prisma/client";
+import Link from 'next/link';
 
 export default async function CollectionPage() {
   return withAuth(async (userId) => {
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      include: { cards: { orderBy: { createdAt: 'desc' } } }
+    const userCards = await prisma.card.findMany({
+      where: { 
+        owners: {
+          some: {
+            id: userId
+          }
+        },
+        AND: [
+          { listing: null }, // Not listed on marketplace
+          { 
+            OR: [
+              { offeredInOffers: { none: {} } }, // Not in any trade offers
+              { 
+                offeredInOffers: {
+                  every: {
+                    status: 'REJECTED'
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      include: {
+        listing: true,
+        offeredInOffers: {
+          include: {
+            trade: true
+          }
+        }
+      }
     });
-    const userCards = user?.cards || [];
 
-    const seriesStats = userCards.reduce((acc, userCard) => {
-      const series = userCard.series;
+    const seriesStats = userCards.reduce((acc: Record<string, number>, card) => {
+      const series = card.series;
       acc[series] = (acc[series] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
 
     const totalValue = userCards.length;
-    const legendaryCount = userCards.filter(userCard => 
-      userCard.rarity === 'LEGENDARY'
+    const legendaryCount = userCards.filter(card => 
+      card.rarity === 'LEGENDARY'
     ).length;
     const recentCards = userCards.slice(0, 5);
 
@@ -30,59 +58,82 @@ export default async function CollectionPage() {
         <div className="relative">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
             <div className="space-y-2">
-              <h1 className="text-4xl font-bold text-white">
-                Collection Overview
-              </h1>
+              <div className="flex items-center gap-4">
+                <h1 className="text-4xl font-bold text-white">
+                  Collection Overview
+                </h1>
+                <Link 
+                  href="/collection/listings"
+                  className="inline-flex items-center gap-2 px-3 py-1.5 
+                           bg-white/5 hover:bg-white/10 text-sm text-gray-300 
+                           hover:text-white rounded-lg transition-colors border 
+                           border-white/10 hover:border-white/20"
+                >
+                  <Package className="h-4 w-4" />
+                  <span>View Listings</span>
+                </Link>
+                <Link 
+                  href="/trading/received-offers"
+                  className="inline-flex items-center gap-2 px-3 py-1.5 
+                           bg-white/5 hover:bg-white/10 text-sm text-gray-300 
+                           hover:text-white rounded-lg transition-colors border 
+                           border-white/10 hover:border-white/20"
+                >
+                  <Package className="h-4 w-4" />
+                  <span>View Trades</span>
+                </Link>
+              </div>
               <p className="text-gray-400 text-lg">
                 Manage and explore your racing cards
               </p>
             </div>
             
-            {/* Stats Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full md:w-auto">
-              <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-blue-500/10 rounded-lg">
-                    <Trophy className="h-5 w-5 text-blue-500" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-400">Total Cards</p>
-                    <p className="text-xl font-bold text-white">{totalValue}</p>
-                  </div>
-                </div>
-              </div>
-              <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-purple-500/10 rounded-lg">
-                    <Sparkles className="h-5 w-5 text-purple-500" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-400">Legendary</p>
-                    <p className="text-xl font-bold text-white">{legendaryCount}</p>
+            <div className="w-full md:w-auto">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-blue-500/10 rounded-lg">
+                      <Trophy className="h-5 w-5 text-blue-500" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-400">Total Cards</p>
+                      <p className="text-xl font-bold text-white">{totalValue}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-green-500/10 rounded-lg">
-                    <Wallet className="h-5 w-5 text-green-500" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-400">Series</p>
-                    <p className="text-xl font-bold text-white">
-                      {Object.keys(seriesStats || {}).length}
-                    </p>
+                <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-purple-500/10 rounded-lg">
+                      <Sparkles className="h-5 w-5 text-purple-500" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-400">Legendary</p>
+                      <p className="text-xl font-bold text-white">{legendaryCount}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-yellow-500/10 rounded-lg">
-                    <Clock className="h-5 w-5 text-yellow-500" />
+                <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-green-500/10 rounded-lg">
+                      <Wallet className="h-5 w-5 text-green-500" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-400">Series</p>
+                      <p className="text-xl font-bold text-white">
+                        {Object.keys(seriesStats || {}).length}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-sm text-gray-400">Recent</p>
-                    <p className="text-xl font-bold text-white">{recentCards.length}</p>
+                </div>
+                <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-yellow-500/10 rounded-lg">
+                      <Clock className="h-5 w-5 text-yellow-500" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-400">Recent</p>
+                      <p className="text-xl font-bold text-white">{recentCards.length}</p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -152,7 +203,7 @@ export default async function CollectionPage() {
             <div>
               <h3 className="text-lg font-semibold text-white mb-4">Year</h3>
               <div className="space-y-2">
-                {Array.from(new Set(userCards.map(userCard => userCard.year)))
+                {Array.from(new Set(userCards.map(card => card.year)))
                   .sort()
                   .reverse()
                   .map((year) => (
@@ -202,9 +253,9 @@ export default async function CollectionPage() {
                 </div>
               </div>
             ) : (
-              <CardGrid cards={userCards.map(userCard => ({
-                ...userCard,
-                userCardId: userCard.id,
+              <CardGrid cards={userCards.map(card => ({
+                ...card,
+                userCardId: card.id,
                 quantity: 1,
                 isOwner: true
               }))} isOwner={true} />

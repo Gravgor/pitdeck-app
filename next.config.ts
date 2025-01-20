@@ -11,6 +11,7 @@ const nextConfig: NextConfig = {
     NEXT_AUTH_URL: process.env.NEXT_AUTH_URL,
   },
   images: {
+    formats: ['image/avif', 'image/webp'],
     remotePatterns: [
       {
         protocol: 'https',

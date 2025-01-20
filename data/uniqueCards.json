@@ -1,0 +1,1063 @@
+{
+  "F1": {
+    "F1_DRIVER": [
+      {
+        "name": "Charles Leclerc",
+        "type": "F1_DRIVER",
+        "rarity": "EPIC",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/drivers/charles.webp",
+        "description": "Ferrari's star driver known for his qualifying prowess and racing intelligence.",
+        "edition": "2024",
+        "series": "F1",
+        "year": 2024,
+        "stats": {
+          "pace": 94,
+          "awareness": 90,
+          "racecraft": 92,
+          "experience": 88,
+          "overtaking": 91
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Lewis Hamilton",
+        "type": "F1_DRIVER",
+        "rarity": "LEGENDARY",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/drivers/hamilton.jpg",
+        "description": "7-time F1 World Champion, holds records for most wins and pole positions in F1 history.",
+        "edition": "2024",
+        "series": "F1",
+        "year": 2024,
+        "stats": {
+          "pace": 95,
+          "awareness": 96,
+          "racecraft": 98,
+          "experience": 99,
+          "overtaking": 95
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Max Verstappen",
+        "type": "F1_DRIVER",
+        "rarity": "LEGENDARY",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/drivers/maxver01-58ff06f6.png",
+        "description": "3-time F1 World Champion, Red Bull Racing's lead driver known for his aggressive racing style and exceptional pace.",
+        "edition": "2024",
+        "series": "F1",
+        "year": 2024,
+        "stats": {
+          "pace": 98,
+          "awareness": 95,
+          "racecraft": 97,
+          "experience": 92,
+          "overtaking": 96
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Max Verstappen - 2021 Champion Edition",
+        "type": "F1_DRIVER",
+        "rarity": "LEGENDARY",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/championship/verstappen-2021.jpg",
+        "description": "Commemorating Verstappen's first F1 World Championship",
+        "edition": "2021 Championship",
+        "series": "F1",
+        "year": 2021,
+        "stats": {
+          "pace": 98,
+          "pressure": 99,
+          "racecraft": 97,
+          "championship": 100,
+          "determination": 100
+        },
+        "championshipDetails": {
+          "wins": 10,
+          "points": 395.5,
+          "season": 2021,
+          "podiums": 18,
+          "decisiveRace": "Abu Dhabi GP"
+        },
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Max Verstappen - Las Vegas Launch Edition",
+        "type": "F1_DRIVER",
+        "rarity": "LEGENDARY",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/events/vegas2023/Max Verstappen - Las Vegas Launch Edition.jpg",
+        "description": "Special edition card celebrating F1's return to Las Vegas",
+        "edition": "Las Vegas GP Launch",
+        "series": "F1",
+        "year": 2023,
+        "stats": {
+          "pace": 99,
+          "awareness": 96,
+          "racecraft": 98,
+          "experience": 93,
+          "overtaking": 97
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Vegas Crown: Max Verstappen's Triumph",
+        "type": "F1_DRIVER",
+        "rarity": "LEGENDARY",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/events/vegas2024/verstappen-vegas-2024-champion.png",
+        "description": "Commemorating Max Verstappen's extraordinary achievement of securing his 4th World Championship title under the neon lights of Las Vegas.",
+        "edition": null,
+        "series": "F1",
+        "year": 2024,
+        "stats": {
+          "speed": 99,
+          "defense": 95,
+          "overall": 98,
+          "racecraft": 97,
+          "qualifying": 96,
+          "consistency": 98
+        },
+        "championshipDetails": {
+          "totalPoints": 403,
+          "winsInSeason": 8,
+          "podiumsInSeason": 12,
+          "championshipPosition": 1,
+          "championshipClinchRace": "Las Vegas Grand Prix"
+        },
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Verstappen - 2023 Suzuka Victory",
+        "type": "F1_DRIVER",
+        "rarity": "EPIC",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/events/verstappen-suzuka-23.jpg",
+        "description": "Commemorating Red Bull's Constructor Championship clinching victory",
+        "edition": "Race Winners",
+        "series": "F1",
+        "year": 2023,
+        "stats": {
+          "teamwork": 96,
+          "raceStrategy": 97,
+          "qualifyingPace": 98,
+          "racePerformance": 99,
+          "championshipImpact": 100
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      }
+    ],
+    "F1_CAR": [
+      {
+        "name": "Alpine A524",
+        "type": "F1_CAR",
+        "rarity": "RARE",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/cars/f0e858c672.webp",
+        "description": "Complete concept revision targeting improved performance.",
+        "edition": "2024",
+        "series": "F1",
+        "year": 2024,
+        "stats": {
+          "speed": 90,
+          "handling": 89,
+          "innovation": 89,
+          "reliability": 88,
+          "acceleration": 91
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Aston Martin AMR24",
+        "type": "F1_CAR",
+        "rarity": "EPIC",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/cars/Shot_3_copy.jpg",
+        "description": "Refined design with innovative aerodynamic solutions.",
+        "edition": "2024",
+        "series": "F1",
+        "year": 2024,
+        "stats": {
+          "speed": 93,
+          "handling": 92,
+          "innovation": 92,
+          "reliability": 93,
+          "acceleration": 91
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Ferrari Miami Vice Edition",
+        "type": "F1_CAR",
+        "rarity": "LEGENDARY",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/cars/53c33dd4-bc69-440e-9877-93dd4f2f1c1d.jpg",
+        "description": "Special Miami GP livery edition Ferrari SF-23",
+        "edition": "Miami GP Special",
+        "series": "F1",
+        "year": 2023,
+        "stats": {
+          "speed": 96,
+          "handling": 95,
+          "reliability": 93,
+          "acceleration": 97,
+          "specialLivery": 100
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Ferrari SF-24",
+        "type": "F1_CAR",
+        "rarity": "EPIC",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/cars/715d80b2-b77e-435d-a6cf-8e8ac337762a.jpg",
+        "description": "Scuderia Ferrari's 2024 challenger, featuring improved reliability and race pace.",
+        "edition": "2024",
+        "series": "F1",
+        "year": 2024,
+        "stats": {
+          "speed": 95,
+          "handling": 94,
+          "innovation": 93,
+          "reliability": 92,
+          "acceleration": 96
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Haas VF-24",
+        "type": "F1_CAR",
+        "rarity": "COMMON",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/cars/haas-vf-24_1e3sfk5ckasor1lrrhx0828aou.jpg",
+        "description": "New design direction under fresh technical leadership.",
+        "edition": "2024",
+        "series": "F1",
+        "year": 2024,
+        "stats": {
+          "speed": 86,
+          "handling": 85,
+          "innovation": 83,
+          "reliability": 87,
+          "acceleration": 84
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Kick Sauber C44",
+        "type": "F1_CAR",
+        "rarity": "RARE",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/cars/OIP+(1).jpg",
+        "description": "First car under new Stake F1 identity with fresh concepts.",
+        "edition": "2024",
+        "series": "F1",
+        "year": 2024,
+        "stats": {
+          "speed": 88,
+          "handling": 86,
+          "innovation": 85,
+          "reliability": 89,
+          "acceleration": 87
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "McLaren MCL38",
+        "type": "F1_CAR",
+        "rarity": "EPIC",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/cars/mclaren-mcl38-hero-dark-planetf1.jpg",
+        "description": "Further evolution of McLaren's impressive development trajectory.",
+        "edition": "2024",
+        "series": "F1",
+        "year": 2024,
+        "stats": {
+          "speed": 94,
+          "handling": 95,
+          "innovation": 94,
+          "reliability": 92,
+          "acceleration": 93
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Mercedes W15",
+        "type": "F1_CAR",
+        "rarity": "LEGENDARY",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/cars/03_Side_LH.webp",
+        "description": "Revolutionary 'zero-sidepod' concept evolution with improved performance.",
+        "edition": "2024",
+        "series": "F1",
+        "year": 2024,
+        "stats": {
+          "speed": 96,
+          "handling": 95,
+          "innovation": 98,
+          "reliability": 94,
+          "acceleration": 97
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "RB20 Testing Spec",
+        "type": "F1_CAR",
+        "rarity": "EPIC",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/cars/RB20+Testing+Spec.jpg",
+        "description": "Special pre-season testing specification with unique features.",
+        "edition": "2024",
+        "series": "F1",
+        "year": 2024,
+        "stats": {
+          "speed": 95,
+          "handling": 94,
+          "innovation": 96,
+          "reliability": 91,
+          "acceleration": 95
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Red Bull RB20",
+        "type": "F1_CAR",
+        "rarity": "LEGENDARY",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/cars/rb20-front.jpg",
+        "description": "Red Bull Racing's dominant 2024 challenger, featuring innovative aerodynamic solutions.",
+        "edition": "2024",
+        "series": "F1",
+        "year": 2024,
+        "stats": {
+          "speed": 98,
+          "handling": 97,
+          "innovation": 98,
+          "reliability": 94,
+          "acceleration": 96
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "SF-24 Launch Edition",
+        "type": "F1_CAR",
+        "rarity": "EPIC",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/cars/debd7f8b-7a38-4774-8cb1-383efd8819e6.jpg",
+        "description": "Ferrari's 2024 challenger in special launch specification.",
+        "edition": "2024",
+        "series": "F1",
+        "year": 2024,
+        "stats": {
+          "speed": 94,
+          "handling": 93,
+          "innovation": 95,
+          "reliability": 90,
+          "acceleration": 94
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "VCARB 01",
+        "type": "F1_CAR",
+        "rarity": "COMMON",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/cars/SI202402080595_hires_jpeg_24bit_rgb.jpg",
+        "description": "Rebranded RB sister team with increased independence.",
+        "edition": "2024",
+        "series": "F1",
+        "year": 2024,
+        "stats": {
+          "speed": 87,
+          "handling": 86,
+          "innovation": 84,
+          "reliability": 88,
+          "acceleration": 85
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Williams FW46",
+        "type": "F1_CAR",
+        "rarity": "RARE",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/cars/Williams FW46.jpg",
+        "description": "Evolution of Williams' low-drag concept.",
+        "edition": "2024",
+        "series": "F1",
+        "year": 2024,
+        "stats": {
+          "speed": 89,
+          "handling": 87,
+          "innovation": 86,
+          "reliability": 88,
+          "acceleration": 90
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      }
+    ],
+    "CIRCUIT": [
+      {
+        "name": "Monaco",
+        "type": "CIRCUIT",
+        "rarity": "LEGENDARY",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/tracks/Monaco.jpeg",
+        "description": "The crown jewel of F1, the prestigious street circuit of Monte Carlo.",
+        "edition": "Classic Tracks",
+        "series": "F1",
+        "year": 2024,
+        "stats": {
+          "length": 3.337,
+          "corners": 19,
+          "prestige": 100,
+          "difficulty": 98,
+          "overtaking": 75
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Snow Spa Special Edition",
+        "type": "CIRCUIT",
+        "rarity": "LEGENDARY",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/tracks/Snow Spa Special Edition.jpg",
+        "description": "Winter edition of the legendary Spa-Francorchamps circuit",
+        "edition": "Winter Collection 2023",
+        "series": "F1",
+        "year": 2023,
+        "stats": {
+          "length": 7.004,
+          "corners": 19,
+          "weather": 100,
+          "difficulty": 98,
+          "seasonalChallenge": 95
+        },
+        "championshipDetails": null,
+        "seasonalDetails": {
+          "season": "Winter",
+          "specialConditions": true,
+          "limitedAvailability": "December 2023"
+        },
+        "historicDetails": null
+      },
+      {
+        "name": "Spa-Francorchamps",
+        "type": "CIRCUIT",
+        "rarity": "LEGENDARY",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/tracks/Spa-Francorchamps.webp",
+        "description": "The legendary Belgian circuit, featuring the iconic Eau Rouge-Raidillon complex.",
+        "edition": "Classic Tracks",
+        "series": "F1",
+        "year": 2024,
+        "stats": {
+          "length": 7.004,
+          "corners": 19,
+          "weather": 88,
+          "difficulty": 95,
+          "overtaking": 92
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      }
+    ],
+    "HISTORIC_MOMENT": [
+      {
+        "name": "Abu Dhabi Showdown - 2021 Final Lap",
+        "type": "HISTORIC_MOMENT",
+        "rarity": "LEGENDARY",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/championship/abu-dhabi-2021.webp",
+        "description": "The dramatic final lap of the 2021 Abu Dhabi GP",
+        "edition": "Championship Moments",
+        "series": "F1",
+        "year": 2021,
+        "stats": {
+          "drama": 100,
+          "intensity": 100,
+          "controversy": 100,
+          "significance": 100,
+          "historicalImpact": 99
+        },
+        "championshipDetails": {
+          "lap": "Final Lap",
+          "event": "Abu Dhabi GP 2021",
+          "significance": "Championship Deciding Moment"
+        },
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Ayrton Senna - Monaco Mastery",
+        "type": "HISTORIC_MOMENT",
+        "rarity": "LEGENDARY",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/historic/senna-monaco-88.jpg",
+        "description": "Senna's legendary qualifying lap at Monaco 1988",
+        "edition": "Timeless Legends",
+        "series": "F1",
+        "year": 1988,
+        "stats": {
+          "skill": 100,
+          "legacy": 100,
+          "precision": 100,
+          "achievement": 100,
+          "concentration": 100
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": {
+          "event": "Monaco GP Qualifying 1988",
+          "margin": "1.427 seconds",
+          "significance": "Greatest qualifying lap in F1 history"
+        }
+      },
+      {
+        "name": "First Night Race Singapore 2008",
+        "type": "HISTORIC_MOMENT",
+        "rarity": "EPIC",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/historic/singapore-2008.jpg",
+        "description": "F1's first night race at Marina Bay Street Circuit.",
+        "edition": "Legends",
+        "series": "F1",
+        "year": 2008,
+        "stats": {
+          "impact": 93,
+          "spectacle": 97,
+          "innovation": 96,
+          "memorability": 95,
+          "historicalSignificance": 94
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Hunt vs Lauda - 1976",
+        "type": "HISTORIC_MOMENT",
+        "rarity": "LEGENDARY",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/historic/hunt-lauda-76.jpg",
+        "description": "The epic 1976 championship battle",
+        "edition": "Greatest Rivalries",
+        "series": "F1",
+        "year": 1976,
+        "stats": {
+          "drama": 100,
+          "courage": 100,
+          "rivalry": 100,
+          "determination": 100,
+          "historicalImpact": 100
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": {
+          "margin": "1 point",
+          "season": 1976,
+          "champion": "James Hunt",
+          "significance": "One of F1's greatest rivalries"
+        }
+      },
+      {
+        "name": "Schumacher's Rain Dance",
+        "type": "HISTORIC_MOMENT",
+        "rarity": "LEGENDARY",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/historic/schumacher-spain-96.jpg",
+        "description": "Schumacher's masterclass in the wet at Spain 1996",
+        "edition": "Timeless Legends",
+        "series": "F1",
+        "year": 1996,
+        "stats": {
+          "legacy": 99,
+          "strategy": 98,
+          "adaptation": 100,
+          "carControl": 99,
+          "wetWeatherSkill": 100
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": {
+          "event": "Spanish GP 1996",
+          "conditions": "Extreme Wet",
+          "achievement": "Won by 45 seconds in inferior machinery"
+        }
+      },
+      {
+        "name": "Senna vs Prost 1989",
+        "type": "HISTORIC_MOMENT",
+        "rarity": "LEGENDARY",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/historic/senna-prost-89.jpg",
+        "description": "The infamous collision at Suzuka that decided the 1989 World Championship.",
+        "edition": "Legends",
+        "series": "F1",
+        "year": 1989,
+        "stats": {
+          "drama": 99,
+          "impact": 97,
+          "controversy": 95,
+          "memorability": 99,
+          "historicalSignificance": 98
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      }
+    ],
+    "TEAM": [
+      {
+        "name": "Ferrari",
+        "type": "TEAM",
+        "rarity": "LEGENDARY",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/teams/Ferrari.png",
+        "description": "The most historic and successful F1 team of all time.",
+        "edition": "2024",
+        "series": "F1",
+        "year": 2024,
+        "stats": {
+          "strategy": 90,
+          "personnel": 95,
+          "resources": 98,
+          "facilities": 97,
+          "development": 94
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Red Bull Racing",
+        "type": "TEAM",
+        "rarity": "LEGENDARY",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/teams/red-bull.jpg",
+        "description": "Multiple F1 Constructors' Champions, known for aerodynamic innovation.",
+        "edition": "2024",
+        "series": "F1",
+        "year": 2024,
+        "stats": {
+          "strategy": 95,
+          "personnel": 96,
+          "resources": 97,
+          "facilities": 98,
+          "development": 97
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      }
+    ],
+    "EVENT": [
+      {
+        "name": "Circuit Layout - Las Vegas Strip",
+        "type": "EVENT",
+        "rarity": "COMMON",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/tracks/Circuit Layout - Las Vegas Strip.jpg",
+        "description": "The Las Vegas Strip circuit layout, featuring iconic landmarks and high-speed turns.",
+        "edition": "2024",
+        "series": "F1",
+        "year": 2024,
+        "stats": null,
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      }
+    ],
+    "WINNERS_EDITION": [
+      {
+        "name": "George Russell: Vegas Glory Winner",
+        "type": "WINNERS_EDITION",
+        "rarity": "EPIC",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/events/vegas2024/russell-vegas-2024-winner.png",
+        "description": "Celebrating George Russell's spectacular victory at the Las Vegas Grand Prix, showcasing his skill and determination under the dazzling neon lights.",
+        "edition": "2024",
+        "series": "F1",
+        "year": 2024,
+        "stats": {
+          "speed": 96,
+          "defense": 94,
+          "overall": 96,
+          "racecraft": 97,
+          "qualifying": 95,
+          "consistency": 95
+        },
+        "championshipDetails": {
+          "totalPoints": 217,
+          "winsInSeason": 2,
+          "podiumsInSeason": 4,
+          "championshipPosition": 6,
+          "championshipClinchRace": null
+        },
+        "seasonalDetails": null,
+        "historicDetails": null
+      }
+    ],
+    "MOMENT_IN_TIME": [
+      {
+        "name": "Mercedes-AMG Petronas: Vegas 1-2 Finish",
+        "type": "MOMENT_IN_TIME",
+        "rarity": "RARE",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/events/vegas2024/mercedes-vegas-2024-1-2-finish.png",
+        "description": "A historic moment as Mercedes-AMG Petronas F1 Team secures an incredible 1-2 finish at the Las Vegas Grand Prix, with George Russell taking the win and Lewis Hamilton finishing second.",
+        "edition": "2024",
+        "series": "F1",
+        "year": 2024,
+        "stats": {
+          "overall": 97,
+          "pitStops": 96,
+          "strategy": 98,
+          "driverSynergy": 95,
+          "teamPerformance": 97
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      }
+    ],
+    "ICONIC_MOMENT": [
+      {
+        "name": "Lewis Hamilton is Ferrari's new driver",
+        "type": "ICONIC_MOMENT",
+        "rarity": "LEGENDARY",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/2025/cards/iconic_lewis.png",
+        "description": "Lewis Hamilton arrives in Maranello to be officially presented as Ferrari's new driver",
+        "edition": "2025",
+        "series": "F1",
+        "year": 2025,
+        "stats": null,
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Max Verstappen: 4th World Championship Victory",
+        "type": "ICONIC_MOMENT",
+        "rarity": "LEGENDARY",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/events/vegas2024/verstappen-4th-title.png",
+        "description": "Max Verstappen celebrates his historic fourth Formula 1 World Championship title after the 2024 Las Vegas Grand Prix, solidifying his place among the legends of the sport.",
+        "edition": "2024",
+        "series": "F1",
+        "year": 2024,
+        "stats": {
+          "overall": 98,
+          "dominance": 99,
+          "raceCraft": 97,
+          "strategyAdaptation": 95,
+          "qualifyingPerformance": 96
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Robert Kubica F1 Last Dance",
+        "type": "ICONIC_MOMENT",
+        "rarity": "LEGENDARY",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/drivers/z25462025AMPRobert-Kubica-podczas-mistrzostw-F1-w-Singapurze--.jpg",
+        "description": "Half a second was missing. Robert Kubica says goodbye to Formula One In Williams Racing Team",
+        "edition": "2019",
+        "series": "F1",
+        "year": 2019,
+        "stats": {
+          "overall": 78,
+          "dominance": 79,
+          "raceCraft": 87,
+          "strategyAdaptation": 69,
+          "qualifyingPerformance": 76
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      }
+    ]
+  },
+  "F2": {
+    "F2_DRIVER": [
+      {
+        "name": "Oliver Bearman",
+        "type": "F2_DRIVER",
+        "rarity": "EPIC",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/drivers/olibea01.png",
+        "description": "Ferrari Academy driver showing exceptional promise in F2.",
+        "edition": "2024",
+        "series": "F2",
+        "year": 2024,
+        "stats": {
+          "pace": 88,
+          "awareness": 84,
+          "racecraft": 85,
+          "experience": 75,
+          "overtaking": 86
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      }
+    ]
+  },
+  "INDYCAR": {
+    "INDYCAR_DRIVER": [
+      {
+        "name": "Alex Palou",
+        "type": "INDYCAR_DRIVER",
+        "rarity": "LEGENDARY",
+        "imageUrl": "/cards/indycar/drivers/palou.jpg",
+        "description": "2023 IndyCar Champion, known for consistency and race craft.",
+        "edition": "2024",
+        "series": "INDYCAR",
+        "year": 2024,
+        "stats": {
+          "pace": 95,
+          "ovalRacing": 93,
+          "roadCourse": 96,
+          "consistency": 97,
+          "adaptability": 94
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Josef Newgarden",
+        "type": "INDYCAR_DRIVER",
+        "rarity": "LEGENDARY",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/drivers/Josef Newgarden.jpg",
+        "description": "Two-time IndyCar Champion and Indy 500 winner.",
+        "edition": "2024",
+        "series": "INDYCAR",
+        "year": 2024,
+        "stats": {
+          "pace": 96,
+          "ovalRacing": 95,
+          "roadCourse": 94,
+          "consistency": 93,
+          "adaptability": 95
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      }
+    ]
+  },
+  "WEC": {
+    "WEC_DRIVER": [
+      {
+        "name": "Antonio Felix da Costa",
+        "type": "WEC_DRIVER",
+        "rarity": "EPIC",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/drivers/Antonio Felix da Costa.jpg",
+        "description": "Porsche factory driver competing in WEC Hypercar class.",
+        "edition": "2024",
+        "series": "WEC",
+        "year": 2024,
+        "stats": {
+          "pace": 92,
+          "teamwork": 93,
+          "endurance": 90,
+          "consistency": 91,
+          "nightDriving": 89
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Brendon Hartley",
+        "type": "WEC_DRIVER",
+        "rarity": "EPIC",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/drivers/Brendon Hartley.png",
+        "description": "Multiple Le Mans winner with exceptional endurance racing experience.",
+        "edition": "2024",
+        "series": "WEC",
+        "year": 2024,
+        "stats": {
+          "pace": 93,
+          "teamwork": 96,
+          "endurance": 95,
+          "consistency": 94,
+          "nightDriving": 94
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Kamui Kobayashi",
+        "type": "WEC_DRIVER",
+        "rarity": "LEGENDARY",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/drivers/kobayashi.jpg",
+        "description": "Toyota Gazoo Racing ace and former F1 driver.",
+        "edition": "2024",
+        "series": "WEC",
+        "year": 2024,
+        "stats": {
+          "pace": 95,
+          "teamwork": 94,
+          "endurance": 96,
+          "consistency": 95,
+          "nightDriving": 97
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Kevin Estre",
+        "type": "WEC_DRIVER",
+        "rarity": "RARE",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/drivers/Kevin Estre.jpg",
+        "description": "Porsche factory driver with impressive speed.",
+        "edition": "2024",
+        "series": "WEC",
+        "year": 2024,
+        "stats": {
+          "pace": 90,
+          "teamwork": 92,
+          "endurance": 91,
+          "consistency": 90,
+          "nightDriving": 89
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Mike Conway",
+        "type": "WEC_DRIVER",
+        "rarity": "EPIC",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/drivers/mike-conway.png",
+        "description": "Toyota's reliable endurance specialist.",
+        "edition": "2024",
+        "series": "WEC",
+        "year": 2024,
+        "stats": {
+          "pace": 91,
+          "teamwork": 94,
+          "endurance": 93,
+          "consistency": 93,
+          "nightDriving": 92
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Nicklas Nielsen",
+        "type": "WEC_DRIVER",
+        "rarity": "RARE",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/drivers/Nicklas Nielsen.jpg",
+        "description": "Rising star in Ferrari's endurance program.",
+        "edition": "2024",
+        "series": "WEC",
+        "year": 2024,
+        "stats": {
+          "pace": 89,
+          "teamwork": 90,
+          "endurance": 88,
+          "consistency": 89,
+          "nightDriving": 87
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Oliver Jarvis",
+        "type": "WEC_DRIVER",
+        "rarity": "RARE",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/drivers/Oliver Jarvis.png",
+        "description": "Experienced endurance racing professional.",
+        "edition": "2024",
+        "series": "WEC",
+        "year": 2024,
+        "stats": {
+          "pace": 87,
+          "teamwork": 88,
+          "endurance": 89,
+          "consistency": 87,
+          "nightDriving": 88
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Paul Di Resta",
+        "type": "WEC_DRIVER",
+        "rarity": "RARE",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/drivers/Paul Di Resta.jpg",
+        "description": "Former F1 driver turned successful endurance racer.",
+        "edition": "2024",
+        "series": "WEC",
+        "year": 2024,
+        "stats": {
+          "pace": 88,
+          "teamwork": 89,
+          "endurance": 87,
+          "consistency": 88,
+          "nightDriving": 86
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Romain Dumas",
+        "type": "WEC_DRIVER",
+        "rarity": "EPIC",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/drivers/Romain Dumas.jpg",
+        "description": "Versatile endurance racing veteran.",
+        "edition": "2024",
+        "series": "WEC",
+        "year": 2024,
+        "stats": {
+          "pace": 92,
+          "teamwork": 93,
+          "endurance": 94,
+          "consistency": 92,
+          "nightDriving": 95
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Sebastien Buemi",
+        "type": "WEC_DRIVER",
+        "rarity": "LEGENDARY",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/cards/drivers/OIP+(2).jpg",
+        "description": "Multiple Le Mans winner and WEC champion, known for exceptional endurance racing skills.",
+        "edition": "2024",
+        "series": "WEC",
+        "year": 2024,
+        "stats": {
+          "pace": 94,
+          "teamwork": 95,
+          "endurance": 97,
+          "consistency": 98,
+          "nightDriving": 96
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      }
+    ]
+  }
+}
