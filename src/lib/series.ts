@@ -72,22 +72,24 @@ const SERIES_METADATA: Record<string, SeriesMetadata> = {
     heroImage: '/series/wec-hero.jpg',
     categories: [
       {
-        id: 'wec-drivers',
+        id: 'wec_driver',
         name: 'Drivers',
         description: 'Elite endurance racing drivers',
         image: '/categories/wec-drivers.jpg'
       },
+    ]
+  },
+  'indycar': {
+    name: 'IndyCar',
+    slug: 'indycar',
+    description: 'Collect cards featuring IndyCar drivers, teams, and historic moments from the pinnacle of motorsport.',
+    heroImage: '/series/indycar-hero.jpg',
+    categories: [
       {
-        id: 'wec-cars',
-        name: 'Hypercars',
-        description: 'Next-generation WEC racing machines',
-        image: '/categories/wec-cars.jpg'
-      },
-      {
-        id: 'wec-lemans',
-        name: 'Le Mans',
-        description: 'Special cards from the legendary 24 Hours of Le Mans',
-        image: '/categories/lemans.jpg'
+        id: 'indycar_driver',
+        name: 'Drivers',
+        description: 'Current IndyCar drivers and legends of the sport',
+        image: '/categories/indycar-drivers.jpg'
       }
     ]
   }

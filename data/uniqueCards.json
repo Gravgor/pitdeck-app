@@ -2,6 +2,63 @@
   "F1": {
     "F1_DRIVER": [
       {
+        "name": "Alexander Albon",
+        "type": "F1_DRIVER",
+        "rarity": "COMMON",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/2025/formula1-commons/albon.avif",
+        "description": "Alexander Albon is a Thai racing driver who currently drives for the Williams Racing team in Formula 1.",
+        "edition": "2025",
+        "series": "F1",
+        "year": 2025,
+        "stats": {
+          "points": 240,
+          "podiums": 2,
+          "grandPrixEntered": 240,
+          "highestRaceFinish": "3rd"
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Andrea Kimi Antonelli",
+        "type": "F1_DRIVER",
+        "rarity": "RARE",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/2025/formula1-commons/antonelli.avif",
+        "description": "Andrea Kimi Antonelli is an Italian racing driver who currently drives for the Aston Martin F1 team in Formula 1.",
+        "edition": "2025",
+        "series": "F1",
+        "year": 2025,
+        "stats": {
+          "points": 0,
+          "podiums": 0,
+          "grandPrixEntered": 0,
+          "highestRaceFinish": "0th"
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Carlos Sainz",
+        "type": "F1_DRIVER",
+        "rarity": "RARE",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/2025/formula1-commons/sainz.avif",
+        "description": "Carlos Sainz is a Spanish racing driver who currently drives for the Williams Racing team in Formula 1.",
+        "edition": "2025",
+        "series": "F1",
+        "year": 2025,
+        "stats": {
+          "points": 1272.5,
+          "podiums": 27,
+          "grandPrixEntered": 208,
+          "highestRaceFinish": "1st"
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
         "name": "Charles Leclerc",
         "type": "F1_DRIVER",
         "rarity": "EPIC",
@@ -22,6 +79,139 @@
         "historicDetails": null
       },
       {
+        "name": "Charles Leclerc",
+        "type": "F1_DRIVER",
+        "rarity": "RARE",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/2025/formula1-commons/leclerc.avif",
+        "description": "Charles Leclerc is a Monegasque racing driver who currently drives for the Ferrari team in Formula 1.",
+        "edition": "2025",
+        "series": "F1",
+        "year": 2025,
+        "stats": {
+          "points": 1430,
+          "podiums": 43,
+          "grandPrixEntered": 149,
+          "highestRaceFinish": "1st"
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Esteban Ocon",
+        "type": "F1_DRIVER",
+        "rarity": "COMMON",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/2025/formula1-commons/ocon.avif",
+        "description": "Esteban Ocon is a French racing driver who currently drives for the Haas F1 team in Formula 1.",
+        "edition": "2025",
+        "series": "F1",
+        "year": 2025,
+        "stats": {
+          "points": 445,
+          "podiums": 4,
+          "grandPrixEntered": 156,
+          "highestRaceFinish": "1st"
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Fernando Alonso",
+        "type": "F1_DRIVER",
+        "rarity": "RARE",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/2025/formula1-commons/alonso.avif",
+        "description": "Fernando Alonso is a Spanish racing driver who currently drives for the Aston Martin F1 team in Formula 1.",
+        "edition": "2025",
+        "series": "F1",
+        "year": 2025,
+        "stats": {
+          "points": 2337,
+          "podiums": 106,
+          "grandPrixEntered": 404,
+          "highestRaceFinish": "1st"
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Gabriel Bortoleto",
+        "type": "F1_DRIVER",
+        "rarity": "COMMON",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/2025/formula1-commons/bortoleto.avif",
+        "description": "Gabriel Bortoleto is a Brazilian racing driver who currently drives for the Kick Sauber team in Formula 1.",
+        "edition": "2025",
+        "series": "F1",
+        "year": 2025,
+        "stats": {
+          "points": 0,
+          "podiums": 0,
+          "grandPrixEntered": 0,
+          "highestRaceFinish": "0th"
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Isack Hadjar",
+        "type": "F1_DRIVER",
+        "rarity": "COMMON",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/2025/formula1-commons/hadjar.avif",
+        "description": "Isack Hadjar is a French racing driver who currently drives for the Racing Bulls team in Formula 1.",
+        "edition": "2025",
+        "series": "F1",
+        "year": 2025,
+        "stats": {
+          "points": 0,
+          "podiums": 0,
+          "grandPrixEntered": 0,
+          "highestRaceFinish": "0th"
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Jack Doohan",
+        "type": "F1_DRIVER",
+        "rarity": "COMMON",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/2025/formula1-commons/doohan.avif",
+        "description": "Jack Doohan is an Australian racing driver who currently drives for the Alpine F1 team in Formula 1.",
+        "edition": "2025",
+        "series": "F1",
+        "year": 2025,
+        "stats": {
+          "points": 0,
+          "podiums": 0,
+          "grandPrixEntered": 1,
+          "highestRaceFinish": "17th"
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Lance Stroll",
+        "type": "F1_DRIVER",
+        "rarity": "COMMON",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/2025/formula1-commons/stroll.avif",
+        "description": "Lance Stroll is a Canadian racing driver who currently drives for the Aston Martin F1 team in Formula 1.",
+        "edition": "2025",
+        "series": "F1",
+        "year": 2025,
+        "stats": {
+          "points": 292,
+          "podiums": 3,
+          "grandPrixEntered": 167,
+          "highestRaceFinish": "3rd"
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
         "name": "Lewis Hamilton",
         "type": "F1_DRIVER",
         "rarity": "LEGENDARY",
@@ -36,6 +226,63 @@
           "racecraft": 98,
           "experience": 99,
           "overtaking": 95
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Lewis Hamilton",
+        "type": "F1_DRIVER",
+        "rarity": "EPIC",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/2025/formula1-commons/hamilton.avif",
+        "description": "Lewis Hamilton is a British racing driver who currently drives for the Ferrari team in Formula 1.",
+        "edition": "2025",
+        "series": "F1",
+        "year": 2025,
+        "stats": {
+          "points": 4862.5,
+          "podiums": 202,
+          "grandPrixEntered": 356,
+          "highestRaceFinish": "1st"
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Liam Lawson",
+        "type": "F1_DRIVER",
+        "rarity": "COMMON",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/2025/formula1-commons/lawson.avif",
+        "description": "Liam Lawson is a New Zealand racing driver who currently drives for the Red Bull Racing team in Formula 1.",
+        "edition": "2025",
+        "series": "F1",
+        "year": 2025,
+        "stats": {
+          "points": 6,
+          "podiums": 0,
+          "grandPrixEntered": 11,
+          "highestRaceFinish": "9th"
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Max Verstappen",
+        "type": "F1_DRIVER",
+        "rarity": "EPIC",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/2025/formula1-commons/verstappen.avif",
+        "description": "Max Verstappen is a Dutch racing driver who currently drives for the Red Bull Racing team in Formula 1.",
+        "edition": "2025",
+        "series": "F1",
+        "year": 2025,
+        "stats": {
+          "points": 3023.5,
+          "podiums": 112,
+          "grandPrixEntered": 209,
+          "highestRaceFinish": "1st"
         },
         "championshipDetails": null,
         "seasonalDetails": null,
@@ -108,6 +355,63 @@
         "historicDetails": null
       },
       {
+        "name": "Nico Hulkenberg",
+        "type": "F1_DRIVER",
+        "rarity": "COMMON",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/2025/formula1-commmons/hulkenberg.avif",
+        "description": "Nico Hulkenberg is a German racing driver who currently drives for the Kick Sauber team in Formula 1.",
+        "edition": "2025",
+        "series": "F1",
+        "year": 2025,
+        "stats": {
+          "points": 571,
+          "podiums": 0,
+          "grandPrixEntered": 230,
+          "highestRaceFinish": "4th"
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Oliver Bearman",
+        "type": "F1_DRIVER",
+        "rarity": "COMMON",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/2025/formula1-commons/bearman.avif",
+        "description": "Oliver Bearman is a British racing driver who currently drives for the Haas F1 team in Formula 1.",
+        "edition": "2025",
+        "series": "F1",
+        "year": 2025,
+        "stats": {
+          "points": 7,
+          "podiums": 0,
+          "grandPrixEntered": 3,
+          "highestRaceFinish": "7th"
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Pierre Gasly",
+        "type": "F1_DRIVER",
+        "rarity": "COMMON",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/2025/formula1-commons/gasly.avif",
+        "description": "Pierre Gasly is a French racing driver who currently drives for the Alpine F1 team in Formula 1.",
+        "edition": "2025",
+        "series": "F1",
+        "year": 2025,
+        "stats": {
+          "points": 436,
+          "podiums": 5,
+          "grandPrixEntered": 154,
+          "highestRaceFinish": "1st"
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
         "name": "Vegas Crown: Max Verstappen's Triumph",
         "type": "F1_DRIVER",
         "rarity": "LEGENDARY",
@@ -149,6 +453,25 @@
           "qualifyingPace": 98,
           "racePerformance": 99,
           "championshipImpact": 100
+        },
+        "championshipDetails": null,
+        "seasonalDetails": null,
+        "historicDetails": null
+      },
+      {
+        "name": "Yuki Tsunoda",
+        "type": "F1_DRIVER",
+        "rarity": "COMMON",
+        "imageUrl": "https://pitdeck-app.s3.eu-north-1.amazonaws.com/2025/formula1-commons/tsunoda.avif",
+        "description": "Yuki Tsunoda is a Japanese racing driver who currently drives for the Racing Bulls team in Formula 1.",
+        "edition": "2025",
+        "series": "F1",
+        "year": 2025,
+        "stats": {
+          "points": 91,
+          "podiums": 0,
+          "grandPrixEntered": 90,
+          "highestRaceFinish": "4th"
         },
         "championshipDetails": null,
         "seasonalDetails": null,

@@ -38,6 +38,16 @@ const mainLinks = [
     requiresAuth: true 
   },
   { 
+    name: 'Roadmap', 
+    href: '/roadmap',
+    requiresAuth: false 
+  },
+  { 
+    name: 'Waitlist', 
+    href: '/waitlist',
+    requiresAuth: false 
+  },
+  { 
     name: 'Features', 
     href: '/features',
     requiresAuth: false 

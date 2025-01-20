@@ -66,10 +66,9 @@ export function Footer() {
           <div>
             <h3 className="text-white font-display uppercase tracking-wider text-sm mb-4">Quick Links</h3>
             <ul className="space-y-2">
-              <FooterLink href="/marketplace" text="Marketplace" />
-              <FooterLink href="/packs" text="Card Packs" />
-              <FooterLink href="/collections" text="Collections" />
-              <FooterLink href="/trading" text="Trading" />
+              <FooterLink href="/roadmap" text="Roadmap" />
+              <FooterLink href="/waitlist" text="Join Waitlist" />
+              <FooterLink href="/features" text="Features" />
               <FooterLink href="/leaderboard" text="Leaderboard" />
             </ul>
           </div>

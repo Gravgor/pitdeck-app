@@ -1,7 +1,7 @@
+import { Scale, Shield, FileText, Users, Lock } from 'lucide-react';
 import Link from 'next/link';
-import { Shield, Image as ImageIcon, Database, UserCircle, Lock } from 'lucide-react';
 
-export default function PrivacyPage() {
+export default function TermsPage() {
   return (
     <div className="min-h-screen bg-black">
       {/* Background Effects */}
@@ -17,11 +17,11 @@ export default function PrivacyPage() {
           <div className="space-y-4">
             <div className="inline-flex items-center px-4 py-1.5 rounded-full 
                          border border-white/10 bg-white/5 backdrop-blur-sm">
-              <Lock className="h-4 w-4 text-red-500 mr-2" />
-              <span className="text-sm text-white/80">Privacy & Security</span>
+              <Scale className="h-4 w-4 text-red-500 mr-2" />
+              <span className="text-sm text-white/80">Legal</span>
             </div>
             <h1 className="text-4xl sm:text-5xl font-bold text-white">
-              Privacy <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-blue-500">Policy</span>
+              Terms of <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-blue-500">Service</span>
             </h1>
             <p className="text-lg text-gray-400">Last updated: {new Date().toLocaleDateString()}</p>
           </div>
@@ -51,63 +51,60 @@ export default function PrivacyPage() {
 
 const sections = [
   {
-    title: 'Image Rights and Copyright',
-    icon: ImageIcon,
-    iconColor: 'text-red-500',
-    content: (
-      <>
-        <p>
-          All motorsport-related images, team logos, driver photos, and car designs displayed on PitDeck are property 
-          of their respective owners. This includes but is not limited to:
-        </p>
-        <ul className="list-disc pl-6 space-y-2">
-          <li>Formula 1® and its associated teams and partners</li>
-          <li>FIA World Endurance Championship (WEC)</li>
-          <li>IndyCar Series</li>
-          <li>NASCAR</li>
-          <li>Formula 2 Championship</li>
-          <li>Individual racing teams and manufacturers</li>
-          <li>Professional motorsport photographers and media agencies</li>
-        </ul>
-      </>
-    )
-  },
-  {
-    title: 'Data Collection and Usage',
-    icon: Database,
+    title: 'Acceptance of Terms',
+    icon: FileText,
     iconColor: 'text-blue-500',
     content: (
-      <>
-        <p>We collect and store the following information to provide our services:</p>
-        <ul className="list-disc pl-6 space-y-2">
-          <li>Basic account information (username, email)</li>
-          <li>Collection data and trading history</li>
-          <li>Game progress and achievements</li>
-          <li>User preferences and settings</li>
-        </ul>
-      </>
-    )
-  },
-  {
-    title: 'User Content',
-    icon: UserCircle,
-    iconColor: 'text-green-500',
-    content: (
       <p>
-        By using PitDeck, you agree that any user-generated content you submit (including profile pictures, 
-        comments, and messages) complies with our terms of service and does not infringe on any third-party rights.
+        By accessing or using PitDeck, you agree to be bound by these Terms of Service. If you disagree 
+        with any part of the terms, you may not access the service.
       </p>
     )
   },
   {
-    title: 'Contact Us',
+    title: 'User Responsibilities',
+    icon: Users,
+    iconColor: 'text-green-500',
+    content: (
+      <>
+        <p>As a PitDeck user, you are responsible for:</p>
+        <ul className="list-disc pl-6 space-y-2">
+          <li>Maintaining the security of your account</li>
+          <li>All activities that occur under your account</li>
+          <li>Ensuring your content doesn't violate any laws or rights</li>
+          <li>Following our community guidelines</li>
+        </ul>
+      </>
+    )
+  },
+  {
+    title: 'Intellectual Property',
     icon: Shield,
+    iconColor: 'text-red-500',
+    content: (
+      <>
+        <p>
+          All content on PitDeck, including but not limited to card designs, logos, and trademarks, 
+          is protected by intellectual property rights. Users may not:
+        </p>
+        <ul className="list-disc pl-6 space-y-2">
+          <li>Copy or reproduce any content without permission</li>
+          <li>Use our trademarks or branding</li>
+          <li>Modify or create derivative works</li>
+          <li>Distribute or sell any PitDeck content</li>
+        </ul>
+      </>
+    )
+  },
+  {
+    title: 'Contact Information',
+    icon: Lock,
     iconColor: 'text-yellow-500',
     content: (
       <p>
-        For any privacy-related concerns or copyright issues, please contact us at:{' '}
-        <Link href="mailto:privacy@pitdeck.app" className="text-blue-400 hover:text-blue-300 transition-colors">
-          privacy@pitdeck.app
+        For any questions about these Terms of Service, please contact us at:{' '}
+        <Link href="mailto:legal@pitdeck.app" className="text-blue-400 hover:text-blue-300 transition-colors">
+          legal@pitdeck.app
         </Link>
       </p>
     )
