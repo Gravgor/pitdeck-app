@@ -105,7 +105,6 @@ export function Card({
         <Image
           src={imageUrl}
           alt={name}
-          placeholder="blur"
           loading="lazy"
           fill
           className="object-cover"

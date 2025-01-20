@@ -606,3 +606,29 @@ model DropGeneration {
   @@index([latitude, longitude])
   @@index([createdAt])
 }
+
+enum WaitlistPlatform {
+  WEB
+  MOBILE
+  BOTH
+}
+
+enum WaitlistStatus {
+  PENDING
+  APPROVED
+  INVITED
+  JOINED
+}
+
+model Waitlist {
+  id         String           @id @default(cuid())
+  email      String           @unique
+  platform   WaitlistPlatform
+  status     WaitlistStatus
+  signupDate DateTime
+  inviteDate DateTime?
+  joinDate   DateTime?
+
+  @@index([email])
+  @@index([status])
+}

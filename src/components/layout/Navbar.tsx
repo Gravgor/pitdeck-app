@@ -22,7 +22,6 @@ import { NavbarLoading } from './NavbarLoading';
 import Image from 'next/image';
 import { NotificationBell } from '../notifications/NotificationBell';
 import { PitDeckLogo } from '../ui/logo';
-import EA from './EA';
 import { formatNumber } from '@/lib/utils/formatNumber';
 const seriesLinks = [
   { name: 'Formula 1', href: '/series/f1', icon: Car },
@@ -330,7 +329,6 @@ export function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
-      <EA />
     </nav>
   );
 }
