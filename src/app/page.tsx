@@ -12,8 +12,8 @@ export default function LandingPage() {
           <div className="flex items-center justify-center gap-2 text-sm">
             <Globe className="h-4 w-4" />
             <span>Also available on web at</span>
-            <Link href="https://pitdeck.app/map" className="font-semibold underline">
-              pitdeck.app/map
+            <Link href="https://pitdeck.app/auth/register" className="font-semibold underline">
+              app.pitdeck.app
             </Link>
           </div>
         </div>
@@ -87,7 +87,7 @@ export default function LandingPage() {
                 </Link>
                 
                 <Link
-                  href="https://pitdeck.app/register"
+                  href="https://pitdeck.app/auth/register"
                   className="rounded-full px-8 py-4 text-white border border-white/10 hover:bg-white/10 transition-all inline-flex items-center justify-center backdrop-blur-sm hover:scale-105"
                 >
                   Try Web Version
@@ -467,7 +467,7 @@ export default function LandingPage() {
                     </span>
                   </Link>
                   <Link
-                    href="https://app.pitdeck.com"
+                    href="https://pitdeck.app/auth/register"
                     className="rounded-full px-8 py-4 text-white border border-white/10 hover:bg-white/10 transition-colors inline-flex items-center justify-center backdrop-blur-sm text-lg group"
                   >
                     Try Web Version
