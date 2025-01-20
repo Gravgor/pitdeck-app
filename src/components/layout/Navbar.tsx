@@ -5,76 +5,101 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Menu, X, ChevronDown, Trophy, Wallet, 
-  Users, Star, CircuitBoard, Car, Flag,
-  Bell,
-  CreditCard,
-  LogOut,
-  User,
-  Settings,
-  Package,
-  Crown,
-  MapPin,
-  Scroll
+  Menu, X, ChevronDown, Trophy, Car, Flag,
+  Bell, LogOut, User, Settings, Crown, MapPin, 
+  Scroll, Download, Play, Apple
 } from 'lucide-react';
 import { useSession, signOut } from 'next-auth/react';
 import { NavbarLoading } from './NavbarLoading';
 import Image from 'next/image';
 import { NotificationBell } from '../notifications/NotificationBell';
 import { PitDeckLogo } from '../ui/logo';
-import { formatNumber } from '@/lib/utils/formatNumber';
 import { UserBalance } from '../user/UserBalance';
+
+const mainLinks = [
+  { 
+    name: 'Collection', 
+    href: '/collection',
+    requiresAuth: true 
+  },
+  { 
+    name: 'Trading', 
+    href: '/trading',
+    requiresAuth: true 
+  },
+  { 
+    name: 'Marketplace', 
+    href: '/marketplace',
+    requiresAuth: true 
+  },
+  { 
+    name: 'Packs', 
+    href: '/packs',
+    requiresAuth: true 
+  },
+  { 
+    name: 'Features', 
+    href: '/features',
+    requiresAuth: false 
+  },
+];
+
 const seriesLinks = [
   { name: 'Formula 1', href: '/series/f1', icon: Car },
   { name: 'WEC', href: '/series/wec', icon: Flag },
-  { name: 'IndyCar', href: '/series/indycar', icon: CircuitBoard },
-  { name: 'NASCAR', href: '/series/nascar', icon: Trophy },
-  { name: 'Formula E', href: '/series/formula-e', icon: Car },
+  { name: 'IndyCar', href: '/series/indycar', icon: Trophy },
+];
+
+const userMenuItems = [
+  { label: 'Profile', href: '/profile', icon: User },
+  { label: 'Map', href: '/map', icon: MapPin },
+  { label: 'Quests', href: '/quests', icon: Scroll },
+  { label: 'Settings', href: '/settings', icon: Settings },
 ];
 
 export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isSeriesMenuOpen, setIsSeriesMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [isSeriesMenuOpen, setIsSeriesMenuOpen] = useState(false);
   const pathname = usePathname();
   const { data: session, status } = useSession();
 
-  const mainLinks = status === 'authenticated' 
-    ? [
-        {name: 'My Collection', href: '/collection'},
-        { name: 'Marketplace', href: '/marketplace' },
-        { name: 'Packs', href: '/packs' },
-        { name: 'Trading', href: '/trading' },
-      ]
-    : [
-        { name: 'Collections', href: '/collections' },
-      ];
-
-  const userMenuItems = [
-    { label: 'Profile', href: `/profile/${session?.user?.name}`, icon: User },
-    { label: 'Map', href: '/map', icon: MapPin },
-    { label: 'Quests', href: '/quests', icon: Scroll },
-    { label: 'Achievements', href: '/achievements', icon: Crown },
-    { label: 'Settings', href: '/settings', icon: Settings },
-  ];
+  const visibleLinks = mainLinks.filter(link => 
+    !link.requiresAuth || (link.requiresAuth && status === 'authenticated')
+  );
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-lg border-b border-white/10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav className="fixed top-0 left-0 right-0 z-50">
+      <div className="absolute inset-0 bg-black/80 backdrop-blur-xl border-b border-white/10" />
+      
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2">
-            <PitDeckLogo />
+          <Link href="/" className="flex items-center">
+            <PitDeckLogo className="h-8 w-auto" />
           </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
+            {visibleLinks.map((link) => (
+              <Link
+                key={link.name}
+                href={link.href}
+                className={`text-sm ${
+                  pathname === link.href 
+                    ? 'text-white' 
+                    : 'text-gray-300 hover:text-white'
+                } transition-colors`}
+              >
+                {link.name}
+              </Link>
+            ))}
+            
             {/* Series Dropdown */}
             <div className="relative">
               <button
                 onClick={() => setIsSeriesMenuOpen(!isSeriesMenuOpen)}
-                className="flex items-center space-x-1 text-gray-300 hover:text-white transition-colors"
+                className="flex items-center space-x-1 text-sm text-gray-300 hover:text-white transition-colors"
               >
                 <span>Series</span>
                 <ChevronDown className="h-4 w-4" />
@@ -86,36 +111,22 @@ export function Navbar() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 10 }}
-                    className="absolute top-full left-0 w-48 py-2 mt-2 bg-black/90 backdrop-blur-lg rounded-lg border border-white/10"
+                    className="absolute left-0 mt-2 w-48 py-2 bg-black/90 backdrop-blur-xl rounded-xl border border-white/10"
                   >
-                    {seriesLinks.map((link) => (
+                    {seriesLinks.map((item) => (
                       <Link
-                        key={link.name}
-                        href={link.href}
-                        onClick={() => setIsSeriesMenuOpen(false)}
-                        className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-white/10 hover:text-white transition-colors"
+                        key={item.name}
+                        href={item.href}
+                        className="flex items-center space-x-2 px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/10 transition-colors"
                       >
-                        <link.icon className="h-4 w-4 mr-2" />
-                        {link.name}
+                        <item.icon className="h-4 w-4" />
+                        <span>{item.name}</span>
                       </Link>
                     ))}
                   </motion.div>
                 )}
               </AnimatePresence>
             </div>
-
-            {/* Main Navigation Links */}
-            {mainLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                className={`text-sm ${
-                  pathname === link.href ? 'text-white' : 'text-gray-300 hover:text-white'
-                } transition-colors`}
-              >
-                {link.name}
-              </Link>
-            ))}
           </div>
 
           {/* User Actions */}
@@ -125,96 +136,29 @@ export function Navbar() {
             ) : status === 'authenticated' ? (
               <>
                 <UserBalance initialBalance={session?.user?.coins || 0} />
-
-               <NotificationBell />
-
-                {/* User Menu */}
-                <div className="relative">
-                  <button
-                    onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                    className="flex items-center space-x-2 p-1 rounded-full hover:bg-white/10 transition-colors"
-                  >
-                    {session.user.image ? (
-                      <Image
-                        src={session.user.image}
-                        alt={session.user.name || ''}
-                        width={32}
-                        height={32}
-                        className="rounded-full"
-                      />
-                    ) : (
-                      <div className="h-8 w-8 bg-red-600 rounded-full flex items-center justify-center">
-                        <span className="text-white font-display">
-                          {session.user.name?.charAt(0)}
-                        </span>
-                      </div>
-                    )}
-                    <ChevronDown className="h-4 w-4 text-gray-400" />
-                  </button>
-
-                  <AnimatePresence>
-                    {isUserMenuOpen && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 10 }}
-                        className="absolute right-0 mt-2 w-48 bg-black/90 backdrop-blur-lg rounded-lg border border-white/10 shadow-xl"
-                      >
-                        {/*@ts-ignore */}
-                        {status === 'loading' ? (
-                          <div className="p-2 space-y-2">
-                            {[...Array(4)].map((_, index) => (
-                              <div 
-                                key={index}
-                                className="flex items-center space-x-2 px-4 py-2"
-                              >
-                                <div className="h-4 w-4 bg-white/10 rounded animate-pulse" />
-                                <div className="h-4 w-24 bg-white/10 rounded animate-pulse" />
-                              </div>
-                            ))}
-                          </div>
-                        ) : (
-                          <div className="p-2">
-                            {userMenuItems.map((item) => (
-                              <Link
-                                key={item.label}
-                                href={item.href}
-                                className="flex items-center space-x-2 px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
-                              >
-                                <item.icon className="h-4 w-4" />
-                                <span>{item.label}</span>
-                              </Link>
-                            ))}
-                            <hr className="my-2 border-white/10" />
-                            <button
-                              onClick={() => signOut()}
-                              className="w-full flex items-center space-x-2 px-4 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-white/10 rounded-lg transition-colors"
-                            >
-                              <LogOut className="h-4 w-4" />
-                              <span>Sign Out</span>
-                            </button>
-                          </div>
-                        )}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
+                <NotificationBell />
+                <UserMenu 
+                  session={session} 
+                  isOpen={isUserMenuOpen}
+                  setIsOpen={setIsUserMenuOpen}
+                />
               </>
             ) : (
               <>
                 <Link
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  href="/auth/signin"
-                  className="px-4 py-2 text-sm text-white hover:text-white/80 transition-colors"
+                  href="/waitlist"
+                  className="group relative overflow-hidden rounded-full bg-white/5 backdrop-blur-sm border border-white/10 px-4 py-2 inline-flex items-center hover:bg-white/10 transition-colors"
                 >
-                  Sign In
+                  <span className="relative text-white text-sm flex items-center">
+                    <Download className="mr-2 h-4 w-4 transition-transform group-hover:-translate-y-1" />
+                    Join Waitlist
+                  </span>
                 </Link>
                 <Link
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  href="/auth/register"
-                  className="px-4 py-2 text-sm bg-red-600 hover:bg-red-700 text-white rounded-full transition-colors"
+                  href="/auth/signin"
+                  className="text-sm text-white/80 hover:text-white transition-colors"
                 >
-                  Get Started
+                  Sign In
                 </Link>
               </>
             )}
@@ -223,7 +167,7 @@ export function Navbar() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 text-gray-300 hover:text-white transition-colors"
+            className="md:hidden relative p-2 text-gray-300 hover:text-white transition-colors"
           >
             {isMobileMenuOpen ? (
               <X className="h-6 w-6" />
@@ -237,91 +181,163 @@ export function Navbar() {
       {/* Mobile Menu */}
       <AnimatePresence>
         {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-black/95 border-t border-white/10"
-          >
-            <div className="px-4 py-6 space-y-4">
-              {/* Main Links Only - No Series */}
-              <div className="space-y-2">
-                <h3 className="text-sm font-semibold text-gray-400">Navigation</h3>
-                {mainLinks.map((link) => (
-                  <Link
-                    key={link.name}
-                    href={link.href}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="block px-2 py-2 text-base text-gray-300 hover:text-white transition-colors"
-                  >
-                    {link.name}
-                  </Link>
-                ))}
-              </div>
-
-              {/* Mobile Auth/User Menu */}
-              <div className="pt-4 space-y-3">
-                {status === 'loading' ? (
-                  <NavbarLoading />
-                ) : status === 'authenticated' ? (
-                  <>
-                    {/* Balance */}
-                    <div className="px-4 py-2 bg-white/5 rounded-full flex items-center space-x-2">
-                      <CreditCard className="h-4 w-4 text-yellow-400" />
-                      <span className="text-sm text-white font-display">
-                        {session.user.coins || 0} RC
-                      </span>
-                    </div>
-                    
-                    {/* User Menu Items */}
-                    <div className="space-y-2">
-                      {userMenuItems.map((item) => (
-                        <Link
-                          key={item.label}
-                          href={item.href}
-                          onClick={() => setIsMobileMenuOpen(false)}
-                          className="flex items-center space-x-2 px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
-                        >
-                          <item.icon className="h-4 w-4" />
-                          <span>{item.label}</span>
-                        </Link>
-                      ))}
-                      <hr className="my-2 border-white/10" />
-                      <button
-                        onClick={() => {
-                          signOut();
-                          setIsMobileMenuOpen(false);
-                        }}
-                        className="w-full flex items-center space-x-2 px-4 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-white/10 rounded-lg transition-colors"
-                      >
-                        <LogOut className="h-4 w-4" />
-                        <span>Sign Out</span>
-                      </button>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <Link
-                      href="/auth/signin"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="block w-full px-4 py-2 text-center text-white border border-white/10 rounded-full hover:bg-white/10 transition-colors"
-                    >
-                      Sign In
-                    </Link>
-                    <Link
-                      href="/auth/signup"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="block w-full px-4 py-2 text-center bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors"
-                    >
-                      Get Started
-                    </Link>
-                  </>
-                )}
-              </div>
-            </div>
-          </motion.div>
+          <MobileMenu 
+            session={session} 
+            status={status}
+            seriesLinks={seriesLinks}
+            onClose={() => setIsMobileMenuOpen(false)}
+          />
         )}
       </AnimatePresence>
     </nav>
+  );
+}
+
+// Separate components for cleaner organization
+function UserMenu({ session, isOpen, setIsOpen }: { session: any, isOpen: boolean, setIsOpen: (isOpen: boolean) => void }) {
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center space-x-2 p-1 rounded-full hover:bg-white/10 transition-colors"
+      >
+        {session.user.image ? (
+          <Image
+            src={session.user.image}
+            alt={session.user.name || ''}
+            width={32}
+            height={32}
+            className="rounded-full"
+          />
+        ) : (
+          <div className="h-8 w-8 bg-gradient-to-br from-red-500 to-blue-500 rounded-full flex items-center justify-center">
+            <span className="text-white font-medium">
+              {session.user.name?.charAt(0)}
+            </span>
+          </div>
+        )}
+        <ChevronDown className="h-4 w-4 text-white/60" />
+      </button>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+            className="absolute right-0 mt-2 w-48 py-2 bg-black/90 backdrop-blur-xl rounded-xl border border-white/10"
+          >
+            {userMenuItems.map((item) => (
+              <Link
+                key={item.label}
+                href={item.href}
+                className="flex items-center space-x-2 px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/10 transition-colors"
+              >
+                <item.icon className="h-4 w-4" />
+                <span>{item.label}</span>
+              </Link>
+            ))}
+            <hr className="my-2 border-white/10" />
+            <button
+              onClick={() => signOut()}
+              className="w-full flex items-center space-x-2 px-4 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-white/10 transition-colors"
+            >
+              <LogOut className="h-4 w-4" />
+              <span>Sign Out</span>
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+function MobileMenu({ session, status, seriesLinks, onClose }: { session: any, status: any, seriesLinks: any, onClose: any }) {
+  const visibleLinks = mainLinks.filter(link => 
+    !link.requiresAuth || (link.requiresAuth && status === 'authenticated')
+  );
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, height: 0 }}
+      animate={{ opacity: 1, height: 'auto' }}
+      exit={{ opacity: 0, height: 0 }}
+      className="relative md:hidden border-t border-white/10"
+    >
+      <div className="absolute inset-0 bg-black/95 backdrop-blur-xl" />
+      <div className="relative px-4 py-6 space-y-6">
+        <div className="space-y-3">
+          {visibleLinks.map((link) => (
+            <Link
+              key={link.name}
+              href={link.href}
+              onClick={onClose}
+              className="block px-2 py-2 text-base text-gray-300 hover:text-white transition-colors"
+            >
+              {link.name}
+            </Link>
+          ))}
+          
+          {/* Mobile Series Links */}
+          <div className="pt-2 pb-1 px-2 text-sm text-gray-500">Series</div>
+          {seriesLinks.map((item: any) => (
+            <Link
+              key={item.name}
+              href={item.href}
+              onClick={onClose}
+              className="flex items-center space-x-2 px-2 py-2 text-base text-gray-300 hover:text-white transition-colors"
+            >
+              <item.icon className="h-4 w-4" />
+              <span>{item.name}</span>
+            </Link>
+          ))}
+        </div>
+
+        <div className="pt-4">
+          {status === 'authenticated' ? (
+            <div className="space-y-3">
+              {userMenuItems.map((item) => (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  onClick={onClose}
+                  className="flex items-center space-x-2 px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+                >
+                  <item.icon className="h-4 w-4" />
+                  <span>{item.label}</span>
+                </Link>
+              ))}
+              <button
+                onClick={() => {
+                  signOut();
+                  onClose();
+                }}
+                className="w-full flex items-center space-x-2 px-4 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-white/10 rounded-lg transition-colors"
+              >
+                <LogOut className="h-4 w-4" />
+                <span>Sign Out</span>
+              </button>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              <Link
+                href="/waitlist"
+                onClick={onClose}
+                className="block w-full px-4 py-2 text-center text-white bg-gradient-to-r from-red-600 to-blue-600 rounded-full hover:opacity-90 transition-opacity"
+              >
+                Join Waitlist
+              </Link>
+              <Link
+                href="/auth/signin"
+                onClick={onClose}
+                className="block w-full px-4 py-2 text-center text-white border border-white/10 rounded-full hover:bg-white/10 transition-colors"
+              >
+                Sign In
+              </Link>
+            </div>
+          )}
+        </div>
+      </div>
+    </motion.div>
   );
 }

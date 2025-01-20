@@ -13,9 +13,9 @@ const prisma = new PrismaClient();
 /** @type {CardImageMapping[]} */
 const cardImages = [
   {
-    name: "Lewis Hamilton is Ferrari's new driver",
-    imageUrl: 'https://pitdeck-app.s3.eu-north-1.amazonaws.com/2025/cards/iconic_lewis.png',
-    type: 'ICONIC_MOMENT',
+    name: "Isack Hadjar",
+    imageUrl: 'https://pitdeck-app.s3.eu-north-1.amazonaws.com/2025/formula1-commons/hadjar.avif',
+    type: 'F1_DRIVER',
     series: 'F1'
   }
 

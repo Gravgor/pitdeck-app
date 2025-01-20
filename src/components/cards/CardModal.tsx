@@ -70,111 +70,118 @@ export function CardModal({ card, isOpen, onClose, isOwner = false }: CardModalP
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            className="relative w-full max-w-4xl bg-[#12141A] rounded-2xl overflow-hidden shadow-2xl"
+            className="relative w-full max-w-4xl"
           >
-            {/* Close Button */}
-            <button
-              onClick={onClose}
-              className="absolute top-4 right-4 z-50 p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors"
-            >
-              <X className="h-5 w-5" />
-            </button>
+            <div className="absolute -inset-1 bg-gradient-to-r from-red-500 to-blue-500 rounded-2xl opacity-20 blur-xl" />
+            <div className="relative bg-black/90 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/10">
+              <button
+                onClick={onClose}
+                className="absolute top-4 right-4 z-50 p-2 rounded-full 
+                         bg-black/50 hover:bg-black/70 text-white/70 hover:text-white 
+                         backdrop-blur-sm transition-colors"
+              >
+                <X className="h-5 w-5" />
+              </button>
 
-            <div className="grid grid-cols-1 md:grid-cols-2">
-              {/* Card Image Section */}
-              <div className="relative aspect-[3/4] bg-black">
-                <Image
-                  src={card.imageUrl}
-                  alt={card.name}
-                  fill
-                  className="object-cover"
-                />
-                <div className={`absolute inset-0 ${getRarityOverlay(card.rarity)}`} />
-                
-                {/* Rarity Badge */}
-                <div className={`absolute top-4 right-4 ${getRarityBadgeStyle(card.rarity)}`}>
-                  {getRarityIcon(card.rarity)}
-                </div>
-              </div>
-
-              {/* Card Info Section */}
-              <div className="p-6 flex flex-col h-full">
-                <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <h2 className="text-2xl font-bold text-white mb-2">{card.name}</h2>
-                    <div className="flex items-center gap-2">
-                      <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${getRarityTagStyle(card.rarity)}`}>
-                        {card.rarity}
-                      </span>
-                      <span className="text-sm text-gray-400">{card.type}</span>
-                    </div>
-                  </div>
+              <div className="grid grid-cols-1 md:grid-cols-2">
+                {/* Card Image Section */}
+                <div className="relative aspect-[3/4] bg-black">
+                  <Image
+                    src={card.imageUrl}
+                    alt={card.name}
+                    fill
+                    className="object-cover"
+                  />
+                  <div className={`absolute inset-0 ${getRarityOverlay(card.rarity)}`} />
                   
-                  <div className="flex gap-2">
-                    <button 
-                      onClick={() => setIsLiked(!isLiked)}
-                      className={`p-2 rounded-full transition-colors ${
-                        isLiked ? 'bg-red-500/20 text-red-500' : 'bg-white/5 hover:bg-white/10'
-                      }`}
-                    >
-                      <Heart className="h-5 w-5" fill={isLiked ? 'currentColor' : 'none'} />
-                    </button>
-                    <button className="p-2 rounded-full bg-white/5 hover:bg-white/10 transition-colors">
-                      <Share2 className="h-5 w-5" />
-                    </button>
+                  {/* Rarity Badge */}
+                  <div className={`absolute top-4 left-4 ${getRarityBadgeStyle(card.rarity)}`}>
+                    {getRarityIcon(card.rarity)}
                   </div>
                 </div>
 
-                <p className="text-gray-400 mb-6">{card.description}</p>
-
-                {/* Stats Section */}
-                {card.stats && (
-                  <div className="space-y-4 mb-6">
-                    <h3 className="text-lg font-semibold text-white">Statistics</h3>
-                    {Object.entries(card.stats as Record<string, number>).map(([key, value]) => (
-                      <div key={key}>
-                        <div className="flex justify-between text-sm mb-1">
-                          <span className="text-gray-400 capitalize">{key.replace(/_/g, ' ')}</span>
-                          <span className="text-white font-medium">{value}</span>
-                        </div>
-                        <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-                          <motion.div
-                            initial={{ width: 0 }}
-                            animate={{ width: `${value}%` }}
-                            transition={{ duration: 0.5 }}
-                            className={`h-full rounded-full ${getStatBarColor(card.rarity)}`}
-                          />
-                        </div>
+                {/* Card Info Section */}
+                <div className="p-6 flex flex-col h-full">
+                  <div className="flex items-start justify-between mb-6">
+                    <div>
+                      <h2 className="text-2xl font-bold text-white mb-2">{card.name}</h2>
+                      <div className="flex items-center gap-2">
+                        <span className={`px-2 py-0.5 rounded-full text-xs font-medium 
+                                     ${getRarityTagStyle(card.rarity)}`}>
+                          {card.rarity}
+                        </span>
+                        <span className="text-sm text-white/60">{card.type}</span>
                       </div>
-                    ))}
+                    </div>
+                    
+                    <div className="flex gap-2">
+                      <button 
+                        onClick={() => setIsLiked(!isLiked)}
+                        className={`p-2 rounded-full transition-colors ${
+                          isLiked 
+                            ? 'bg-red-500/20 text-red-500' 
+                            : 'bg-white/5 hover:bg-white/10'
+                        }`}
+                      >
+                        <Heart className="h-5 w-5" fill={isLiked ? 'currentColor' : 'none'} />
+                      </button>
+                      <button className="p-2 rounded-full bg-white/5 hover:bg-white/10 transition-colors">
+                        <Share2 className="h-5 w-5" />
+                      </button>
+                    </div>
                   </div>
-                )}
 
-                {/* Serial Number */}
-                <div className="mb-6">
-                  <h3 className="text-lg font-semibold text-white mb-2">Details</h3>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-white/5 rounded-lg p-3">
-                      <span className="text-sm text-gray-400">Serial Number</span>
-                      <p className="text-white font-medium">#{card.serialNumber}</p>
+                  <p className="text-white/70 mb-6 leading-relaxed">{card.description}</p>
+
+                  {/* Stats Section */}
+                  {card.stats && (
+                    <div className="space-y-4 mb-6">
+                      <h3 className="text-lg font-semibold text-white">Statistics</h3>
+                      {Object.entries(card.stats as Record<string, number>).map(([key, value]) => (
+                        <div key={key}>
+                          <div className="flex justify-between text-sm mb-1">
+                            <span className="text-white/60 capitalize">{key.replace(/_/g, ' ')}</span>
+                            <span className="text-white font-medium">{value}</span>
+                          </div>
+                          <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                            <motion.div
+                              initial={{ width: 0 }}
+                              animate={{ width: `${value}%` }}
+                              transition={{ duration: 0.5 }}
+                              className={`h-full rounded-full ${getStatBarColor(card.rarity)}`}
+                            />
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                    <div className="bg-white/5 rounded-lg p-3">
-                      <span className="text-sm text-gray-400">Series</span>
-                      <p className="text-white font-medium">{card.series}</p>
+                  )}
+
+                  {/* Details Section */}
+                  <div className="mb-6">
+                    <h3 className="text-lg font-semibold text-white mb-3">Details</h3>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="bg-white/5 rounded-lg p-3 border border-white/10">
+                        <span className="text-sm text-white/60">Serial Number</span>
+                        <p className="text-white font-medium">#{card.serialNumber}</p>
+                      </div>
+                      <div className="bg-white/5 rounded-lg p-3 border border-white/10">
+                        <span className="text-sm text-white/60">Series</span>
+                        <p className="text-white font-medium">{card.series}</p>
+                      </div>
                     </div>
                   </div>
+
+                  {/* Actions */}
+                  {isOwner && (
+                    <div className="mt-auto">
+                      <CardActions 
+                        card={card} 
+                        onSell={(price) => handleSellCard(card.id, price)}
+                        onTrade={() => handleTradeCard(card.id)}
+                      />
+                    </div>
+                  )}
                 </div>
-
-                {/* Actions */}
-                {isOwner && (
-                  <div className="mt-auto">
-                    <CardActions 
-                      card={card} 
-                      onSell={(price) => handleSellCard(card.id, price)}
-                      onTrade={() => handleTradeCard(card.id)}
-                    />
-                  </div>
-                )}
               </div>
             </div>
           </motion.div>
