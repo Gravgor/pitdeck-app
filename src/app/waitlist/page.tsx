@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { ArrowLeft, Download, Check, AlertCircle } from 'lucide-react';
+import { ArrowLeft, Download, Check, AlertCircle, JoystickIcon } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -73,65 +73,92 @@ export default function WaitlistPage() {
                 Be among the first to experience the future of motorsport card collecting. Get exclusive rewards and early access when we launch.
               </p>
 
-              {!status || status === 'idle' ? (
-                <form onSubmit={handleSubmit} className="space-y-6 max-w-md">
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-400 mb-2">
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                      className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-500
-                               focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                      placeholder="Enter your email"
-                    />
+              <div className="flex flex-col sm:flex-row gap-4">
+                {!status || status === 'idle' ? (
+                  <>
+                    <form onSubmit={handleSubmit} className="flex-1 space-y-6 max-w-md">
+                      <div>
+                        <label htmlFor="email" className="block text-sm font-medium text-gray-400 mb-2">
+                          Email Address
+                        </label>
+                        <input
+                          type="email"
+                          id="email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          required
+                          className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-500
+                                   focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                          placeholder="Enter your email"
+                        />
+                      </div>
+                      <button
+                        type="submit"
+                        className="w-full group relative overflow-hidden rounded-lg bg-white px-8 py-4 inline-flex items-center justify-center"
+                      >
+                        <div className="absolute inset-0 bg-gradient-to-r from-red-600 to-blue-600 transition-transform duration-300 group-hover:scale-[1.5] animate-slow-spin" />
+                        <span className="relative text-black font-medium text-lg">
+                          <Download className="mr-2 h-5 w-5 inline-block" />
+                          Join Waitlist
+                        </span>
+                      </button>
+                    </form>
+
+                    <a
+                      href="https://discord.gg/f7jb4Vsf2R"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group relative overflow-hidden rounded-lg bg-[#5865F2] px-8 py-4 inline-flex items-center justify-center hover:bg-[#4752C4] transition-colors"
+                    >
+                      <span className="text-white font-medium text-lg flex items-center">
+                        <JoystickIcon className="mr-2 h-5 w-5" />
+                        Join Discord
+                      </span>
+                    </a>
+                  </>
+                ) : status === 'loading' ? (
+                  <div className="bg-white/5 border border-white/10 rounded-lg p-6 max-w-md">
+                    <div className="flex items-center gap-3 text-gray-500 mb-4">
+                      <AlertCircle className="h-6 w-6" />
+                      <span className="text-lg font-medium">Joining...</span>
+                    </div>
+                    <p className="text-gray-400">
+                      {errorMessage || 'Please wait while we process your request.'}
+                    </p>
                   </div>
-                  <button
-                    type="submit"
-                    className="w-full group relative overflow-hidden rounded-lg bg-white px-8 py-4 inline-flex items-center justify-center"
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-r from-red-600 to-blue-600 transition-transform duration-300 group-hover:scale-[1.5] animate-slow-spin" />
-                    <span className="relative text-black font-medium text-lg">
-                      <Download className="mr-2 h-5 w-5 inline-block" />
-                      Join Waitlist
-                    </span>
-                  </button>
-                </form>
-              ) : status === 'loading' ? (
-                <div className="bg-white/5 border border-white/10 rounded-lg p-6 max-w-md">
-                  <div className="flex items-center gap-3 text-gray-500 mb-4">
-                    <AlertCircle className="h-6 w-6" />
-                    <span className="text-lg font-medium">Joining...</span>
+                ) : status === 'success' ? (
+                  <div className="bg-white/5 border border-white/10 rounded-lg p-6 max-w-md">
+                    <div className="flex items-center gap-3 text-green-500 mb-4">
+                      <Check className="h-6 w-6" />
+                      <span className="text-lg font-medium">Successfully Joined!</span>
+                    </div>
+                    <p className="text-gray-400 mb-4">
+                      Thank you for joining our waitlist. We'll notify you when PitDeck Mobile is ready for early access.
+                    </p>
+                    <a
+                      href="https://discord.gg/f7jb4Vsf2R"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group relative overflow-hidden rounded-lg bg-[#5865F2] px-6 py-3 inline-flex items-center justify-center hover:bg-[#4752C4] transition-colors"
+                    >
+                      <span className="text-white font-medium flex items-center">
+                        <JoystickIcon className="mr-2 h-5 w-5" />
+                        Join our Discord Community
+                      </span>
+                    </a>
                   </div>
-                  <p className="text-gray-400">
-                    {errorMessage || 'Please wait while we process your request.'}
-                  </p>
-                </div>
-              ) : status === 'success' ? (
-                <div className="bg-white/5 border border-white/10 rounded-lg p-6 max-w-md">
-                  <div className="flex items-center gap-3 text-green-500 mb-4">
-                    <Check className="h-6 w-6" />
-                    <span className="text-lg font-medium">Successfully Joined!</span>
+                ) : (
+                  <div className="bg-white/5 border border-white/10 rounded-lg p-6 max-w-md">
+                    <div className="flex items-center gap-3 text-red-500 mb-4">
+                      <AlertCircle className="h-6 w-6" />
+                      <span className="text-lg font-medium">Join Error</span>
+                    </div>
+                    <p className="text-gray-400">
+                      {errorMessage}
+                    </p>
                   </div>
-                  <p className="text-gray-400">
-                    Thank you for joining our waitlist. We'll notify you when PitDeck Mobile is ready for early access.
-                  </p>
-                </div>
-              ) : (
-                <div className="bg-white/5 border border-white/10 rounded-lg p-6 max-w-md">
-                  <div className="flex items-center gap-3 text-red-500 mb-4">
-                    <AlertCircle className="h-6 w-6" />
-                    <span className="text-lg font-medium">Join Error</span>
-                  </div>
-                  <p className="text-gray-400">
-                    {errorMessage}
-                  </p>
-                </div>
-              )}
+                )}
+              </div>
             </div>
 
             {/* Right Content - Phone Preview */}

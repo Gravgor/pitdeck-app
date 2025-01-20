@@ -112,7 +112,7 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
               <h2 className="text-2xl font-bold text-white mb-6">Exclusive Event Cards</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {exclusiveCards.map((card) => (
-                  <Card key={card.id} {...card} />
+                  <Card key={card.id} card={card} />
                 ))}
               </div>
             </section>
