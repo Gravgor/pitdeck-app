@@ -3,10 +3,11 @@
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { Loader2, Mail, Lock } from 'lucide-react';
+import { Loader2, Mail, Lock, ArrowRight } from 'lucide-react';
 import { signInSchema, type SignInInput } from '@/lib/validations/auth';
 import Link from 'next/link';
 import Image from 'next/image';
+
 export function SignInForm() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -37,9 +38,7 @@ export function SignInForm() {
     };
 
     try {
-      // Validate all fields
       signInSchema.parse(data);
-
       setIsLoading(true);
 
       const result = await signIn('credentials', {
@@ -67,22 +66,20 @@ export function SignInForm() {
   };
 
   return (
-    <div className="w-full min-h-screen flex items-center justify-center p-4">
-      <div className="w-full max-w-md relative">
-        {/* Animated background gradients */}
-        <div className="absolute inset-0 bg-gradient-to-r from-red-500/20 to-blue-500/20 blur-[100px] animate-pulse" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/90 to-black" />
-
-        {/* Main content */}
-        <div className="relative bg-black/40 backdrop-blur-xl rounded-2xl border border-white/10 p-8 shadow-2xl">
+    <div className="w-full max-w-md relative">
+      {/* Form Container */}
+      <div className="relative">
+        <div className="absolute -inset-1 bg-gradient-to-r from-red-500 to-blue-500 rounded-2xl opacity-20 blur-xl" />
+        <div className="relative bg-black/40 backdrop-blur-xl rounded-2xl border border-white/10 p-8">
+          {/* Logo and Title */}
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold tracking-tight">
               <span className="bg-gradient-to-r from-red-500 to-blue-500 bg-clip-text text-transparent">
-                Welcome to PitDeck
+                Welcome Back
               </span>
             </h1>
             <p className="mt-2 text-gray-400">
-              Sign in to collect and trade racing cards
+              Sign in to continue to PitDeck
             </p>
           </div>
 
@@ -98,20 +95,23 @@ export function SignInForm() {
                 <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1.5">
                   Email address
                 </label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500" />
-                  <input
-                    type="email"
-                    name="email"
-                    id="email"
-                    required
-                    onChange={(e) => validateField('email', e.target.value)}
-                    className="block w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 
-                             rounded-lg text-white placeholder:text-gray-500
-                             focus:border-red-500 focus:ring-1 focus:ring-red-500
-                             transition-colors duration-200"
-                    placeholder="name@example.com"
-                  />
+                <div className="group relative">
+                  <div className="absolute -inset-1 bg-gradient-to-r from-red-500 to-blue-500 rounded-xl opacity-0 group-focus-within:opacity-20 transition-opacity blur-xl" />
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500" />
+                    <input
+                      type="email"
+                      name="email"
+                      id="email"
+                      required
+                      onChange={(e) => validateField('email', e.target.value)}
+                      className="block w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 
+                               rounded-lg text-white placeholder:text-gray-500
+                               focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50
+                               transition-colors"
+                      placeholder="name@example.com"
+                    />
+                  </div>
                 </div>
                 {validationErrors.email && (
                   <p className="mt-1.5 text-sm text-red-400">{validationErrors.email}</p>
@@ -122,20 +122,23 @@ export function SignInForm() {
                 <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-1.5">
                   Password
                 </label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500" />
-                  <input
-                    type="password"
-                    name="password"
-                    id="password"
-                    required
-                    onChange={(e) => validateField('password', e.target.value)}
-                    className="block w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 
-                             rounded-lg text-white placeholder:text-gray-500
-                             focus:border-red-500 focus:ring-1 focus:ring-red-500
-                             transition-colors duration-200"
-                    placeholder="••••••••"
-                  />
+                <div className="group relative">
+                  <div className="absolute -inset-1 bg-gradient-to-r from-red-500 to-blue-500 rounded-xl opacity-0 group-focus-within:opacity-20 transition-opacity blur-xl" />
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500" />
+                    <input
+                      type="password"
+                      name="password"
+                      id="password"
+                      required
+                      onChange={(e) => validateField('password', e.target.value)}
+                      className="block w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 
+                               rounded-lg text-white placeholder:text-gray-500
+                               focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50
+                               transition-colors"
+                      placeholder="••••••••"
+                    />
+                  </div>
                 </div>
                 {validationErrors.password && (
                   <p className="mt-1.5 text-sm text-red-400">{validationErrors.password}</p>
@@ -148,8 +151,8 @@ export function SignInForm() {
                 <input
                   type="checkbox"
                   id="remember"
-                  className="h-4 w-4 rounded border-white/10 bg-white/5 text-red-500 
-                           focus:ring-1 focus:ring-red-500 focus:ring-offset-0"
+                  className="h-4 w-4 rounded border-white/10 bg-white/5 text-blue-500 
+                           focus:ring-1 focus:ring-blue-500 focus:ring-offset-0"
                 />
                 <label htmlFor="remember" className="ml-2 text-sm text-gray-400">
                   Remember me
@@ -158,8 +161,8 @@ export function SignInForm() {
 
               <Link 
                 href="/auth/forgot-password" 
-                className="text-sm font-medium text-red-400 hover:text-red-300 
-                         transition-colors duration-200"
+                className="text-sm font-medium text-blue-400 hover:text-blue-300 
+                         transition-colors"
               >
                 Forgot password?
               </Link>
@@ -169,22 +172,20 @@ export function SignInForm() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full flex justify-center items-center px-4 py-3 
-                         bg-gradient-to-r from-red-500 to-red-600 
-                         hover:from-red-600 hover:to-red-700 
-                         rounded-lg text-sm font-medium text-white 
-                         shadow-lg shadow-red-500/25 
-                         disabled:opacity-50 disabled:cursor-not-allowed 
-                         transition-all duration-200"
+                className="relative w-full group"
               >
-                {isLoading ? (
-                  <>
-                    <Loader2 className="animate-spin -ml-1 mr-2 h-4 w-4" />
-                    Signing in...
-                  </>
-                ) : (
-                  'Sign in'
-                )}
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-red-500 to-blue-500 rounded-lg opacity-50 blur-sm 
+                              group-hover:opacity-75 transition-opacity" />
+                <div className="relative flex items-center justify-center px-4 py-3 bg-black rounded-lg">
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" />
+                      <span className="text-white font-medium">Signing in...</span>
+                    </>
+                  ) : (
+                    <span className="text-white font-medium">Sign in</span>
+                  )}
+                </div>
               </button>
 
               <div className="relative">
@@ -192,9 +193,7 @@ export function SignInForm() {
                   <div className="w-full border-t border-white/10" />
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-black text-gray-500">
-                    Or continue with
-                  </span>
+                  <span className="px-2 bg-black text-gray-500">Or continue with</span>
                 </div>
               </div>
 
@@ -204,9 +203,9 @@ export function SignInForm() {
                 className="w-full flex items-center justify-center gap-3 px-4 py-3 
                          bg-white/5 hover:bg-white/10 border border-white/10 
                          rounded-lg text-sm font-medium text-white 
-                         transition-colors duration-200"
+                         transition-colors"
               >
-                <Image src="/google.svg" alt="Google" className="h-5 w-5" width={20} height={20}/>
+                <Image src="/google.svg" alt="Google" width={20} height={20} className="h-5 w-5" />
                 Google
               </button>
             </div>
@@ -216,8 +215,8 @@ export function SignInForm() {
             Don't have an account?{' '}
             <Link 
               href="/auth/register" 
-              className="font-medium text-red-400 hover:text-red-300 
-                       transition-colors duration-200"
+              className="font-medium text-blue-400 hover:text-blue-300 
+                       transition-colors"
             >
               Sign up for free
             </Link>
