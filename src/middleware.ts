@@ -23,7 +23,7 @@ export async function middleware(request: NextRequest) {
   const token = await getToken({ req: request });
 
 
-  if (request.nextUrl.pathname === '/auth/signin' || request.nextUrl.pathname === '/auth/register') {
+  if (request.nextUrl.pathname === '/auth/signin' || request.nextUrl.pathname === '/auth/register' || request.nextUrl.pathname === '/auth/forgot-password' || request.nextUrl.pathname === '/auth/reset-password') {
     return NextResponse.next();
   }
 
