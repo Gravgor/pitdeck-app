@@ -1,16 +1,4 @@
-import { Suspense } from 'react';
-import { ArrowLeft } from 'lucide-react';
-import Link from 'next/link';
-import { ResetPasswordForm } from '@/components/auth/ResetPasswordForm';
-import ResetPasswordLoading from './loading';
-
-interface ResetPasswordPageProps {
-  searchParams: { token?: string };
-}
-
-export default function ResetPasswordPage() {
-
-
+export default function ResetPasswordLoading() {
   return (
     <div className="min-h-screen bg-black">
       {/* Background Effects */}
@@ -23,27 +11,25 @@ export default function ResetPasswordPage() {
       <div className="relative flex items-center justify-center min-h-screen p-4">
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
-            <Link 
-              href="/auth/login"
-              className="inline-flex items-center text-sm text-gray-400 hover:text-white transition-colors mb-8"
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Login
-            </Link>
-            <h1 className="text-3xl font-bold text-white mb-2">
-              Reset your password
-            </h1>
-            <p className="text-gray-400">
-              Enter your new password below.
-            </p>
+            <div className="h-8 w-24 bg-white/5 rounded-full animate-pulse mx-auto mb-8" />
+            <div className="h-8 w-48 bg-white/5 rounded-lg animate-pulse mx-auto mb-2" />
+            <div className="h-4 w-32 bg-white/5 rounded animate-pulse mx-auto" />
           </div>
 
           <div className="relative">
             <div className="absolute -inset-1 bg-gradient-to-r from-red-500 to-blue-500 rounded-2xl opacity-20 blur-xl" />
             <div className="relative bg-black/40 backdrop-blur-xl rounded-2xl border border-white/10 p-8">
-              <Suspense fallback={<ResetPasswordLoading />}>
-                <ResetPasswordForm  />
-              </Suspense>
+              <div className="space-y-6">
+                <div className="space-y-1.5">
+                  <div className="h-4 w-24 bg-white/5 rounded animate-pulse" />
+                  <div className="h-12 w-full bg-white/5 rounded-lg animate-pulse" />
+                </div>
+                <div className="space-y-1.5">
+                  <div className="h-4 w-32 bg-white/5 rounded animate-pulse" />
+                  <div className="h-12 w-full bg-white/5 rounded-lg animate-pulse" />
+                </div>
+                <div className="h-12 w-full bg-white/5 rounded-lg animate-pulse" />
+              </div>
             </div>
           </div>
         </div>
