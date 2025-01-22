@@ -60,12 +60,6 @@ const seriesLinks = [
   { name: 'IndyCar', href: '/series/indycar', icon: Trophy },
 ];
 
-const userMenuItems = [
-  { label: 'Profile', href: '/profile', icon: User },
-  { label: 'Map', href: '/map', icon: MapPin },
-  { label: 'Quests', href: '/quests', icon: Scroll },
-  { label: 'Settings', href: '/settings', icon: Settings },
-];
 
 export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -73,6 +67,13 @@ export function Navbar() {
   const [isSeriesMenuOpen, setIsSeriesMenuOpen] = useState(false);
   const pathname = usePathname();
   const { data: session, status } = useSession();
+
+  const userMenuItems = [
+    { label: 'Profile', href: `/profile/${session?.user?.name}`, icon: User },
+    { label: 'Map', href: '/map', icon: MapPin },
+    { label: 'Quests', href: '/quests', icon: Scroll },
+    { label: 'Settings', href: '/settings', icon: Settings },
+  ];
 
   const visibleLinks = mainLinks.filter(link => 
     !link.requiresAuth || (link.requiresAuth && status === 'authenticated')
@@ -205,6 +206,12 @@ export function Navbar() {
 
 // Separate components for cleaner organization
 function UserMenu({ session, isOpen, setIsOpen }: { session: any, isOpen: boolean, setIsOpen: (isOpen: boolean) => void }) {
+  const userMenuItems = [
+    { label: 'Profile', href: `/profile/${session?.user?.name}`, icon: User },
+    { label: 'Map', href: '/map', icon: MapPin },
+    { label: 'Quests', href: '/quests', icon: Scroll },
+    { label: 'Settings', href: '/settings', icon: Settings },
+  ];
   return (
     <div className="relative">
       <button
@@ -263,6 +270,12 @@ function UserMenu({ session, isOpen, setIsOpen }: { session: any, isOpen: boolea
 }
 
 function MobileMenu({ session, status, seriesLinks, onClose }: { session: any, status: any, seriesLinks: any, onClose: any }) {
+  const userMenuItems = [
+    { label: 'Profile', href: `/profile/${session?.user?.name}`, icon: User },
+    { label: 'Map', href: '/map', icon: MapPin },
+    { label: 'Quests', href: '/quests', icon: Scroll },
+    { label: 'Settings', href: '/settings', icon: Settings },
+  ];
   const visibleLinks = mainLinks.filter(link => 
     !link.requiresAuth || (link.requiresAuth && status === 'authenticated')
   );
