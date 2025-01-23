@@ -2,6 +2,7 @@ import { ArrowRight, Trophy, Users, Wallet, Star, Sparkles, Zap, Flag, Car, Arro
 import Image from 'next/image';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { AppPreviewCarousel } from '@/components/landing/AppPreviewCarousel';
 
 export default function LandingPage() {
   return (
@@ -314,115 +315,7 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <div className="relative">
-            {/* Background Effects */}
-            <div className="absolute inset-0 bg-gradient-to-r from-black via-transparent to-black z-10 pointer-events-none" />
-            
-            <div className="relative flex gap-8 overflow-x-hidden snap-x snap-mandatory px-8 pb-12 items-center 
-                          scrollbar-none hover:cursor-grab active:cursor-grabbing">
-              {[
-                { 
-                  title: "Card Collection",
-                  subtitle: "Organize and showcase your cards",
-                  image: "collection",
-                  color: "from-red-500",
-                  features: ["Grid & List Views", "Sort by Rarity", "Quick Filters"]
-                },
-                { 
-                  title: "Location Hunting",
-                  subtitle: "Find cards at race events",
-                  image: "hunting",
-                  color: "from-blue-500",
-                  features: ["Track Exclusives", "Event Drops", "Nearby Cards"]
-                },
-                { 
-                  title: "Live Trading",
-                  subtitle: "Trade with collectors worldwide",
-                  image: "trading",
-                  color: "from-green-500",
-                  features: ["Secure Trades", "Chat System", "Trade History"]
-                },
-                { 
-                  title: "Pack Opening",
-                  subtitle: "Open packs and earn cards",
-                  image: "pack",
-                  color: "from-purple-500",
-                  features: ["Animated Reveals", "Rarity Boosts", "Special Editions"]
-                },
-              ].map((screen, i) => (
-                <div 
-                  key={i} 
-                  className="relative flex-none w-[300px] snap-center transform transition-all duration-300 hover:scale-105"
-                >
-                  <div className={`absolute -inset-2 bg-gradient-to-br ${screen.color} to-transparent rounded-3xl blur-xl opacity-20`} />
-                  <div className="relative aspect-[9/19.5] rounded-[2.5rem] overflow-hidden border-[8px] border-black/80 shadow-2xl">
-                    {/* Phone Frame */}
-                    <div className="absolute inset-0 bg-black rounded-[2rem] overflow-hidden">
-                      {/* Status Bar */}
-                      <div className="absolute top-0 inset-x-0 h-6 bg-black z-20">
-                        <div className="absolute top-1 left-1/2 -translate-x-1/2 w-16 h-4 bg-black rounded-full" />
-                      </div>
-                      
-                      {/* Screen Content */}
-                      <div className="relative h-full w-full">
-                        <Image
-                          src={`/screenshots/${screen.image}.png`}
-                          alt={screen.title}
-                          fill
-                          className="object-cover"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/20" />
-                        
-                        {/* Screen Info */}
-                        <div className="absolute bottom-0 inset-x-0 p-6 space-y-4 bg-gradient-to-t from-black/90 to-transparent">
-                          <h3 className="text-white font-semibold text-lg">{screen.title}</h3>
-                          <p className="text-gray-300 text-sm">{screen.subtitle}</p>
-                          <div className="flex flex-wrap gap-2">
-                            {screen.features.map((feature, j) => (
-                              <span 
-                                key={j}
-                                className="px-2 py-1 rounded-full bg-white/10 text-xs text-white/80 backdrop-blur-sm"
-                              >
-                                {feature}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {/* Phone Details */}
-                    <div className="absolute -right-2 top-16 w-1 h-8 bg-gray-800 rounded-l" />
-                    <div className="absolute -right-2 top-32 w-1 h-12 bg-gray-800 rounded-l" />
-                  </div>
-
-                  {/* Floating Features */}
-                  <div className="absolute -right-4 top-8 p-2 rounded-lg bg-black/80 backdrop-blur-sm border border-white/10
-                                animate-float text-xs text-white/80">
-                    {screen.features[0]}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Navigation Buttons */}
-            <button className="absolute top-1/2 left-4 -translate-y-1/2 z-20 p-2 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors group">
-              <ArrowRight className="h-5 w-5 text-white rotate-180 group-hover:-translate-x-1 transition-transform" />
-            </button>
-            <button className="absolute top-1/2 right-4 -translate-y-1/2 z-20 p-2 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors group">
-              <ArrowRight className="h-5 w-5 text-white group-hover:translate-x-1 transition-transform" />
-            </button>
-
-            {/* Scroll Indicator */}
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 flex gap-2">
-              {[...Array(4)].map((_, i) => (
-                <div
-                  key={i}
-                  className="w-2 h-2 rounded-full bg-white/20 first:bg-white/60"
-                />
-              ))}
-            </div>
-          </div>
+         <AppPreviewCarousel />
         </div>
       </div>
 

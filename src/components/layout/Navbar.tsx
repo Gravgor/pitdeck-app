@@ -1,13 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Menu, X, ChevronDown, Trophy, Car, Flag,
   Bell, LogOut, User, Settings, Crown, MapPin, 
-  Scroll, Download, Play, Apple
+  Scroll, Download, Play, Apple, MoreHorizontal
 } from 'lucide-react';
 import { useSession, signOut } from 'next-auth/react';
 import { NavbarLoading } from './NavbarLoading';
@@ -37,21 +37,6 @@ const mainLinks = [
     href: '/packs',
     requiresAuth: true 
   },
-  { 
-    name: 'Roadmap', 
-    href: '/roadmap',
-    requiresAuth: false 
-  },
-  { 
-    name: 'Waitlist', 
-    href: '/waitlist',
-    requiresAuth: false 
-  },
-  { 
-    name: 'Features', 
-    href: '/features',
-    requiresAuth: false 
-  },
 ];
 
 const seriesLinks = [
@@ -60,13 +45,57 @@ const seriesLinks = [
   { name: 'IndyCar', href: '/series/indycar', icon: Trophy },
 ];
 
+const moreLinks = [
+  { 
+    name: 'Roadmap', 
+    href: '/roadmap',
+    requiresAuth: false,
+    icon: Scroll
+  },
+  { 
+    name: 'Waitlist', 
+    href: '/waitlist',
+    requiresAuth: false,
+    icon: Download
+  },
+  { 
+    name: 'Features', 
+    href: '/features',
+    requiresAuth: false,
+    icon: Crown
+  },
+];
 
 export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isSeriesMenuOpen, setIsSeriesMenuOpen] = useState(false);
+  const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
+  const seriesMenuRef = useRef<HTMLDivElement>(null);
+  const userMenuRef = useRef<HTMLDivElement>(null);
+  const moreMenuRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const { data: session, status } = useSession();
+
+  // Handle click outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (seriesMenuRef.current && !seriesMenuRef.current.contains(event.target as Node)) {
+        setIsSeriesMenuOpen(false);
+      }
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+        setIsUserMenuOpen(false);
+      }
+      if (moreMenuRef.current && !moreMenuRef.current.contains(event.target as Node)) {
+        setIsMoreMenuOpen(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const userMenuItems = [
     { label: 'Profile', href: `/profile/${session?.user?.name}`, icon: User },
@@ -92,52 +121,151 @@ export function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            {visibleLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                className={`text-sm ${
-                  pathname === link.href 
-                    ? 'text-white' 
-                    : 'text-gray-300 hover:text-white'
-                } transition-colors`}
-              >
-                {link.name}
-              </Link>
-            ))}
-            
-            {/* Series Dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => setIsSeriesMenuOpen(!isSeriesMenuOpen)}
-                className="flex items-center space-x-1 text-sm text-gray-300 hover:text-white transition-colors"
-              >
-                <span>Series</span>
-                <ChevronDown className="h-4 w-4" />
-              </button>
-
-              <AnimatePresence>
-                {isSeriesMenuOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 10 }}
-                    className="absolute left-0 mt-2 w-48 py-2 bg-black/90 backdrop-blur-xl rounded-xl border border-white/10"
+            {status === 'authenticated' ? (
+              <>
+                {visibleLinks.map((link) => (
+                  <Link
+                    key={link.name}
+                    href={link.href}
+                    className={`text-sm ${
+                      pathname === link.href 
+                        ? 'text-white' 
+                        : 'text-gray-300 hover:text-white'
+                    } transition-colors`}
                   >
-                    {seriesLinks.map((item) => (
-                      <Link
-                        key={item.name}
-                        href={item.href}
-                        className="flex items-center space-x-2 px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/10 transition-colors"
+                    {link.name}
+                  </Link>
+                ))}
+                
+                {/* Series Dropdown */}
+                <div className="relative" ref={seriesMenuRef}>
+                  <button
+                    onClick={() => setIsSeriesMenuOpen(!isSeriesMenuOpen)}
+                    className="flex items-center space-x-1 text-sm text-gray-300 hover:text-white transition-colors"
+                  >
+                    <span>Series</span>
+                    <ChevronDown className="h-4 w-4" />
+                  </button>
+
+                  <AnimatePresence>
+                    {isSeriesMenuOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 10 }}
+                        className="absolute left-0 mt-2 w-48 py-2 bg-black/90 backdrop-blur-xl rounded-xl border border-white/10"
+                        onMouseLeave={() => setIsSeriesMenuOpen(false)}
                       >
-                        <item.icon className="h-4 w-4" />
-                        <span>{item.name}</span>
-                      </Link>
-                    ))}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
+                        {seriesLinks.map((item) => (
+                          <Link
+                            key={item.name}
+                            href={item.href}
+                            onClick={() => setIsSeriesMenuOpen(false)}
+                            className="flex items-center space-x-2 px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/10 transition-colors"
+                          >
+                            <item.icon className="h-4 w-4" />
+                            <span>{item.name}</span>
+                          </Link>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                {/* More Dropdown */}
+                <div className="relative" ref={moreMenuRef}>
+                  <button
+                    onClick={() => setIsMoreMenuOpen(!isMoreMenuOpen)}
+                    className="flex items-center space-x-1 text-sm text-gray-300 hover:text-white transition-colors"
+                  >
+                    <span>More</span>
+                    <ChevronDown className="h-4 w-4" />
+                  </button>
+
+                  <AnimatePresence>
+                    {isMoreMenuOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 10 }}
+                        className="absolute left-0 mt-2 w-48 py-2 bg-black/90 backdrop-blur-xl rounded-xl border border-white/10"
+                        onMouseLeave={() => setIsMoreMenuOpen(false)}
+                      >
+                        {moreLinks.map((item) => (
+                          <Link
+                            key={item.name}
+                            href={item.href}
+                            onClick={() => setIsMoreMenuOpen(false)}
+                            className="flex items-center space-x-2 px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/10 transition-colors"
+                          >
+                            <item.icon className="h-4 w-4" />
+                            <span>{item.name}</span>
+                          </Link>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </>
+            ) : (
+              <>
+                {/* Series Dropdown for non-authenticated users */}
+                <div className="relative" ref={seriesMenuRef}>
+                  <button
+                    onClick={() => setIsSeriesMenuOpen(!isSeriesMenuOpen)}
+                    className="flex items-center space-x-1 text-sm text-gray-300 hover:text-white transition-colors"
+                  >
+                    <span>Series</span>
+                    <ChevronDown className="h-4 w-4" />
+                  </button>
+
+                  <AnimatePresence>
+                    {isSeriesMenuOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 10 }}
+                        className="absolute left-0 mt-2 w-48 py-2 bg-black/90 backdrop-blur-xl rounded-xl border border-white/10"
+                        onMouseLeave={() => setIsSeriesMenuOpen(false)}
+                      >
+                        {seriesLinks.map((item) => (
+                          <Link
+                            key={item.name}
+                            href={item.href}
+                            onClick={() => setIsSeriesMenuOpen(false)}
+                            className="flex items-center space-x-2 px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/10 transition-colors"
+                          >
+                            <item.icon className="h-4 w-4" />
+                            <span>{item.name}</span>
+                          </Link>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                <Link
+                  href="/features"
+                  className={`text-sm ${
+                    pathname === '/features'
+                      ? 'text-white'
+                      : 'text-gray-300 hover:text-white'
+                  } transition-colors`}
+                >
+                  Features
+                </Link>
+                <Link
+                  href="/roadmap"
+                  className={`text-sm ${
+                    pathname === '/roadmap'
+                      ? 'text-white'
+                      : 'text-gray-300 hover:text-white'
+                  } transition-colors`}
+                >
+                  Roadmap
+                </Link>
+              </>
+            )}
           </div>
 
           {/* User Actions */}
@@ -148,11 +276,64 @@ export function Navbar() {
               <>
                 <UserBalance initialBalance={session?.user?.coins || 0} />
                 <NotificationBell />
-                <UserMenu 
-                  session={session} 
-                  isOpen={isUserMenuOpen}
-                  setIsOpen={setIsUserMenuOpen}
-                />
+                <div className="relative" ref={userMenuRef}>
+                  <button
+                    onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                    className="flex items-center space-x-2 p-1 rounded-full hover:bg-white/10 transition-colors"
+                  >
+                    {session.user.image ? (
+                      <Image
+                        src={session.user.image}
+                        alt={session.user.name || ''}
+                        width={32}
+                        height={32}
+                        className="rounded-full"
+                      />
+                    ) : (
+                      <div className="h-8 w-8 bg-gradient-to-br from-red-500 to-blue-500 rounded-full flex items-center justify-center">
+                        <span className="text-white font-medium">
+                          {session.user.name?.charAt(0)}
+                        </span>
+                      </div>
+                    )}
+                    <ChevronDown className="h-4 w-4 text-white/60" />
+                  </button>
+
+                  <AnimatePresence>
+                    {isUserMenuOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 10 }}
+                        className="absolute right-0 mt-2 w-48 py-2 bg-black/90 backdrop-blur-xl rounded-xl border border-white/10"
+                        onMouseLeave={() => setIsUserMenuOpen(false)}
+                      >
+                        {userMenuItems.map((item) => (
+                          <Link
+                            key={item.label}
+                            href={item.href}
+                            onClick={() => setIsUserMenuOpen(false)}
+                            className="flex items-center space-x-2 px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/10 transition-colors"
+                          >
+                            <item.icon className="h-4 w-4" />
+                            <span>{item.label}</span>
+                          </Link>
+                        ))}
+                        <hr className="my-2 border-white/10" />
+                        <button
+                          onClick={() => {
+                            setIsUserMenuOpen(false);
+                            signOut();
+                          }}
+                          className="w-full flex items-center space-x-2 px-4 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-white/10 transition-colors"
+                        >
+                          <LogOut className="h-4 w-4" />
+                          <span>Sign Out</span>
+                        </button>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
               </>
             ) : (
               <>
@@ -196,6 +377,7 @@ export function Navbar() {
             session={session} 
             status={status}
             seriesLinks={seriesLinks}
+            moreLinks={moreLinks}
             onClose={() => setIsMobileMenuOpen(false)}
           />
         )}
@@ -204,72 +386,13 @@ export function Navbar() {
   );
 }
 
-// Separate components for cleaner organization
-function UserMenu({ session, isOpen, setIsOpen }: { session: any, isOpen: boolean, setIsOpen: (isOpen: boolean) => void }) {
-  const userMenuItems = [
-    { label: 'Profile', href: `/profile/${session?.user?.name}`, icon: User },
-    { label: 'Map', href: '/map', icon: MapPin },
-    { label: 'Quests', href: '/quests', icon: Scroll },
-    { label: 'Settings', href: '/settings', icon: Settings },
-  ];
-  return (
-    <div className="relative">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center space-x-2 p-1 rounded-full hover:bg-white/10 transition-colors"
-      >
-        {session.user.image ? (
-          <Image
-            src={session.user.image}
-            alt={session.user.name || ''}
-            width={32}
-            height={32}
-            className="rounded-full"
-          />
-        ) : (
-          <div className="h-8 w-8 bg-gradient-to-br from-red-500 to-blue-500 rounded-full flex items-center justify-center">
-            <span className="text-white font-medium">
-              {session.user.name?.charAt(0)}
-            </span>
-          </div>
-        )}
-        <ChevronDown className="h-4 w-4 text-white/60" />
-      </button>
-
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 10 }}
-            className="absolute right-0 mt-2 w-48 py-2 bg-black/90 backdrop-blur-xl rounded-xl border border-white/10"
-          >
-            {userMenuItems.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                className="flex items-center space-x-2 px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/10 transition-colors"
-              >
-                <item.icon className="h-4 w-4" />
-                <span>{item.label}</span>
-              </Link>
-            ))}
-            <hr className="my-2 border-white/10" />
-            <button
-              onClick={() => signOut()}
-              className="w-full flex items-center space-x-2 px-4 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-white/10 transition-colors"
-            >
-              <LogOut className="h-4 w-4" />
-              <span>Sign Out</span>
-            </button>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-}
-
-function MobileMenu({ session, status, seriesLinks, onClose }: { session: any, status: any, seriesLinks: any, onClose: any }) {
+function MobileMenu({ session, status, seriesLinks, moreLinks, onClose }: { 
+  session: any, 
+  status: any, 
+  seriesLinks: any,
+  moreLinks: any,
+  onClose: any 
+}) {
   const userMenuItems = [
     { label: 'Profile', href: `/profile/${session?.user?.name}`, icon: User },
     { label: 'Map', href: '/map', icon: MapPin },
@@ -304,6 +427,20 @@ function MobileMenu({ session, status, seriesLinks, onClose }: { session: any, s
           {/* Mobile Series Links */}
           <div className="pt-2 pb-1 px-2 text-sm text-gray-500">Series</div>
           {seriesLinks.map((item: any) => (
+            <Link
+              key={item.name}
+              href={item.href}
+              onClick={onClose}
+              className="flex items-center space-x-2 px-2 py-2 text-base text-gray-300 hover:text-white transition-colors"
+            >
+              <item.icon className="h-4 w-4" />
+              <span>{item.name}</span>
+            </Link>
+          ))}
+
+          {/* Mobile More Links */}
+          <div className="pt-2 pb-1 px-2 text-sm text-gray-500">More</div>
+          {moreLinks.map((item: any) => (
             <Link
               key={item.name}
               href={item.href}

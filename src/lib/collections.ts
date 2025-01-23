@@ -28,7 +28,7 @@ export async function checkCollectionMilestones(userId: string) {
   if (!user) return;
 
   const cardCount = user.cards.length;
-  const completedMilestones = user.completedMilestones as number[] || [];
+  /*const completedMilestones = user.completedMilestones as number[] || [];
 
   // Find all milestones that should be completed
   const newMilestones = MILESTONES.filter(milestone => 
@@ -84,5 +84,5 @@ export async function checkCollectionMilestones(userId: string) {
         }
       )
     ));
-  }
+  }*/
 } 
