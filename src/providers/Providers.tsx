@@ -18,7 +18,7 @@ const queryClient = new QueryClient({
 });
 
 if (typeof window !== 'undefined') {
-  posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY as string, {
+  posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY ?? 'phc_SxHgEQIYfIEuxVHdSfWyfd38wUCTWGk0gLZGOwrVNDY', {
     api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST as string,
     person_profiles: 'always',
   })
