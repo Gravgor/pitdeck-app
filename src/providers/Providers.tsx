@@ -4,6 +4,8 @@ import { SessionProvider } from 'next-auth/react';
 import { UserProvider } from './UserProvider';
 import { Toaster } from 'sonner';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import posthog from 'posthog-js'
+import { PostHogProvider } from 'posthog-js/react'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -15,12 +17,21 @@ const queryClient = new QueryClient({
   },
 });
 
+if (typeof window !== 'undefined') {
+  posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY as string, {
+    api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST as string,
+    person_profiles: 'always',
+  })
+}
+
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <SessionProvider>
         <UserProvider>
-          {children}
+          <PostHogProvider client={posthog}>
+            {children}
+          </PostHogProvider>
           <Toaster 
             theme="dark" 
             position="top-right"

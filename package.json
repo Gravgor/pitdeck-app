@@ -13,6 +13,7 @@
     "db:image-update": "tsx prisma/image-update.ts",
     "favicon": "npx ts-node --transpile-only scripts/generate-favicon.ts",
     "export-cards": "tsx scripts/exportUniqueCards.ts",
+    "disconnect-cards": "tsx prisma/scripts/disconnect-cards.ts",
     "queue-worker:dev": "tsx workers/queue-worker.ts",
     "queue-worker:build": "tsc -p workers/tsconfig.json",
     "queue-worker:start": "node dist/workers/queue-worker.js"
@@ -49,6 +50,7 @@
     "mapbox-gl": "^3.8.0",
     "next": "^15.1.6",
     "next-auth": "^4.24.10",
+    "posthog-js": "^1.210.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.53.2",
