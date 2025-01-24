@@ -13,8 +13,8 @@ const prisma = new PrismaClient();
 /** @type {CardImageMapping[]} */
 const cardImages = [
   {
-    name: "Gabriel Bortoleto",
-    imageUrl: 'https://pitdeck-app.s3.eu-north-1.amazonaws.com/2025/formula1-commons/bortoleto.avif',
+    name: "Sergio Perez",
+    imageUrl: 'https://pitdeck-app.s3.eu-north-1.amazonaws.com/2025/cards/743196a8-1c7d-4233-b51c-58a9985fe69c.webp',
     type: 'F1_DRIVER',
     series: 'F1'
   }
