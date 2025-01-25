@@ -3,6 +3,32 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { AppPreviewCarousel } from '@/components/landing/AppPreviewCarousel';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'PitDeck | F1 Cards & Motorsport Digital Card Collection Game',
+  description: 'Collect, trade and hunt exclusive F1 cards and motorsport cards in the ultimate digital card collection game. Join the future of motorsport card collecting.',
+  keywords: ['F1 cards', 'motorsport cards', 'collection game', 'digital cards', 'racing cards', 'Formula 1 cards'],
+  openGraph: {
+    title: 'PitDeck | F1 Cards & Motorsport Digital Card Collection Game',
+    description: 'Collect, trade and hunt exclusive F1 cards and motorsport cards in the ultimate digital card collection game.',
+    images: ['/og-image.jpg'],
+  }
+};
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "MobileApplication",
+  "name": "PitDeck - F1 Cards Collection Game",
+  "description": "Digital motorsport card collection game featuring F1 cards and exclusive racing collectibles",
+  "applicationCategory": "Game",
+  "operatingSystem": "iOS, Android",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+};
 
 export default function LandingPage() {
   return (
@@ -47,7 +73,7 @@ export default function LandingPage() {
         </div>
 
         {/* Content */}
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Left Content */}
             <div className="text-center lg:text-left space-y-8">
@@ -57,20 +83,20 @@ export default function LandingPage() {
               </div>
               
               <div className="space-y-4">
-                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-display font-bold tracking-tight">
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display font-bold tracking-tight">
                   <span className="block text-transparent bg-clip-text bg-gradient-to-r from-white to-white/60">
-                    Be the First to
+                    The Ultimate Motorsport
                   </span>
                   <span className="block text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-blue-500 to-purple-500 animate-gradient">
-                    Experience PitDeck
+                    Cards Collection Game
                   </span>
                   <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">
-                    Mobile
+                    From F1 to Formula E
                   </span>
                 </h1>
                 
-                <p className="text-xl text-gray-400 max-w-2xl">
-                  Join our waitlist for exclusive early access and special rewards when we launch. Be part of the future of motorsport card collecting.
+                <p className="text-lg sm:text-xl text-gray-400 max-w-2xl">
+                  Collect and trade digital cards from every major racing series. From F1 to F2, F3, WEC, IndyCar, and Formula E - build your ultimate motorsport collection in one place.
                 </p>
               </div>
               
@@ -97,7 +123,7 @@ export default function LandingPage() {
               </div>
 
               {/* App Store Badges */}
-              <div className="pt-8 space-y-4">
+              <div className="pt-2 space-y-4">
                 <p className="text-sm text-gray-400">Coming soon to</p>
                 <div className="flex gap-4 justify-center lg:justify-start">
                   <div className="group relative">
@@ -121,6 +147,15 @@ export default function LandingPage() {
                     </div>
                   </div>
                 </div>
+              </div>
+
+              {/* Series Showcase */}
+              <div className="flex flex-wrap justify-center lg:justify-start gap-3 mt-6">
+                {["F1 Cards", "F2 Cards", "F3 Cards", "WEC Cards", "IndyCar Cards", "Formula E Cards"].map((series) => (
+                  <div key={series} className="px-3 py-1.5 rounded-full bg-white/5 backdrop-blur-sm border border-white/10">
+                    <span className="text-sm text-white/80">{series}</span>
+                  </div>
+                ))}
               </div>
             </div>
 
@@ -186,60 +221,60 @@ export default function LandingPage() {
             </div>
             <h2 className="text-4xl sm:text-5xl font-bold">
               <span className="block text-transparent bg-clip-text bg-gradient-to-r from-white to-white/60">
-                Your Racing Collection,
+                The Most Advanced
               </span>
               <span className="block text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-blue-500 to-purple-500">
-                Anywhere
+                Motorsport Cards Mobile Game
               </span>
             </h2>
             <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-              PitDeck mobile brings the excitement of motorsport card collecting to your fingertips
+              Experience the future of racing card collecting with features designed for every motorsport series
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
+                title: "Multi-Series Collection",
+                description: "Collect cards from F1, F2, F3, WEC, IndyCar, and Formula E all in one place",
+                icon: Trophy,
+                color: "red",
+                features: ["All racing series", "Exclusive cards", "Special editions"]
+              },
+              {
                 title: "Location-Based Hunting",
                 description: "Visit race tracks to unlock exclusive cards and special editions only available at specific locations",
                 icon: MapPin,
-                color: "red",
-                features: ["Geo-locked cards", "Track-specific drops", "Event bonuses"]
-              },
-              {
-                title: "Real-Time Notifications",
-                description: "Get instant alerts for nearby card drops, trade offers, and special events during race weekends",
-                icon: Bell,
                 color: "blue",
-                features: ["Drop alerts", "Trade requests", "Event updates"]
-              },
-              {
-                title: "AR Card Scanner",
-                description: "Use augmented reality to scan and verify cards, see them come to life in the real world",
-                icon: Scan,
-                color: "green",
-                features: ["Card verification", "3D viewing", "AR collection"]
-              },
-              {
-                title: "Mobile Trading",
-                description: "Trade cards with nearby collectors or globally, right from your phone with secure transactions",
-                icon: ArrowLeftRight,
-                color: "yellow",
-                features: ["Proximity trading", "Global marketplace", "Secure swaps"]
+                features: ["Track-specific drops", "Event bonuses", "Geo-locked cards"]
               },
               {
                 title: "Live Race Integration",
-                description: "Earn bonus cards and rewards during live races and qualifying sessions",
+                description: "Earn special cards and rewards during live races across all major racing series",
                 icon: Flag,
                 color: "purple",
-                features: ["Live rewards", "Race achievements", "Special editions"]
+                features: ["Race rewards", "Live drops", "Event specials"]
               },
               {
-                title: "Event Calendar",
-                description: "Stay updated with upcoming races and card drop events in your area",
+                title: "Cross-Series Trading",
+                description: "Trade cards between different racing series with collectors worldwide",
+                icon: ArrowLeftRight,
+                color: "yellow",
+                features: ["Global marketplace", "Series swaps", "Secure trading"]
+              },
+              {
+                title: "Real-Time Updates",
+                description: "Get instant notifications for card drops during race weekends across all series",
+                icon: Bell,
+                color: "green",
+                features: ["Race alerts", "Drop notifications", "Series updates"]
+              },
+              {
+                title: "Racing Calendar",
+                description: "Track upcoming races and card drops across all motorsport series",
                 icon: Calendar,
                 color: "orange",
-                features: ["Event planning", "Drop schedules", "Local meetups"]
+                features: ["Multi-series calendar", "Drop schedules", "Event planning"]
               }
             ].map((feature, i) => (
               <div
@@ -421,6 +456,11 @@ export default function LandingPage() {
           </div>
         </div>
       </div>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
     </div>
   );
 }

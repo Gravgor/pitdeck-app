@@ -1,7 +1,26 @@
 import { ArrowRight, Check, Clock, Sparkles, Star, Zap, JoystickIcon, MessageSquare } from 'lucide-react';
+import { Metadata } from 'next';
 import Link from 'next/link';
 
 const CURRENT_PHASE = 'alpha';
+
+export const metadata: Metadata = {
+  title: 'PitDeck Roadmap | F1 Cards & Motorsport Digital Collection Game Development',
+  description: 'Explore the future of PitDeck - upcoming features for F1 cards, motorsport cards collection game, and cross-series trading platform. See what\'s next for digital racing collectibles.',
+  keywords: [
+    'F1 cards roadmap',
+    'motorsport cards development',
+    'racing collection game updates',
+    'digital cards future',
+    'F1 collectibles platform',
+    'motorsport trading features'
+  ],
+  openGraph: {
+    title: 'PitDeck Development Roadmap',
+    description: 'See what\'s next for the ultimate F1 and motorsport digital cards collection game',
+    images: ['/og/roadmap.jpg']
+  }
+};
 
 const ROADMAP_PHASES = [
   {

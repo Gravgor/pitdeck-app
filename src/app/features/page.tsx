@@ -1,3 +1,4 @@
+import { Metadata } from 'next';
 import { MapPin, Bell, Scan, ArrowLeftRight, Flag, Calendar, Signal, Gift, ArrowLeft, Sparkles, Download, ArrowRight, Apple, Play, Car } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -54,6 +55,12 @@ const features = [
   }
 ];
 
+export const metadata: Metadata = {
+  title: 'PitDeck Features | F1 Cards & Motorsport Digital Collection Game',
+  description: 'Explore unique features of PitDeck - the ultimate F1 cards and motorsport digital collection game. Location-based hunting, live race integration, and cross-series trading.',
+  keywords: ['F1 cards features', 'motorsport cards app', 'racing collection game', 'digital card collecting']
+};
+
 // Make page async to fetch data
 export default async function FeaturesPage() {
   // Fetch random preview cards from database
@@ -81,8 +88,7 @@ export default async function FeaturesPage() {
   return (
     <div className="min-h-screen bg-black">
       {/* Hero Section */}
-      <div className="relative overflow-hidden">
-        {/* Background Effects */}
+      <div className="relative overflow-hidden py-24">
         <div className="absolute inset-0 bg-gradient-to-br from-red-600/30 via-blue-600/20 to-slate-900/40" />
         <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10" />
         <div className="absolute inset-0">
@@ -91,36 +97,32 @@ export default async function FeaturesPage() {
         </div>
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Back Button */}
-          <div className="py-8">
-            <Link 
-              href="/"
-              className="inline-flex items-center px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm hover:bg-white/10 transition-colors"
-            >
-              <ArrowLeft className="h-5 w-5 mr-2" />
-              <span className="text-white/80">Back to Home</span>
-            </Link>
-          </div>
-
-          {/* Hero Content */}
-          <div className="py-20 text-center">
-            <div className="inline-flex items-center px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm mb-8">
+          <div className="text-center space-y-8">
+            <div className="inline-flex items-center px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm">
               <Sparkles className="h-4 w-4 text-yellow-400 mr-2 animate-pulse" />
-              <span className="text-sm text-white/80">Mobile Experience</span>
+              <span className="text-sm text-white/80">Exclusive Features</span>
             </div>
-            
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-8">
+
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight">
               <span className="block text-transparent bg-clip-text bg-gradient-to-r from-white to-white/60">
                 Revolutionary Features for
               </span>
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-blue-500 to-purple-500 animate-gradient">
-                Modern Card Collecting
+              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-blue-500 to-purple-500">
+                Digital Motorsport Cards
               </span>
             </h1>
-            
+
             <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-              Discover all the exciting features that make PitDeck Mobile the ultimate motorsport card collecting experience.
+              From F1 to Formula E, discover unique features designed for the ultimate motorsport card collection experience
             </p>
+
+            <div className="flex flex-wrap justify-center gap-3">
+              {["F1 Cards", "F2 Cards", "F3 Cards", "WEC Cards", "IndyCar Cards", "Formula E Cards"].map((series) => (
+                <div key={series} className="px-3 py-1.5 rounded-full bg-white/5 backdrop-blur-sm border border-white/10">
+                  <span className="text-sm text-white/80">{series}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -159,29 +161,23 @@ export default async function FeaturesPage() {
       </div>
 
       {/* Card Preview Section */}
-      <div className="relative py-24 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20" />
-        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-5" />
-        
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm mb-8">
-              <Car className="h-4 w-4 text-blue-400 mr-2" />
-              <span className="text-sm text-white/80">Card Preview</span>
-            </div>
-            
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-              Explore Our{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">
-                Digital Collection
+      <div className="relative py-24 bg-black">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center space-y-8 mb-16">
+            <h2 className="text-4xl font-bold">
+              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-white to-white/60">
+                Featured Cards From
+              </span>
+              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-blue-500 to-purple-500">
+                Multiple Racing Series
               </span>
             </h2>
             <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-              Get a sneak peek at some of the exclusive cards available in our game
+              Explore our collection of exclusive cards from F1, F2, F3, WEC, IndyCar, and Formula E
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {previewCards.map((card) => (
               <div key={card.id} className="group relative aspect-[2/3] rounded-xl overflow-hidden">
                 <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl blur opacity-25 group-hover:opacity-75 transition duration-1000" />
@@ -228,7 +224,6 @@ export default async function FeaturesPage() {
               </div>
             ))}
           </div>
-
         </div>
       </div>
 
