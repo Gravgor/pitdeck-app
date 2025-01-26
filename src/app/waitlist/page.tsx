@@ -54,7 +54,7 @@ export default function WaitlistPage() {
                 </p>
 
                 <a 
-                  href="https://www.kickstarter.com/projects/marceli-pitdeck/pitdeck-explore-the-world-and-collect-motorsport-legends"
+                  href="https://www.kickstarter.com/projects/marceli-pitdeck/pitdeck-explore-the-world-and-collect-motorsport-legends?ref=biadml"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center px-6 py-2.5 rounded-lg bg-[#05CE78] hover:bg-[#04b76b] text-white font-medium transition-colors"
