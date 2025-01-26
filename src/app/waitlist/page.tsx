@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import Image from 'next/image';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, Rocket, ArrowRight } from 'lucide-react';
 import { WaitlistForm } from '@/components/waitlist/WaitlistForm';
 
 export const metadata: Metadata = {
@@ -32,6 +32,50 @@ export default function WaitlistPage() {
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-24">
+        {/* Kickstarter Banner */}
+        <div className="mb-16 relative overflow-hidden rounded-2xl border border-white/10">
+          <div className="absolute inset-0 bg-gradient-to-r from-[#05CE78]/20 via-[#1ED760]/20 to-transparent" />
+          <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10" />
+          
+          <div className="relative px-6 py-8 sm:px-8 sm:py-12">
+            <div className="flex flex-col sm:flex-row items-center gap-8">
+              <div className="flex-1 space-y-4">
+                <div className="inline-flex items-center px-4 py-1.5 rounded-full border border-[#05CE78]/20 bg-[#05CE78]/10 backdrop-blur-sm">
+                  <Rocket className="h-4 w-4 text-[#05CE78] mr-2" />
+                  <span className="text-sm text-white/80">Launch is available on Kickstarter</span>
+                </div>
+                
+                <h2 className="text-2xl sm:text-3xl font-bold text-white">
+                  Back Our Project <span className="text-[#05CE78]">Early</span>
+                </h2>
+                
+                <p className="text-gray-400">
+                  Get exclusive rewards, limited edition packs, and lifetime benefits by supporting our Kickstarter campaign.
+                </p>
+
+                <a 
+                  href="https://www.kickstarter.com/projects/marceli-pitdeck/pitdeck-explore-the-world-and-collect-motorsport-legends"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center px-6 py-2.5 rounded-lg bg-[#05CE78] hover:bg-[#04b76b] text-white font-medium transition-colors"
+                >
+                  Visit Kickstarter
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </a>
+              </div>
+
+              <div className="relative w-full sm:w-64 h-32">
+                <Image
+                  src="/campaign.png"
+                  alt="PitDeck Kickstarter Preview"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Content */}
           <div className="space-y-8">
