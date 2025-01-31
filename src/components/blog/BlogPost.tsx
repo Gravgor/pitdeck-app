@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { formatDate } from '@/lib/utils';
 import type { BlogPost as BlogPostType } from '@/types/blog';
+import ImageGallery from './ImageGallery';
 
 interface BlogPostProps {
   post: BlogPostType;
@@ -21,35 +22,7 @@ function Highlights({ items }: { items: string[] }) {
   );
 }
 
-function ImageGallery({ images }: { images: string[] }) {
-  if (images.length === 1) {
-    return (
-      <div className="relative aspect-video rounded-xl overflow-hidden my-6">
-        <Image
-          src={images[0]}
-          alt="Feature preview"
-          fill
-          className="object-cover"
-        />
-      </div>
-    );
-  }
 
-  return (
-    <div className="grid grid-cols-2 gap-4 my-6">
-      {images.map((image, index) => (
-        <div key={index} className="relative aspect-video rounded-xl overflow-hidden">
-          <Image
-            src={image}
-            alt={`Feature preview ${index + 1}`}
-            fill
-            className="object-cover"
-          />
-        </div>
-      ))}
-    </div>
-  );
-}
 
 export function BlogPost({ post }: BlogPostProps) {
   return (
