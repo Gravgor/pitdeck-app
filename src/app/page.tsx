@@ -207,6 +207,33 @@ export default function LandingPage() {
         </div>
       </div>
 
+      {/* Partners Banner */}
+      <div className="relative py-12 overflow-hidden border-y border-white/5">
+        <div className="absolute inset-0 bg-gradient-to-r from-black via-transparent to-black" />
+        
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col items-center space-y-8">
+            <p className="text-sm text-gray-400 uppercase tracking-wider">Trusted Partners</p>
+            
+            <div className="flex flex-wrap justify-center items-center gap-8 sm:gap-12 opacity-60 hover:opacity-100 transition-opacity">
+              <Link 
+                href="https://discord.gg/GEZGbfpDqM" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative h-24 w-24 grayscale hover:grayscale-0 transition-all transform hover:scale-105"
+              >
+                <Image
+                  src="/partners/partner1.png"
+                  alt="Join our Discord community"
+                  fill
+                  className="object-contain"
+                />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Key Features Section */}
       <div className="relative py-32 overflow-hidden">
         {/* Background Effects */}
