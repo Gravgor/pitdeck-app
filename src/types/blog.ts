@@ -28,6 +28,6 @@ export interface BlogPost {
   updatedAt: string;
   author: {
     name: string;
-    imageUrl: string;
+    image: string;
   };
 } 

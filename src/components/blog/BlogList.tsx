@@ -36,7 +36,7 @@ export function BlogList({ posts }: BlogListProps) {
               
               <div className="flex items-center gap-3 pt-4">
                 <Image
-                  src={post.author.imageUrl}
+                  src={post.author.image}
                   alt={post.author.name}
                   width={32}
                   height={32}
