@@ -1,25 +1,17 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { formatDate } from '@/lib/utils';
-import type { BlogPost } from '@/types/blog';
 
 interface BlogListProps {
-  posts: BlogPost[];
+  posts: any[];
 }
 
 export function BlogList({ posts }: BlogListProps) {
-    console.log(posts);
-  if (!posts || !Array.isArray(posts)) {
-    return (
-      <div className="text-center py-12">
-        <h2 className="text-2xl font-semibold text-white">No posts found</h2>
-      </div>
-    );
-  }
-
+  //@ts-ignore
+  const postsNew = posts.posts;
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {posts.map((post) => (
+      {postsNew.map((post: any) => (
         <Link 
           key={post.id} 
           href={`/blog/${post.slug}`}
@@ -56,7 +48,7 @@ export function BlogList({ posts }: BlogListProps) {
               </div>
 
               <div className="flex flex-wrap gap-2 pt-4">
-                {post.tags.map((tag) => (
+                {post.tags.map((tag: any) => (
                   <span
                     key={tag}
                     className="px-2 py-1 text-xs rounded-full bg-white/5 border border-white/10 text-white/80"

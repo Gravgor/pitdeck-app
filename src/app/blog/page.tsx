@@ -15,9 +15,7 @@ export const metadata: Metadata = {
 };
 
 async function getBlogPosts() {
-  const res = await fetch('https://api.pitdeck.app/api/blog', {
-    next: { revalidate: 3600 } // Revalidate every hour
-  });
+  const res = await fetch('https://api.pitdeck.app/api/blog');
   
   if (!res.ok) throw new Error('Failed to fetch blog posts');
   
@@ -26,7 +24,6 @@ async function getBlogPosts() {
 
 export default async function BlogPage() {
   const posts = await getBlogPosts();
-
   return (
     <div className="min-h-screen bg-black">
       <div className="fixed inset-0">

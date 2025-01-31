@@ -20,9 +20,6 @@ const inter = Inter({
   display: 'swap',
 });
 
-if (process.env.NODE_ENV === 'production') {
-  initializeServer();
-}
 
 export const metadata = {
   title: 'PitDeck - Motorsport Digital Collectibles',
