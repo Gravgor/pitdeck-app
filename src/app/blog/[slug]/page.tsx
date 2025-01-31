@@ -4,7 +4,7 @@ import { BlogHeader } from '@/components/blog/BlogHeader';
 import { BlogPost } from '@/components/blog/BlogPost';
 
 interface Props {
-  params: { slug: string }
+  slug: string;
 }
 
 async function getBlogPost(slug: string) {
@@ -17,8 +17,9 @@ async function getBlogPost(slug: string) {
   return res.json();
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const post = await getBlogPost(params.slug);
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const slug = (await params).slug;
+  const post = await getBlogPost(slug);
   
   if (!post) return notFound();
 
@@ -33,8 +34,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function BlogPostPage({ params }: Props) {
-  const post = await getBlogPost(params.slug);
+export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
+  const slug = (await params).slug;
+  const post = await getBlogPost(slug);
   
   if (!post) return notFound();
 
