@@ -56,7 +56,7 @@ export function BlogPost({ post }: BlogPostProps) {
 
         <div className="flex items-center gap-3">
           <Image
-            src={post.author.image}
+            src={post.author.imageUrl}
             alt={post.author.name}
             width={40}
             height={40}
