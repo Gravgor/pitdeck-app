@@ -82,3 +82,17 @@ export function getRarityColor(rarity: Rarity): string {
       return 'text-gray-400';
   }
 }
+
+export function formatDate(dateString: string): string {
+  const date = new Date(dateString);
+  
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  }).format(date);
+}
+
+// Usage examples:
+// formatDate('2024-01-30') -> "January 30, 2024"
+// formatDate('2024-01-30T15:30:00Z') -> "January 30, 2024"
