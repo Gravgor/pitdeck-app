@@ -10,7 +10,7 @@ const previewData = {
     subtitle: "Organize and showcase your cards",
     images: [
       "/screenshots/collection.png",
-      "/screenshots/collection-2.png",
+      "/screenshots/collection-2.png"
     ],
     features: ["Grid & List Views", "Sort by Rarity", "Quick Filters"]
   },
@@ -18,8 +18,8 @@ const previewData = {
     title: "Location Hunting",
     subtitle: "Find cards at race events",
     images: [
-      "/screenshots/hunting.png",
-      "/screenshots/hunting-2.png",
+      "/screenshots/image.png",
+      "/screenshots/image-2.png",
     ],
     features: ["Track Exclusives", "Event Drops", "Nearby Cards"]
   },
@@ -27,15 +27,18 @@ const previewData = {
     title: "Live Trading",
     subtitle: "Trade with collectors worldwide",
     images: [
-      "/screenshots/trading.png",
+      "/screenshots/market.png",
+      "/screenshots/market-2.png",
     ],
     features: ["Secure Trades", "Chat System", "Trade History"]
+
   },
   packs: {
     title: "Pack Opening",
     subtitle: "Open packs and earn cards",
     images: [
       "/screenshots/pack.png",
+      "/screenshots/pack-2.png",
     ],
     features: ["Animated Reveals", "Special Editions"]
   }

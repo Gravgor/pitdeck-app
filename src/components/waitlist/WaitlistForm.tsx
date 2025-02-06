@@ -1,135 +1,108 @@
 'use client';
 
-import { useState } from 'react';
-import { Download, Check, AlertCircle, JoystickIcon } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+import { ArrowRight, Check, Download, Apple } from 'lucide-react';
 
-export function WaitlistForm() {
-  const [email, setEmail] = useState('');
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-  const [errorMessage, setErrorMessage] = useState('');
+interface WaitlistFormProps {
+  session: any;
+}
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setStatus('loading');
-    setErrorMessage('');
+export function WaitlistForm({ session }: WaitlistFormProps) {
+  const [hasJoinedDiscord, setHasJoinedDiscord] = useState(false);
+  const searchParams = useSearchParams();
 
-    try {
-      const response = await fetch('https://api.pitdeck.app/api/waitlist/join', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, platform: 'WEB' }),
-      });
+  const DISCORD_OAUTH_URL = `https://discord.com/api/oauth2/authorize?client_id=${process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID}&response_type=code&permissions=0&scope=identify%20guilds.join&redirect_uri=${encodeURIComponent(process.env.NEXT_PUBLIC_DISCORD_REDIRECT_URI!)}&guild_id=${process.env.NEXT_PUBLIC_DISCORD_GUILD_ID}`;
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(Array.isArray(data.message) ? data.message[0] : data.message);
-      }
-
-      setStatus('success');
-    } catch (error) {
-      setStatus('error');
-      setErrorMessage(error instanceof Error ? error.message : 'Something went wrong');
+  useEffect(() => {
+    // Check if user has returned from Discord auth
+    const code = searchParams.get('code');
+    if (code) {
+      localStorage.setItem('discord_joined', 'true');
+      setHasJoinedDiscord(true);
+    } else {
+      // Check localStorage for previous Discord join
+      const joined = localStorage.getItem('discord_joined') === 'true';
+      setHasJoinedDiscord(joined);
     }
-  };
-
-  if (status === 'loading') {
-    return (
-      <div className="bg-white/5 border border-white/10 rounded-lg p-6 max-w-md backdrop-blur-sm">
-        <div className="flex items-center gap-3 text-gray-500 mb-4">
-          <AlertCircle className="h-6 w-6 animate-pulse" />
-          <span className="text-lg font-medium">Joining...</span>
-        </div>
-        <p className="text-gray-400">Please wait while we process your request.</p>
-      </div>
-    );
-  }
-
-  if (status === 'success') {
-    return (
-      <div className="bg-white/5 border border-white/10 rounded-lg p-6 max-w-md backdrop-blur-sm">
-        <div className="flex items-center gap-3 text-green-500 mb-4">
-          <Check className="h-6 w-6" />
-          <span className="text-lg font-medium">Successfully Joined!</span>
-        </div>
-        <p className="text-gray-400 mb-4">
-          Thank you for joining our waitlist. We'll notify you when PitDeck Mobile is ready for early access.
-        </p>
-        <a
-          href="https://discord.gg/f7jb4Vsf2R"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="relative group inline-block"
-        >
-          <div className="absolute -inset-0.5 bg-[#5865F2] rounded-lg opacity-50 blur-sm group-hover:opacity-75 transition-opacity" />
-          <div className="relative flex items-center justify-center px-6 py-3 bg-[#5865F2] rounded-lg">
-            <span className="text-white font-medium flex items-center">
-              <JoystickIcon className="mr-2 h-5 w-5" />
-              Join our Discord Community
-            </span>
-          </div>
-        </a>
-      </div>
-    );
-  }
-
-  if (status === 'error') {
-    return (
-      <div className="bg-white/5 border border-white/10 rounded-lg p-6 max-w-md backdrop-blur-sm">
-        <div className="flex items-center gap-3 text-red-500 mb-4">
-          <AlertCircle className="h-6 w-6" />
-          <span className="text-lg font-medium">Join Error</span>
-        </div>
-        <p className="text-gray-400">{errorMessage}</p>
-      </div>
-    );
-  }
+  }, [searchParams]);
 
   return (
-    <form onSubmit={handleSubmit} className="flex-1 space-y-6 max-w-md">
-      <div className="group relative">
-        <div className="absolute -inset-1 bg-gradient-to-r from-red-500 to-blue-500 rounded-xl opacity-0 group-focus-within:opacity-20 transition-opacity blur-xl" />
-        <div className="relative">
-          <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1.5">
-            Email Address
-          </label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white 
-                     placeholder:text-gray-500 focus:border-blue-500/50 focus:ring-1 
-                     focus:ring-blue-500/50 transition-colors"
-            placeholder="Enter your email"
-          />
+    <div className="space-y-8">
+      {/* Step 1: Discord Authentication */}
+      <div className={`relative p-6 bg-white/5 backdrop-blur-sm rounded-xl border ${!hasJoinedDiscord ? 'border-blue-500/50' : 'border-white/10'}`}>
+        <div className="absolute -top-3 -left-3 w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-sm font-bold">
+          1
         </div>
+        
+        <h3 className="text-xl font-semibold text-white mb-4">Join Our Discord</h3>
+        
+        {!hasJoinedDiscord ? (
+          <Link
+            href={DISCORD_OAUTH_URL}
+            className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-[#5865F2] hover:bg-[#4752C4] transition-colors rounded-lg text-white font-medium"
+          >
+            <Image
+              src="/discord-mark-white.svg"
+              alt="Discord"
+              width={24}
+              height={24}
+            />
+            Join Discord Server
+          </Link>
+        ) : (
+          <div className="flex items-center gap-2 text-green-500">
+            <Check className="w-5 h-5" />
+            <span>Successfully joined Discord!</span>
+          </div>
+        )}
       </div>
 
-      <div className="flex gap-3">
-        <button type="submit" className="flex-1 relative group">
-          <div className="absolute -inset-0.5 bg-gradient-to-r from-red-500 to-blue-500 rounded-lg opacity-50 blur-sm group-hover:opacity-75 transition-opacity" />
-          <div className="relative flex items-center justify-center px-4 py-3 bg-black rounded-lg">
-            <span className="text-white font-medium">
-              <Download className="mr-2 h-5 w-5 inline-block" />
-              Join Waitlist
-            </span>
+      {/* Step 2: TestFlight Access */}
+      <div className={`relative p-6 bg-white/5 backdrop-blur-sm rounded-xl border ${hasJoinedDiscord ? 'border-blue-500/50' : 'border-white/10'}`}>
+        <div className="absolute -top-3 -left-3 w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-sm font-bold">
+          2
+        </div>
+        
+        <h3 className="text-xl font-semibold text-white mb-4">Download PitDeck Mobile</h3>
+        
+        {hasJoinedDiscord ? (
+          <div className="space-y-4">
+            <p className="text-gray-400">
+              You're all set! Click below to download the beta.
+            </p>
+            
+            <Link
+              href="https://testflight.apple.com/join/your-beta-id"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-red-500 to-blue-500 hover:from-red-600 hover:to-blue-600 transition-colors rounded-lg text-white font-medium"
+            >
+              <Apple className="w-5 h-5" />
+              Download on TestFlight
+            </Link>
           </div>
-        </button>
+        ) : (
+          <div className="text-gray-500">
+            Complete step 1 to get access to TestFlight
+          </div>
+        )}
+      </div>
 
-        <a
-          href="https://discord.gg/f7jb4Vsf2R"
+      {/* Help Section */}
+      <div className="text-center text-sm text-gray-400">
+        <p>Need help? Contact us in</p>
+        <Link
+          href="https://discord.gg/vvDnj2uhWQ"
           target="_blank"
           rel="noopener noreferrer"
-          className="relative group"
+          className="text-blue-400 hover:text-blue-300 transition-colors"
         >
-          <div className="absolute -inset-0.5 bg-[#5865F2] rounded-lg opacity-50 blur-sm group-hover:opacity-75 transition-opacity" />
-          <div className="relative flex items-center justify-center px-6 py-3 bg-[#5865F2] rounded-lg">
-            <JoystickIcon className="h-5 w-5 text-white" />
-          </div>
-        </a>
+          Discord
+        </Link>
       </div>
-    </form>
+    </div>
   );
 } 
