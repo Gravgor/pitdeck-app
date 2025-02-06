@@ -14,7 +14,7 @@ export function WaitlistForm({ session }: WaitlistFormProps) {
   const [hasJoinedDiscord, setHasJoinedDiscord] = useState(false);
   const searchParams = useSearchParams();
 
-  const DISCORD_OAUTH_URL = `https://discord.com/api/oauth2/authorize?client_id=${process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID}&response_type=code&permissions=0&scope=identify%20guilds.join&redirect_uri=${encodeURIComponent(process.env.NEXT_PUBLIC_DISCORD_REDIRECT_URI!)}&guild_id=${process.env.NEXT_PUBLIC_DISCORD_GUILD_ID}`;
+  const DISCORDOAUTH_URL=`https://discord.com/api/oauth2/authorize?client_id=1336887742524817429&response_type=code&scope=identify%20guilds.join&redirect_uri=https%3A%2F%2Fpitdeck.app%2Fwaitlist&guild_id=1308914451558436958`
 
   useEffect(() => {
     // Check if user has returned from Discord auth
@@ -41,10 +41,11 @@ export function WaitlistForm({ session }: WaitlistFormProps) {
         
         {!hasJoinedDiscord ? (
           <Link
-            href={DISCORD_OAUTH_URL}
+            href={DISCORDOAUTH_URL}
             className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-[#5865F2] hover:bg-[#4752C4] transition-colors rounded-lg text-white font-medium"
           >
             <Image
+
               src="/discord-mark-white.svg"
               alt="Discord"
               width={24}
