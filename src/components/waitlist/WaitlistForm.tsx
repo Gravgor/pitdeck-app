@@ -75,7 +75,7 @@ export function WaitlistForm({ session }: WaitlistFormProps) {
             </p>
             
             <Link
-              href="https://testflight.apple.com/join/your-beta-id"
+              href="https://testflight.apple.com/join/X4pdGYuv"
               target="_blank"
               rel="noopener noreferrer"
               className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-red-500 to-blue-500 hover:from-red-600 hover:to-blue-600 transition-colors rounded-lg text-white font-medium"
